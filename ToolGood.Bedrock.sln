@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolGood.Bedrock", "ToolGood.Bedrock\ToolGood.Bedrock.csproj", "{EF5C6E5B-AC95-43FC-A5F4-184E4E3CCAC5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolGood.Bedrock.Test", "ToolGood.Bedrock.Test\ToolGood.Bedrock.Test.csproj", "{002DEB2A-CD1D-4D71-8755-3C5291B8EF29}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolGood.Bedrock.Dependency", "ToolGood.Bedrock.Dependency\ToolGood.Bedrock.Dependency.csproj", "{35F88835-FFB1-4D7B-98CF-E39BF8C84953}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolGood.Bedrock.Web", "ToolGood.Bedrock.Web\ToolGood.Bedrock.Web.csproj", "{FDDC671D-0198-41BE-939E-1BEF0B4CD7F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_test", "_test", "{D2B91058-C0AD-4232-97A3-61D63DCE8EFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolGood.Bedrock.Web.Test", "ToolGood.Bedrock.Web.Test\ToolGood.Bedrock.Web.Test.csproj", "{4AE6F3F9-3A58-42F5-BA2D-A55943491E75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF5C6E5B-AC95-43FC-A5F4-184E4E3CCAC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF5C6E5B-AC95-43FC-A5F4-184E4E3CCAC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF5C6E5B-AC95-43FC-A5F4-184E4E3CCAC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF5C6E5B-AC95-43FC-A5F4-184E4E3CCAC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{002DEB2A-CD1D-4D71-8755-3C5291B8EF29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{002DEB2A-CD1D-4D71-8755-3C5291B8EF29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{002DEB2A-CD1D-4D71-8755-3C5291B8EF29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{002DEB2A-CD1D-4D71-8755-3C5291B8EF29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35F88835-FFB1-4D7B-98CF-E39BF8C84953}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35F88835-FFB1-4D7B-98CF-E39BF8C84953}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35F88835-FFB1-4D7B-98CF-E39BF8C84953}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35F88835-FFB1-4D7B-98CF-E39BF8C84953}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDDC671D-0198-41BE-939E-1BEF0B4CD7F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDDC671D-0198-41BE-939E-1BEF0B4CD7F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDDC671D-0198-41BE-939E-1BEF0B4CD7F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDDC671D-0198-41BE-939E-1BEF0B4CD7F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AE6F3F9-3A58-42F5-BA2D-A55943491E75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AE6F3F9-3A58-42F5-BA2D-A55943491E75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AE6F3F9-3A58-42F5-BA2D-A55943491E75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AE6F3F9-3A58-42F5-BA2D-A55943491E75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{002DEB2A-CD1D-4D71-8755-3C5291B8EF29} = {D2B91058-C0AD-4232-97A3-61D63DCE8EFF}
+		{4AE6F3F9-3A58-42F5-BA2D-A55943491E75} = {D2B91058-C0AD-4232-97A3-61D63DCE8EFF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3BBDAA42-CE0E-4231-A160-B71D966211D1}
+	EndGlobalSection
+EndGlobal

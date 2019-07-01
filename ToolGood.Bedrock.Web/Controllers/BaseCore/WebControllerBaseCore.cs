@@ -1,0 +1,596 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using ToolGood.Bedrock.Web.Constants;
+using ToolGood.Bedrock.Web.Mime;
+using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
+using ToolGood.ReadyGo3;
+
+namespace ToolGood.Bedrock.Web.Controllers.BaseCore
+{
+    public abstract class WebControllerBaseCore : Controller
+    {
+        protected int SuccessCode { get { return CommonConstants.SuccessCode; } }
+        protected int ErrorCode { get { return CommonConstants.ErrorCode; } }
+        protected QueryArgsBase QueryArgs { get; set; }
+
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            ViewData["SuccessCode"] = SuccessCode;
+            ViewData["ErrorCode"] = ErrorCode;
+            if (HttpContext.Items.ContainsKey("ToolGood.Bedrock.QueryArgsBase")) {
+                QueryArgs = HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgsBase;
+                LogUtil.QueryArgs = QueryArgs;
+                ViewData["QueryArgs"] = QueryArgs;
+            }
+
+
+            base.OnActionExecuting(context);
+        }
+
+
+        protected void SetQueryArgs(QueryArgsBase queryArgsBase)
+        {
+            if (HttpContext.Items.ContainsKey("ToolGood.Bedrock.QueryArgsBase")) {
+                var queryArgs = HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgsBase;
+                foreach (var log in queryArgs.Logs) {
+                    queryArgsBase.Logs.Add(log);
+                }
+                foreach (var sqlTime in queryArgs.SqlTimes) {
+                    queryArgsBase.SqlTimes.Add(sqlTime);
+                }
+            }
+
+            QueryArgs = queryArgsBase;
+            QueryArgs.SetHttpContext(this.HttpContext);
+            HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] = queryArgsBase;
+            LogUtil.QueryArgs = queryArgsBase;
+            ViewData["QueryArgs"] = QueryArgs;
+        }
+
+
+        protected IActionResult CamelCaseJson(object data)
+        {
+            var json = data.ToJson();
+            return Content(json, "application/json");
+        }
+
+        #region Success
+        protected IActionResult Success(object obj, object extendData = null)
+        {
+            QueryResult result = new QueryResult() {
+                Code = SuccessCode,
+                Data = obj,
+                ExtendData = extendData,
+                State = "SUCCESS",
+            };
+            if (QueryArgs != null) {
+                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
+                    result.SqlTimes = QueryArgs.SqlTimes;
+                }
+                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
+                    result.Logs = QueryArgs.Logs;
+                }
+            }
+            return CamelCaseJson(result);
+        }
+
+        protected IActionResult Success<T>(List<T> objs)
+        {
+            QueryResult result = new QueryResult() {
+                Code = SuccessCode,
+                Data = objs,
+                State = "SUCCESS",
+            };
+            if (QueryArgs != null) {
+                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
+                    result.SqlTimes = QueryArgs.SqlTimes;
+                }
+                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
+                    result.Logs = QueryArgs.Logs;
+                }
+            }
+            return CamelCaseJson(result);
+        }
+
+        protected IActionResult Success<T>(Page<T> page)
+        {
+            QueryResult result = new QueryResult() {
+                Code = SuccessCode,
+                Page = page,
+                State = "SUCCESS",
+            };
+            if (QueryArgs != null) {
+                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
+                    result.SqlTimes = QueryArgs.SqlTimes;
+                }
+                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
+                    result.Logs = QueryArgs.Logs;
+                }
+            }
+            return CamelCaseJson(result);
+        }
+
+        protected IActionResult Success(string msg = "SUCCESS")
+        {
+            QueryResult result = new QueryResult() {
+                Code = SuccessCode,
+                State = "SUCCESS",
+                Message = msg
+            };
+            if (QueryArgs != null) {
+                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
+                    result.SqlTimes = QueryArgs.SqlTimes;
+                }
+                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
+                    result.Logs = QueryArgs.Logs;
+                }
+            }
+            return CamelCaseJson(result);
+        }
+        #endregion
+
+        #region Error
+
+        protected IActionResult Error(ModelStateDictionary ms)
+        {
+            List<string> sb = new List<string>();
+            //获取所有错误的Key
+            List<string> Keys = ModelState.Keys.ToList();
+            //获取每一个key对应的ModelStateDictionary
+            foreach (var key in Keys) {
+                var errors = ModelState[key].Errors.ToList();
+                //将错误描述添加到sb中
+                foreach (var error in errors) {
+                    sb.Add(error.ErrorMessage);
+                }
+            }
+            QueryResult result = new QueryResult() {
+                Code = ErrorCode,
+                Message = string.Join(",", sb),
+                State = "ERROR",
+            };
+            if (QueryArgs != null) {
+                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
+                    result.SqlTimes = QueryArgs.SqlTimes;
+                }
+                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
+                    result.Logs = QueryArgs.Logs;
+                }
+            }
+            return CamelCaseJson(result);
+        }
+
+        protected IActionResult Error(string msg)
+        {
+            QueryResult result = new QueryResult() {
+                Code = ErrorCode,
+                Message = msg,
+                State = "ERROR",
+            };
+            if (QueryArgs != null) {
+                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
+                    result.SqlTimes = QueryArgs.SqlTimes;
+                }
+                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
+                    result.Logs = QueryArgs.Logs;
+                }
+            }
+            return CamelCaseJson(result);
+        }
+
+        protected IActionResult Error(int code, string msg)
+        {
+            QueryResult result = new QueryResult() {
+                Code = code,
+                Message = msg,
+                State = "ERROR",
+            };
+            if (QueryArgs != null) {
+                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
+                    result.SqlTimes = QueryArgs.SqlTimes;
+                }
+                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
+                    result.Logs = QueryArgs.Logs;
+                }
+            }
+            return CamelCaseJson(result);
+        }
+
+        protected IActionResult Error(object obj)
+        {
+            QueryResult result = new QueryResult() {
+                Code = ErrorCode,
+                Data = obj,
+                State = "ERROR",
+            };
+            if (QueryArgs != null) {
+                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
+                    result.SqlTimes = QueryArgs.SqlTimes;
+                }
+                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
+                    result.Logs = QueryArgs.Logs;
+                }
+            }
+            return CamelCaseJson(result);
+        }
+
+        #endregion
+
+        #region Other CreatePassword GetUserAgent MapPath
+
+        protected string GetUserAgent()
+        {
+            return HttpContext.Request.Headers[HeaderNames.UserAgent].ToString();
+        }
+
+        /// <summary>
+        /// 获取文件绝对路径
+        /// </summary>
+        /// <param name="path">文件路径</param>
+        /// <returns></returns>
+        protected string MapPath(string path)
+        {
+            return MyHostingEnvironment.MapPath(path);
+        }
+        /// <summary>
+        /// 获取文件绝对路径 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        protected string MapWebRootPath(string path)
+        {
+            return MyHostingEnvironment.MapWebRootPath(path);
+        }
+        #endregion
+
+        #region Session
+
+        protected string GetSessionId()
+        {
+            return HttpContext.Session.Id;
+        }
+
+        protected void SetSession(string key, string val)
+        {
+            HttpContext.Session.Set(key, Encoding.UTF8.GetBytes(val));
+        }
+        protected void SetSession(string key, object value)
+        {
+            HttpContext.Session.SetString(key, JsonConvert.SerializeObject(value));
+        }
+
+        protected string GetSession(string key)
+        {
+            return HttpContext.Session.GetString(key);
+        }
+
+        protected bool HasSession(string key)
+        {
+            return HttpContext.Session.Keys.Any(q => q == key);
+        }
+
+        protected T GetSession<T>(string key)
+        {
+            var value = HttpContext.Session.GetString(key);
+            return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
+        }
+
+        protected void DeleteSession(string key)
+        {
+            HttpContext.Session.Remove(key);
+        }
+
+        #endregion
+
+        #region Cookie 操作
+
+        protected string GetCookie(string key)
+        {
+            return HttpContext.Request.Cookies[key];
+        }
+
+        protected void SetCookie(string key, string val)
+        {
+            HttpContext.Response.Cookies.Append(key, val, new CookieOptions() {
+                Path = "/",
+                IsEssential = true,
+                HttpOnly = true,
+                //Secure = true, //非https会无效
+                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
+            });
+        }
+
+        protected void SetCookie(string key, string val, int minutes)
+        {
+            HttpContext.Response.Cookies.Append(key, val, new Microsoft.AspNetCore.Http.CookieOptions() {
+                Path = "/",
+                Expires = DateTime.Now.AddMinutes(minutes),
+                IsEssential = true,
+                HttpOnly = true,
+                //Secure = true, //非https会无效
+                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
+            });
+        }
+
+        protected void SetCookie(string key, string val, DateTime dateTime)
+        {
+            HttpContext.Response.Cookies.Append(key, val, new Microsoft.AspNetCore.Http.CookieOptions() {
+                Path = "/",
+                Expires = dateTime,
+                IsEssential = true,
+                HttpOnly = true,
+                //Secure = true,  //非https会无效
+                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
+            });
+        }
+
+        protected void DeleteCookie(string cookieName)
+        {
+            var val = Request.Cookies[cookieName];
+            if (val != null) {
+                SetCookie(cookieName, "", DateTime.Now.AddYears(-1));
+            }
+        }
+
+        protected bool HasCookie(string cookieName)
+        {
+            return Request.Cookies.ContainsKey(cookieName);
+        }
+        #endregion
+
+        #region 获取真ip
+        /// <summary>
+        /// 获取真ip
+        /// </summary>
+        /// <returns></returns>
+        protected string GetRealIP()
+        {
+            string result = String.Empty;
+            result = Request.Headers["HTTP_X_FORWARDED_FOR"];
+            //可能有代理 
+            if (!string.IsNullOrWhiteSpace(result)) {
+                //没有"." 肯定是非IP格式
+                if (result.IndexOf(".") == -1) {
+                    result = null;
+                } else {
+                    //有","，估计多个代理。取第一个不是内网的IP。
+                    if (result.IndexOf(",") != -1) {
+                        result = result.Replace(" ", string.Empty).Replace("\"", string.Empty);
+
+                        string[] temparyip = result.Split(",;".ToCharArray());
+
+                        if (temparyip != null && temparyip.Length > 0) {
+                            for (int i = 0; i < temparyip.Length; i++) {
+                                //找到不是内网的地址
+                                if (IsIPAddress(temparyip[i]) && temparyip[i].Substring(0, 3) != "10." && temparyip[i].Substring(0, 7) != "192.168" && temparyip[i].Substring(0, 7) != "172.16.") {
+                                    return temparyip[i];
+                                }
+                            }
+                        }
+                    }
+                    //代理即是IP格式
+                    else if (IsIPAddress(result)) {
+                        return result;
+                    }
+                    //代理中的内容非IP
+                    else {
+                        result = null;
+                    }
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(result)) {
+                result = Request.Headers["REMOTE_ADDR"];
+            }
+
+            if (string.IsNullOrWhiteSpace(result)) {
+                result = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+            }
+            return result;
+        }
+        private bool IsIPAddress(string str)
+        {
+            if (string.IsNullOrWhiteSpace(str) || str.Length < 7 || str.Length > 15)
+                return false;
+
+            string regformat = @"^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})";
+            Regex regex = new Regex(regformat, RegexOptions.IgnoreCase);
+
+            return regex.IsMatch(str);
+        }
+
+
+        #endregion
+
+
+        #region 可断点续传和多线程下载的FileResult
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="fileContents">文件二进制流</param>
+        /// <param name="contentType">Content-Type</param>
+        /// <param name="fileDownloadName">下载的文件名</param>
+        /// <returns></returns>
+        protected ResumeFileContentResult ResumeFile(byte[] fileContents, string contentType, string fileDownloadName)
+        {
+            return ResumeFile(fileContents, contentType, fileDownloadName, null);
+        }
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="fileContents">文件二进制流</param>
+        /// <param name="fileDownloadName">下载的文件名</param>
+        /// <returns></returns>
+        protected ResumeFileContentResult ResumeFile(byte[] fileContents, string fileDownloadName)
+        {
+            return ResumeFile(fileContents, new MimeMapper().GetMimeFromPath(fileDownloadName), fileDownloadName, null);
+        }
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="fileContents">文件二进制流</param>
+        /// <param name="contentType">Content-Type</param>
+        /// <param name="fileDownloadName">下载的文件名</param>
+        /// <param name="etag">ETag</param>
+        /// <returns></returns>
+        protected ResumeFileContentResult ResumeFile(byte[] fileContents, string contentType, string fileDownloadName, string etag)
+        {
+            return new ResumeFileContentResult(fileContents, contentType, etag) {
+                FileDownloadName = fileDownloadName
+            };
+        }
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="fileStream">文件二进制流</param>
+        /// <param name="contentType">Content-Type</param>
+        /// <param name="fileDownloadName">下载的文件名</param>
+        /// <returns></returns>
+        protected ResumeFileStreamResult ResumeFile(FileStream fileStream, string contentType, string fileDownloadName)
+        {
+            return ResumeFile(fileStream, contentType, fileDownloadName, null);
+        }
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="fileStream">文件二进制流</param>
+        /// <param name="fileDownloadName">下载的文件名</param>
+        /// <returns></returns>
+        protected ResumeFileStreamResult ResumeFile(FileStream fileStream, string fileDownloadName)
+        {
+            return ResumeFile(fileStream, new MimeMapper().GetMimeFromPath(fileDownloadName), fileDownloadName, null);
+        }
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="fileStream">文件二进制流</param>
+        /// <param name="contentType">Content-Type</param>
+        /// <param name="fileDownloadName">下载的文件名</param>
+        /// <param name="etag">ETag</param>
+        /// <returns></returns>
+        protected ResumeFileStreamResult ResumeFile(FileStream fileStream, string contentType, string fileDownloadName, string etag)
+        {
+            return new ResumeFileStreamResult(fileStream, contentType, etag) {
+                FileDownloadName = fileDownloadName
+            };
+        }
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="virtualPath">服务端本地文件的虚拟路径</param>
+        /// <param name="contentType">Content-Type</param>
+        /// <param name="fileDownloadName">下载的文件名</param>
+        /// <returns></returns>
+        protected ResumeVirtualFileResult ResumeFile(string virtualPath, string contentType, string fileDownloadName)
+        {
+            return ResumeFile(virtualPath, contentType, fileDownloadName, null);
+        }
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="virtualPath">服务端本地文件的虚拟路径</param>
+        /// <returns></returns>
+        protected ResumeVirtualFileResult ResumeFile(string virtualPath)
+        {
+            var fileDownloadName = Path.GetFileName(virtualPath);
+            return ResumeFile(virtualPath, new MimeMapper().GetMimeFromPath(virtualPath), fileDownloadName, null);
+        }
+
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="virtualPath">服务端本地文件的虚拟路径</param>
+        /// <param name="fileDownloadName">下载的文件名</param>
+        /// <returns></returns>
+        protected ResumeVirtualFileResult ResumeFile(string virtualPath, string fileDownloadName)
+        {
+            return ResumeFile(virtualPath, new MimeMapper().GetMimeFromPath(virtualPath), fileDownloadName, null);
+        }
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="virtualPath">服务端本地文件的虚拟路径</param>
+        /// <param name="contentType">Content-Type</param>
+        /// <param name="fileDownloadName">下载的文件名</param>
+        /// <param name="etag">ETag</param>
+        /// <returns></returns>
+        protected ResumeVirtualFileResult ResumeFile(string virtualPath, string contentType, string fileDownloadName, string etag)
+        {
+            return new ResumeVirtualFileResult(virtualPath, contentType, etag) {
+                FileDownloadName = fileDownloadName
+            };
+        }
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="physicalPath">服务端本地文件的物理路径</param>
+        /// <param name="contentType">Content-Type</param>
+        /// <param name="fileDownloadName">下载的文件名</param>
+        /// <returns></returns>
+        protected ResumePhysicalFileResult ResumePhysicalFile(string physicalPath, string contentType, string fileDownloadName)
+        {
+            return ResumePhysicalFile(physicalPath, contentType, fileDownloadName, etag: null);
+        }
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="physicalPath">服务端本地文件的物理路径</param>
+        /// <returns></returns>
+        protected ResumePhysicalFileResult ResumePhysicalFile(string physicalPath)
+        {
+            var fileDownloadName = Path.GetFileName(physicalPath);
+            return ResumePhysicalFile(physicalPath, new MimeMapper().GetMimeFromPath(physicalPath), fileDownloadName, etag: null);
+        }
+
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="physicalPath">服务端本地文件的物理路径</param>
+        /// <param name="fileDownloadName">下载的文件名</param>
+        /// <returns></returns>
+        protected ResumePhysicalFileResult ResumePhysicalFile(string physicalPath, string fileDownloadName)
+        {
+            return ResumePhysicalFile(physicalPath, new MimeMapper().GetMimeFromPath(physicalPath), fileDownloadName, etag: null);
+        }
+
+        /// <summary>
+        /// 可断点续传和多线程下载的FileResult
+        /// </summary>
+        /// <param name="physicalPath">服务端本地文件的物理路径</param>
+        /// <param name="contentType">Content-Type</param>
+        /// <param name="fileDownloadName">下载的文件名</param>
+        /// <param name="etag">ETag</param>
+        /// <returns></returns>
+        protected ResumePhysicalFileResult ResumePhysicalFile(string physicalPath, string contentType, string fileDownloadName, string etag)
+        {
+            return new ResumePhysicalFileResult(physicalPath, contentType, etag) {
+                FileDownloadName = fileDownloadName
+            };
+        }
+        #endregion
+    }
+}
