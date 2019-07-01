@@ -4,11 +4,26 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>_key.snk</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>Copyright 2016-2019 ToolGood</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Authors>ToolGood</Authors>
+    <Company>ToolGood</Company>
+    <PackageProjectUrl>https://github.com/toolgood/ToolGood.Bedrock</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/toolgood/ToolGood.Bedrock</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.2" />
     <PackageReference Include="Castle.Core" Version="4.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 

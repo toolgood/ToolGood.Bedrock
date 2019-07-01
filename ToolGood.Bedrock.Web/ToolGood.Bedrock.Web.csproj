@@ -4,6 +4,14 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>_key.snk</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>ToolGood</Authors>
+    <Company>ToolGood</Company>
+    <Copyright>Copyright 2016-2019 ToolGood</Copyright>
+    <PackageProjectUrl>https://github.com/toolgood/ToolGood.Bedrock</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/toolgood/ToolGood.Bedrock</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +22,13 @@
   <ItemGroup>
     <ProjectReference Include="..\ToolGood.Bedrock.Dependency\ToolGood.Bedrock.Dependency.csproj" />
     <ProjectReference Include="..\ToolGood.Bedrock\ToolGood.Bedrock.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.2|AnyCPU'">
