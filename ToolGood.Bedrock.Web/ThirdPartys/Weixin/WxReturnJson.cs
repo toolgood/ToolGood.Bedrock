@@ -14,5 +14,4 @@
         /// </summary>
         public string errmsg { get; set; }
     }
-    #endregion
 }

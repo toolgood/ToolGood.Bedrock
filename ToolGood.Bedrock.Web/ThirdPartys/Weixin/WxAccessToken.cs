@@ -15,5 +15,4 @@
         /// </summary>
         public int expires_in { get; set; }
     }
-    #endregion
 }
