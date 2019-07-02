@@ -82,7 +82,12 @@ namespace ToolGood.Bedrock.Web
               );
             }
             if (config.UseResumeFile) { services.AddMyResumeFileResult(); }
-            if (config.UseCors) { services.AddCors(); }
+            if (config.UseCors) {
+                services.AddCors(options =>
+                {
+                    options.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+                });
+            }
 
 
             services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
