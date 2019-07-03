@@ -28,7 +28,9 @@ using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
 
 namespace ToolGood.Bedrock.Web
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class StartupBase
     {
         public IConfiguration Configuration { get; }
@@ -42,6 +44,11 @@ namespace ToolGood.Bedrock.Web
 
         protected abstract MyConfig GetMyConfig();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public virtual IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var config = GetMyConfig();
@@ -124,7 +131,11 @@ namespace ToolGood.Bedrock.Web
         /// <param name="containerManager"></param>
         public abstract void IocManagerRegister(ContainerManager containerManager);
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             MyHostingEnvironment.ApplicationName = env.ApplicationName;
@@ -162,7 +173,6 @@ namespace ToolGood.Bedrock.Web
 
             app.UseEnableRequestRewind();
             app.UseQueryArgs();
-            //app.UseRequestLogger();
 
             if (config.UseMvc) {
                 app.UseMvc(routes => {
@@ -176,6 +186,7 @@ namespace ToolGood.Bedrock.Web
                         template: "{controller=Home:exists}/{action=Index}/{id?}");
                 });
             }
+ 
 
         }
         /// <summary>
