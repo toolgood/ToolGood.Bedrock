@@ -2,14 +2,19 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -18,6 +23,8 @@ using ToolGood.Bedrock.Dependency.AutofacContainer;
 using ToolGood.Bedrock.Internals;
 using ToolGood.Bedrock.Web.Loggers;
 using ToolGood.Bedrock.Web.Middlewares;
+using ToolGood.Bedrock.Web.ResumeFiles.Executor;
+using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
 
 namespace ToolGood.Bedrock.Web
 {
@@ -81,10 +88,13 @@ namespace ToolGood.Bedrock.Web
                   }
               );
             }
-            if (config.UseResumeFile) { services.AddMyResumeFileResult(); }
+            services.TryAddSingleton<IActionResultExecutor<ResumePhysicalFileResult>, ResumePhysicalFileResultExecutor>();
+            services.TryAddSingleton<IActionResultExecutor<ResumeVirtualFileResult>, ResumeVirtualFileResultExecutor>();
+            services.TryAddSingleton<IActionResultExecutor<ResumeFileStreamResult>, ResumeFileStreamResultExecutor>();
+            services.TryAddSingleton<IActionResultExecutor<ResumeFileContentResult>, ResumeFileContentResultExecutor>();
+
             if (config.UseCors) {
-                services.AddCors(options =>
-                {
+                services.AddCors(options => {
                     options.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
                 });
             }
@@ -132,7 +142,19 @@ namespace ToolGood.Bedrock.Web
                     app.UseHsts();
                 }
             }
+            #region UseStaticFiles
             app.UseStaticFiles();
+            if (config.UselLetsEncrypt) {
+                var path = Path.Combine(env.ContentRootPath, ".well-known");
+                if (Directory.Exists(path) == false) { Directory.CreateDirectory(path); }
+                app.UseStaticFiles(new StaticFileOptions {
+                    FileProvider = new PhysicalFileProvider(path),
+                    RequestPath = new PathString("/.well-known"),
+                    ServeUnknownFileTypes = true
+                });
+            }
+            #endregion
+
             if (config.UseSession) { app.UseCookiePolicy(); app.UseSession(); } else if (config.UseCookie) { app.UseCookiePolicy(); }
             if (config.UseResponseCaching) { app.UseResponseCaching(); }
             if (config.UseResponseCompression) { app.UseResponseCompression(); }
@@ -146,16 +168,14 @@ namespace ToolGood.Bedrock.Web
                 app.UseMvc(routes => {
                     RouteRegister(routes);
                     routes.MapRoute(
-                      name: "areas",
-                      template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                    );
+                     name: "areas",
+                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                   );
                     routes.MapRoute(
                         name: "default",
-                        template: "{controller=Home}/{action=Index}/{id?}");
+                        template: "{controller=Home:exists}/{action=Index}/{id?}");
                 });
             }
-            if (config.UselLetsEncrypt) { app.UselMyLetsEncrypt(env); }
-
 
         }
         /// <summary>
@@ -163,9 +183,6 @@ namespace ToolGood.Bedrock.Web
         /// </summary>
         /// <param name="routes"></param>
         public abstract void RouteRegister(IRouteBuilder routes);
-
-
-
 
 
     }
