@@ -4,9 +4,9 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace ToolGood.Bedrock.Web.Helpers
+namespace ToolGood.Bedrock.Utils
 {
-    public static class SeoHelper
+    public static class SeoUtil
     {
         //returns a neat url, lower case, allows: -_/0-9a-z
         public static string TidyUrl(string url)
