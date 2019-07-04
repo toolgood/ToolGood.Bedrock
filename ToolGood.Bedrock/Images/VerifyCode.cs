@@ -9,6 +9,26 @@ namespace ToolGood.Bedrock.Images
 {
     public class VerifyCode
     {
+        /// <summary>
+        /// 生成随机码
+        /// </summary>
+        /// <param name="CodeLength"></param>
+        /// <param name="Letters"></param>
+        /// <returns></returns>
+        public string GenerateCaptchaCode(int CodeLength = 4, string Letters = "2346789ABCDEFGHJKLMNPRTUVWXYZ")
+        {
+            var rand = new Random();
+            var maxRand = Letters.Length - 1;
+
+            var sb = new StringBuilder();
+            for (var i = 0; i < CodeLength; i++) {
+                var index = rand.Next(maxRand);
+                sb.Append(Letters[index]);
+            }
+
+            return sb.ToString();
+        }
+
 
         /// <summary>
         /// 噪点颜色
