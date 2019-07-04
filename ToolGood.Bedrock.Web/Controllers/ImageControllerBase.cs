@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.IO;
+using System;
 using ToolGood.Bedrock.Images;
 using ToolGood.Bedrock.Web.Controllers.BaseCore;
 using ToolGood.Bedrock.Web.Mime;
@@ -12,9 +13,9 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// 剪切
         /// </summary>
-        /// <param name="u"></param>
-        /// <param name="w"></param>
-        /// <param name="h"></param>
+        /// <param name="u">原图片路径</param>
+        /// <param name="w">宽</param>
+        /// <param name="h">高</param>
         /// <returns></returns>
         [HttpGet]
         public virtual IActionResult C(string u, int w = 200, int h = 200)
@@ -33,8 +34,8 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// 固定高
         /// </summary>
-        /// <param name="u"></param>
-        /// <param name="h"></param>
+        /// <param name="u">原图片路径</param>
+        /// <param name="h">高</param>
         /// <returns></returns>
         [HttpGet]
         public virtual IActionResult H(string u, int h = 200)
@@ -53,8 +54,8 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// 固定宽
         /// </summary>
-        /// <param name="u"></param>
-        /// <param name="w"></param>
+        /// <param name="u">原图片路径</param>
+        /// <param name="w">宽</param>
         /// <returns></returns>
         [HttpGet]
         public virtual IActionResult W(string u, int w = 200)
@@ -73,9 +74,9 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// 缩小
         /// </summary>
-        /// <param name="u"></param>
-        /// <param name="w"></param>
-        /// <param name="h"></param>
+        /// <param name="u">原图片路径</param>
+        /// <param name="w">宽</param>
+        /// <param name="h">高</param>
         /// <returns></returns>
         [HttpGet]
         public virtual IActionResult T(string u, int w = 200, int h = 200)
@@ -109,78 +110,83 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// 剪切
         /// </summary>
-        /// <param name="u"></param>
-        /// <param name="w"></param>
-        /// <param name="h"></param>
+        /// <param name="sf">保存路径，可为空</param>
+        /// <param name="u">原图片路径</param>
+        /// <param name="w">宽</param>
+        /// <param name="h">高</param>
         /// <returns></returns>
         [HttpPost]
-        public virtual IActionResult ImageCut(string u, int w, int h)
+        public virtual IActionResult ImageCut(string sf, string u, int w, int h)
         {
-            var thumbnailUrl = ("/Thumbnail/" + u).Replace("//", "/");
-            var thumbnailPath = MapWebRootPath(thumbnailUrl);
+            if (sf.IsNotSet()) sf = ("/Thumbnail/" + u).Replace("//", "/");
+            var thumbnailPath = MapWebRootPath(sf);
             string newPath = Thumbnail.GetFileNameForCut(thumbnailPath, w, h);
             var path = MapWebRootPath(u);
             var bytes = Thumbnail.MakeThumbnailImage(path, w, h, "CUT");
             Directory.CreateDirectory(Path.GetDirectoryName(newPath));
             System.IO.File.WriteAllBytes(newPath, bytes);
-            return Success(thumbnailUrl);
+            return Success(sf);
         }
+
         /// <summary>
         /// 锁定高
         /// </summary>
-        /// <param name="u"></param>
-        /// <param name="h"></param>
+        /// <param name="sf">保存路径，可为空</param>
+        /// <param name="u">原图片路径</param>
+        /// <param name="h">高</param>
         /// <returns></returns>
         [HttpPost]
-        public virtual IActionResult ImageLockHeight(string u, int h = 200)
+        public virtual IActionResult ImageLockHeight(string sf, string u, int h = 200)
         {
-            var thumbnailUrl = ("/Thumbnail/" + u).Replace("//", "/");
-            var thumbnailPath = MapWebRootPath(thumbnailUrl);
+            if (sf.IsNotSet()) sf = ("/Thumbnail/" + u).Replace("//", "/");
+            var thumbnailPath = MapWebRootPath(sf);
             var newPath = Thumbnail.GetFileNameForHeight(thumbnailPath, h);
             var path = MapWebRootPath(u);
             var bytes = Thumbnail.MakeThumbnailImage(path, 0, h, "H");
             Directory.CreateDirectory(Path.GetDirectoryName(newPath));
             System.IO.File.WriteAllBytes(newPath, bytes);
-            return Success(thumbnailUrl);
+            return Success(sf);
         }
 
         /// <summary>
         /// 锁定宽
         /// </summary>
-        /// <param name="u"></param>
-        /// <param name="w"></param>
+        /// <param name="sf">保存路径，可为空</param>
+        /// <param name="u">原图片路径</param>
+        /// <param name="w">宽</param>
         /// <returns></returns>
         [HttpPost]
-        public virtual IActionResult ImageLockWidth(string u, int w = 200)
+        public virtual IActionResult ImageLockWidth(string sf, string u, int w = 200)
         {
-            var thumbnailUrl = ("/Thumbnail/" + u).Replace("//", "/");
-            var thumbnailPath = MapWebRootPath(thumbnailUrl);
+            if (sf.IsNotSet()) sf = ("/Thumbnail/" + u).Replace("//", "/");
+            var thumbnailPath = MapWebRootPath(sf);
             var newPath = Thumbnail.GetFileNameForHeight(thumbnailPath, w);
             var path = MapWebRootPath(u);
             var bytes = Thumbnail.MakeThumbnailImage(path, w, 0, "W");
             Directory.CreateDirectory(Path.GetDirectoryName(newPath));
             System.IO.File.WriteAllBytes(newPath, bytes);
-            return Success(thumbnailUrl);
+            return Success(sf);
         }
 
         /// <summary>
         /// 缩放
         /// </summary>
-        /// <param name="u"></param>
-        /// <param name="w"></param>
-        /// <param name="h"></param>
+        /// <param name="sf">保存路径，可为空</param>
+        /// <param name="u">原图片路径</param>
+        /// <param name="w">宽</param>
+        /// <param name="h">高</param>
         /// <returns></returns>
         [HttpPost]
-        public virtual IActionResult ImageThumbnail(string u, int w = 200, int h = 200)
+        public virtual IActionResult ImageThumbnail(string sf, string u, int w = 200, int h = 200)
         {
-            var thumbnailUrl = ("/Thumbnail/" + u).Replace("//", "/");
-            var thumbnailPath = MapWebRootPath(thumbnailUrl);
+            if (sf.IsNotSet()) sf = ("/Thumbnail/" + u).Replace("//", "/");
+            var thumbnailPath = MapWebRootPath(sf);
             var newPath = Thumbnail.GetFileNameForThumbnail(thumbnailPath, w, h);
             var path = MapWebRootPath(u);
             var bytes = Thumbnail.MakeThumbnailImage(path, w, h, "HW");
             Directory.CreateDirectory(Path.GetDirectoryName(newPath));
             System.IO.File.WriteAllBytes(newPath, bytes);
-            return Success(thumbnailUrl);
+            return Success(sf);
         }
 
         /// <summary>
@@ -201,17 +207,18 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// logo水印
         /// </summary>
-        /// <param name="u"></param>
+        /// <param name="sf">保存路径，可为空</param>
+        /// <param name="u">原图片路径</param>
         /// <param name="l">logo水印文件</param>
         /// <param name="s">图片水印位置 0=不使用 1=左上 2=中上 3=右上 4=左中  9=右下</param>
         /// <param name="q">附加水印图片质量,0-100</param>
         /// <param name="t">水印的透明度 1--100 100为不透明</param>
         /// <returns></returns>
         [HttpPost]
-        public virtual IActionResult ImageWaterMarkLogo(string u, string l, int s, int q, int t)
+        public virtual IActionResult ImageWaterMarkLogo(string sf, string u, string l, int s, int q, int t)
         {
-            var thumbnailUrl = ("/WaterMark/" + u).Replace("//", "/");
-            var newPath = MapWebRootPath(thumbnailUrl);
+            if (sf.IsNotSet()) sf = ("/WaterMark/" + u).Replace("//", "/");
+            var newPath = MapWebRootPath(sf);
 
             var path = MapWebRootPath(u);
             var logoPath = MapWebRootPath(l);
@@ -219,13 +226,14 @@ namespace ToolGood.Bedrock.Web
             Directory.CreateDirectory(Path.GetDirectoryName(newPath));
             System.IO.File.WriteAllBytes(newPath, bytes);
 
-            return Success(thumbnailUrl);
+            return Success(sf);
         }
 
         /// <summary>
         /// 文字水印
         /// </summary>
-        /// <param name="u"></param>
+        /// <param name="sf">保存路径，可为空</param>
+        /// <param name="u">原图片路径</param>
         /// <param name="t">水印文字</param>
         /// <param name="s">图片水印位置 0=不使用 1=左上 2=中上 3=右上 4=左中  9=右下</param>
         /// <param name="q">附加水印图片质量,0-100</param>
@@ -233,17 +241,17 @@ namespace ToolGood.Bedrock.Web
         /// <param name="fs">字体大小</param>
         /// <returns></returns>
         [HttpPost]
-        public virtual IActionResult ImageWaterMarkText(string u, string t, int s, int q, string fn, int fs)
+        public virtual IActionResult ImageWaterMarkText(string sf, string u, string t, int s, int q, string fn, int fs)
         {
-            var thumbnailUrl = ("/WaterMark/" + u).Replace("//", "/");
-            var newPath = MapWebRootPath(thumbnailUrl);
+            if (sf.IsNotSet()) sf = ("/WaterMark/" + u).Replace("//", "/");
+            var newPath = MapWebRootPath(sf);
 
             var path = MapWebRootPath(u);
             var bytes = WaterMark.AddImageSignText(path, t, s, q, fn, fs);
             Directory.CreateDirectory(Path.GetDirectoryName(newPath));
             System.IO.File.WriteAllBytes(newPath, bytes);
 
-            return Success(thumbnailUrl);
+            return Success(sf);
         }
 
 
