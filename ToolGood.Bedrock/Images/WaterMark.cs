@@ -9,6 +9,13 @@ namespace ToolGood.Bedrock.Images
 {
     public class WaterMark
     {
+        public static byte[] AddImageSignPic(string imageFile, string watermarkFilename, int watermarkStatus, int quality, int watermarkTransparency)
+        {
+            var fileExt = Path.GetExtension(imageFile);
+            var bytes = File.ReadAllBytes(imageFile);
+            return AddImageSignPic(bytes, fileExt, watermarkFilename, watermarkStatus, quality, watermarkTransparency);
+        }
+
         /// <summary>
         /// 图片水印
         /// </summary>
@@ -17,7 +24,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="watermarkFilename">水印文件相对路径</param>
         /// <param name="watermarkStatus">图片水印位置 0=不使用 1=左上 2=中上 3=右上 4=左中  9=右下</param>
         /// <param name="quality">附加水印图片质量,0-100</param>
-        /// <param name="watermarkTransparency">水印的透明度 1--10 10为不透明</param>
+        /// <param name="watermarkTransparency">水印的透明度 1--100 100为不透明</param>
         public static byte[] AddImageSignPic(byte[] byteData, string fileExt, string watermarkFilename, int watermarkStatus, int quality, int watermarkTransparency)
         {
             MemoryStream memoryStream = new MemoryStream(byteData);
@@ -51,8 +58,8 @@ namespace ToolGood.Bedrock.Images
             imageAttributes.SetRemapTable(remapTable, ColorAdjustType.Bitmap);
 
             float transparency = 0.5F;
-            if (watermarkTransparency >= 1 && watermarkTransparency <= 10)
-                transparency = (watermarkTransparency / 10.0F);
+            if (watermarkTransparency >= 1 && watermarkTransparency <= 100)
+                transparency = (watermarkTransparency / 100.0F);
 
 
             float[][] colorMatrixElements = {
@@ -145,6 +152,14 @@ namespace ToolGood.Bedrock.Images
                 watermark.Dispose();
                 imageAttributes.Dispose();
             }
+        }
+
+
+        public static byte[] AddImageSignText(string imageFile, string watermarkText, int watermarkStatus, int quality, string fontname, int fontsize)
+        {
+            var fileExt = Path.GetExtension(imageFile);
+            var bytes = File.ReadAllBytes(imageFile);
+            return AddImageSignText(bytes, fileExt, watermarkText, watermarkStatus, quality, fontname, fontsize);
         }
 
         /// <summary>

@@ -8,6 +8,7 @@ using ZXing.Common;
 using ZXing.QrCode;
 using ZXing.QrCode.Internal;
 using ZXing.Windows.Compatibility;
+using BarcodeReader = ZXing.Windows.Compatibility.BarcodeReader;
 
 namespace ToolGood.Bedrock.Images
 {
@@ -46,6 +47,31 @@ namespace ToolGood.Bedrock.Images
         }
 
         /// <summary>
+        /// 解析图片
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static string AnalysisImage(string file)
+        {
+            Bitmap m1 = (Bitmap)Bitmap.FromFile(file);
+            BarcodeReader barcodeReader = new BarcodeReader();
+            DecodingOptions arg_1 = new DecodingOptions();
+            arg_1.PossibleFormats = new List<BarcodeFormat>(){
+                BarcodeFormat.QR_CODE,
+                BarcodeFormat.CODE_39,
+                BarcodeFormat.CODE_93,
+                BarcodeFormat.CODE_128,
+            };
+            arg_1.CharacterSet = "UTF-8";//提示已过时？
+            //arg_1.CharacterSet = "gb2312";//设置了字符集也读不出来中文汉字
+            barcodeReader.Options = arg_1;
+
+            Result result = barcodeReader.Decode(m1);
+            return result.Text;
+        }
+
+
+        /// <summary>
         /// 生成一维条形码
         /// </summary>
         /// <param name="text">内容</param>
@@ -58,7 +84,7 @@ namespace ToolGood.Bedrock.Images
             //使用ITF 格式，不能被现在常用的支付宝、微信扫出来
             //如果想生成可识别的可以使用 CODE_128 格式
             //writer.Format = BarcodeFormat.ITF;
-            writer.Format = BarcodeFormat.CODE_39;
+            writer.Format = BarcodeFormat.CODE_128;
             EncodingOptions options = new EncodingOptions() {
                 Width = width,
                 Height = height,
