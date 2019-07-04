@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -157,7 +158,10 @@ namespace ToolGood.Bedrock.Web
             app.UseStaticFiles();
             if (config.UselLetsEncrypt) {
                 var path = Path.Combine(env.ContentRootPath, ".well-known");
-                if (Directory.Exists(path) == false) { Directory.CreateDirectory(path); }
+                if (Directory.Exists(path) == false) {
+                    Directory.CreateDirectory(path);
+                    Directory.CreateDirectory(Path.Combine(path, "Check"));//防止 .well-known 被删除
+                }
                 app.UseStaticFiles(new StaticFileOptions {
                     FileProvider = new PhysicalFileProvider(path),
                     RequestPath = new PathString("/.well-known"),
@@ -180,13 +184,13 @@ namespace ToolGood.Bedrock.Web
                     routes.MapRoute(
                      name: "areas",
                      template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                   );
+                    );
                     routes.MapRoute(
                         name: "default",
                         template: "{controller=Home:exists}/{action=Index}/{id?}");
                 });
             }
- 
+
 
         }
         /// <summary>
