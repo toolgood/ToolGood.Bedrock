@@ -16,7 +16,7 @@ namespace ToolGood.Bedrock.Web.Extensions
         public static string ImageHeightPrefix = "/Image/H/?u={0}&h={1}";
         public static string ImageWidthPrefix = "/Image/W/?u={0}&w={1}";
         public static string ImageThumbnailPrefix = "/Image/T/?u={0}&w={1}&h={2}";
-        public static string ImageQrCodePrefix = "/Image/Qr/?u={0}";
+        public static string ImageQrCodePrefix = "/Image/Qr/?u={0}&w={1}&h={2}";
 
 
         public static HtmlString ToImageUrlForCut(this string url, int width = 100, int height = 100)
@@ -41,7 +41,7 @@ namespace ToolGood.Bedrock.Web.Extensions
 
         public static HtmlString ToImageUrlForQrCode(this string url, int width = 200, int height = 200)
         {
-            return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageQrCodePrefix), url));
+            return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageQrCodePrefix), url, width, height));
         }
 
 
