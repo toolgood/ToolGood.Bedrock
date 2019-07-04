@@ -21,7 +21,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="height"></param>
         /// <param name="width"></param>
         /// <returns></returns>
-        public static string GetFileNameForCut(string path, int height, int width)
+        public static string GetFileNameForCut(string path, int width, int height)
         {
             var fileDir = Path.GetDirectoryName(path);
             var fileName = Path.GetFileNameWithoutExtension(path);
@@ -35,12 +35,12 @@ namespace ToolGood.Bedrock.Images
         /// <param name="height"></param>
         /// <param name="width"></param>
         /// <returns></returns>
-        public static string GetFileNameForHeight(string path, int height, int width)
+        public static string GetFileNameForHeight(string path,   int height)
         {
             var fileDir = Path.GetDirectoryName(path);
             var fileName = Path.GetFileNameWithoutExtension(path);
             var fileExt = Path.GetExtension(path);
-            return Path.Combine(fileDir, $"{fileName}_H{height}x{width}{fileExt}");
+            return Path.Combine(fileDir, $"{fileName}_H{height}{fileExt}");
         }
         /// <summary>
         /// 获取 锁定宽的图片名称
@@ -49,12 +49,12 @@ namespace ToolGood.Bedrock.Images
         /// <param name="height"></param>
         /// <param name="width"></param>
         /// <returns></returns>
-        public static string GetFileNameForWidth(string path, int height, int width)
+        public static string GetFileNameForWidth(string path, int width)
         {
             var fileDir = Path.GetDirectoryName(path);
             var fileName = Path.GetFileNameWithoutExtension(path);
             var fileExt = Path.GetExtension(path);
-            return Path.Combine(fileDir, $"{fileName}_W{height}x{width}{fileExt}");
+            return Path.Combine(fileDir, $"{fileName}_W{width}{fileExt}");
         }
         /// <summary>
         /// 获取 锁定高宽的图片名称
@@ -63,7 +63,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="height"></param>
         /// <param name="width"></param>
         /// <returns></returns>
-        public static string GetFileNameForThumbnail(string path, int height, int width)
+        public static string GetFileNameForThumbnail(string path, int width, int height)
         {
             var fileDir = Path.GetDirectoryName(path);
             var fileName = Path.GetFileNameWithoutExtension(path);
@@ -106,10 +106,6 @@ namespace ToolGood.Bedrock.Images
         {
             var bytes = File.ReadAllBytes(filePath);
             var fileExt = Path.GetExtension(filePath);
-            if (fileExt==".gif") {
-             }
-
-
             return MakeThumbnailImage(bytes, fileExt, width, height, mode);
         }
 
