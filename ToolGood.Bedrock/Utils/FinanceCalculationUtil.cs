@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ToolGood.Bedrock.Utils
+namespace ToolGood.Bedrock
 {
     /// <summary>
     /// 返回计算的结果值

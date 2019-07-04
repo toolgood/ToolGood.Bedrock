@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ToolGood.Bedrock.Utils
+namespace ToolGood.Bedrock
 {
     public class StringUtil
     {

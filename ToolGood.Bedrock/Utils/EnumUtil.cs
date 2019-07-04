@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ToolGood.Bedrock.Utils
+namespace ToolGood.Bedrock
 {
     public static class EnumUtil
     {
