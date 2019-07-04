@@ -257,15 +257,33 @@ namespace ToolGood.Bedrock.Images
         {
             switch (ext.ToLower()) {
                 case "bmp":
+                case ".bmp":
                     return ImageFormat.Bmp;
                 case "png":
+                case ".png":
                     return ImageFormat.Png;
                 case "gif":
+                case ".gif":
                     return ImageFormat.Gif;
                 default:
                     return ImageFormat.Jpeg;
             }
         }
+        /// <summary>
+        /// 获取图像编码解码器的所有相关信息
+        /// </summary>
+        /// <param name="mimeType">包含编码解码器的多用途网际邮件扩充协议 (MIME) 类型的字符串</param>
+        /// <returns>返回图像编码解码器的所有相关信息</returns>
+        private static ImageCodecInfo GetCodecInfo(string mimeType)
+        {
+            ImageCodecInfo[] CodecInfo = ImageCodecInfo.GetImageEncoders();
+            foreach (ImageCodecInfo ici in CodecInfo) {
+                if (ici.MimeType == mimeType)
+                    return ici;
+            }
+            return null;
+        }
+
     }
 
 }

@@ -51,7 +51,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="fileSaveUrl">缩略图存放地址</param>
         /// <param name="side">指定的边长（正方型）</param>
         /// <param name="quality">质量（范围0-100）</param>
-        public static void CutForSquare(this Stream fromFile, string fileSaveUrl, int side, int quality)
+        public static void CutForSquare(Stream fromFile, string fileSaveUrl, int side, int quality)
         {
             //创建目录
             string dir = Path.GetDirectoryName(fileSaveUrl);
@@ -162,7 +162,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="maxWidth">最大宽(单位:px)</param>
         /// <param name="maxHeight">最大高(单位:px)</param>
         /// <param name="quality">质量（范围0-100）</param>
-        public static void CutForCustom(this Stream fromFile, string fileSaveUrl, int maxWidth, int maxHeight, int quality)
+        public static void CutForCustom(Stream fromFile, string fileSaveUrl, int maxWidth, int maxHeight, int quality)
         {
             //从文件获取原始图片，并使用流中嵌入的颜色管理信息
             Image initImage = Image.FromStream(fromFile, true);
@@ -288,7 +288,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="targetHeight">指定的最大高度</param>
         /// <param name="watermarkText">水印文字(为""表示不使用水印)</param>
         /// <param name="watermarkImage">水印图片路径(为""表示不使用水印)</param>
-        public static void ZoomAuto(this Stream fromFile, string savePath, double targetWidth, double targetHeight, string watermarkText, string watermarkImage)
+        public static void ZoomAuto(Stream fromFile, string savePath, double targetWidth, double targetHeight, string watermarkText, string watermarkImage)
         {
             //创建目录
             string dir = Path.GetDirectoryName(savePath);
@@ -469,7 +469,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="b">原始Bitmap</param>
         /// <param name="rec">裁剪区域</param>
         /// <returns>剪裁后的Bitmap</returns>
-        public static Bitmap CutImage(this Bitmap b, Rectangle rec)
+        public static Bitmap CutImage(Bitmap b, Rectangle rec)
         {
             int w = b.Width;
             int h = b.Height;
@@ -503,7 +503,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="newWidth">新的宽度</param>  
         /// <param name="newHeight">新的高度</param>  
         /// <returns>处理以后的图片</returns>  
-        public static Bitmap ResizeImage(this Bitmap bmp, int newWidth, int newHeight)
+        public static Bitmap ResizeImage(Bitmap bmp, int newWidth, int newHeight)
         {
             try {
                 Bitmap b = new Bitmap(newWidth, newHeight);
@@ -530,7 +530,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="newWidth">新的宽度</param>  
         /// <param name="newHeight">新的高度</param>  
         /// <returns>处理以后的图片</returns>
-        public static Bitmap CutAndResize(this Bitmap bmp, Rectangle rec, int newWidth, int newHeight) => bmp.CutImage(rec).ResizeImage(newWidth, newHeight);
+        public static Bitmap CutAndResize(Bitmap bmp, Rectangle rec, int newWidth, int newHeight) => ResizeImage(CutImage(bmp,rec),newWidth, newHeight);
 
         #endregion
 
@@ -698,7 +698,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="width">缩略图宽度</param>
         /// <param name="height">缩略图高度</param>
         /// <param name="mode">生成缩略图的方式</param>    
-        public static void MakeThumbnail(this Image originalImage, string thumbnailPath, int width, int height, ThumbnailCutMode mode)
+        public static void MakeThumbnail(Image originalImage, string thumbnailPath, int width, int height, ThumbnailCutMode mode)
         {
             int towidth = width;
             int toheight = height;
@@ -774,7 +774,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="width">原始图片的长度</param>
         /// <param name="height">原始图片的高度</param>
         /// <param name="val">增加或减少的光暗值</param>
-        public static Bitmap LDPic(this Bitmap mybm, int width, int height, int val)
+        public static Bitmap LDPic(Bitmap mybm, int width, int height, int val)
         {
             Bitmap bm = new Bitmap(width, height); //初始化一个记录经过处理后的图片对象
             int x, y; //x、y是循环次数，后面三个是记录红绿蓝三个值的
@@ -801,7 +801,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="mybm">原始图片</param>
         /// <param name="width">原始图片的长度</param>
         /// <param name="height">原始图片的高度</param>
-        public static Bitmap RePic(this Bitmap mybm, int width, int height)
+        public static Bitmap RePic(Bitmap mybm, int width, int height)
         {
             Bitmap bm = new Bitmap(width, height); //初始化一个记录处理后的图片的对象
             int x, y, resultR, resultG, resultB;
@@ -829,7 +829,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="oldBitmap">原始图片</param>
         /// <param name="width">原始图片的长度</param>
         /// <param name="height">原始图片的高度</param>
-        public static Bitmap Relief(this Bitmap oldBitmap, int width, int height)
+        public static Bitmap Relief(Bitmap oldBitmap, int width, int height)
         {
             Bitmap newBitmap = new Bitmap(width, height);
             for (int x = 0; x < width - 1; x++) {
@@ -862,7 +862,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="bmp">原始图片</param>
         /// <param name="newW">新的宽度</param>
         /// <param name="newH">新的高度</param>
-        public static async Task<Bitmap> ResizeImageAsync(this Bitmap bmp, int newW, int newH)
+        public static async Task<Bitmap> ResizeImageAsync(Bitmap bmp, int newW, int newH)
         {
             try {
                 using (Bitmap bap = new Bitmap(newW, newH)) {
@@ -889,7 +889,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="mybm">原始图片</param>
         /// <param name="width">原始图片的长度</param>
         /// <param name="height">原始图片的高度</param>
-        public static Bitmap FilPic(this Bitmap mybm, int width, int height)
+        public static Bitmap FilPic(Bitmap mybm, int width, int height)
         {
             using (Bitmap bm = new Bitmap(width, height)) //初始化一个记录滤色效果的图片对象
             {
@@ -916,7 +916,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="mybm">原始图片</param>
         /// <param name="width">原始图片的长度</param>
         /// <param name="height">原始图片的高度</param>
-        public static Bitmap RevPicLR(this Bitmap mybm, int width, int height)
+        public static Bitmap RevPicLR(Bitmap mybm, int width, int height)
         {
             using (Bitmap bm = new Bitmap(width, height)) {
                 int x, y, z; //x,y是循环次数,z是用来记录像素点的x坐标的变化的
@@ -941,7 +941,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="mybm">原始图片</param>
         /// <param name="width">原始图片的长度</param>
         /// <param name="height">原始图片的高度</param>
-        public static Bitmap RevPicUD(this Bitmap mybm, int width, int height)
+        public static Bitmap RevPicUD(Bitmap mybm, int width, int height)
         {
             Bitmap bm = new Bitmap(width, height);
             using (bm) {
@@ -966,7 +966,7 @@ namespace ToolGood.Bedrock.Images
         /// </summary>
         /// <param name="img"></param>
         /// <param name="newfile">新文件</param>
-        public static bool Compress(this Image img, string newfile)
+        public static bool Compress(Image img, string newfile)
         {
             try {
                 Size newSize = new Size(100, 125);
@@ -1007,7 +1007,7 @@ namespace ToolGood.Bedrock.Images
         /// </summary>
         /// <param name="c">输入颜色</param>
         /// <returns>输出颜色</returns>
-        public static Color Gray(this Color c)
+        public static Color Gray(Color c)
         {
             int rgb = Convert.ToInt32(0.3 * c.R + 0.59 * c.G + 0.11 * c.B);
             return Color.FromArgb(rgb, rgb, rgb);
@@ -1023,7 +1023,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="mybm">要进行处理的图片</param>
         /// <param name="width">图片的长度</param>
         /// <param name="height">图片的高度</param>
-        public static Bitmap BWPic(this Bitmap mybm, int width, int height)
+        public static Bitmap BWPic(Bitmap mybm, int width, int height)
         {
             Bitmap bm = new Bitmap(width, height);
             using (bm) {
@@ -1049,7 +1049,7 @@ namespace ToolGood.Bedrock.Images
         /// </summary>
         /// <param name="gif">源gif</param>
         /// <param name="pSavedPath">保存路径</param>
-        public static void GetFrames(this Image gif, string pSavedPath)
+        public static void GetFrames(Image gif, string pSavedPath)
         {
             using (gif) {
                 FrameDimension fd = new FrameDimension(gif.FrameDimensionsList[0]);
@@ -1071,7 +1071,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="source">dataUri数据源</param>
         /// <returns></returns>
         /// <exception cref="Exception">操作失败。</exception>
-        public static Bitmap SaveDataUriAsImageFile(this string source)
+        public static Bitmap SaveDataUriAsImageFile(string source)
         {
             string strbase64 = source.Substring(source.IndexOf(',') + 1);
             strbase64 = strbase64.Trim('\0');

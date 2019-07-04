@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Text;
 
 namespace System
@@ -66,14 +67,19 @@ namespace System
             }
             return builder.ToString();
         }
- 
+
         public static byte[] SubBytes(this byte[] bytes, int startIndex, int length)
         {
             byte[] res = new byte[length];
             Array.Copy(bytes, startIndex, res, 0, length);
             return res;
         }
-         
+
+
+        public static void SaveFile(this byte[] bytes, string filePath)
+        {
+            File.WriteAllBytes(filePath, bytes);
+        }
 
     }
 }
