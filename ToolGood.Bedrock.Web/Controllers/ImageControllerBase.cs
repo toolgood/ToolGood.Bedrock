@@ -15,7 +15,7 @@ namespace ToolGood.Bedrock.Web
         /// <param name="w"></param>
         /// <param name="h"></param>
         /// <returns></returns>
-        public IActionResult C(string u, int w, int h)
+        public IActionResult C(string u, int w = 200, int h = 200)
         {
             var path = MyHostingEnvironment.MapWebRootPath(u);
             var thumbnailPath = MyHostingEnvironment.MapWebRootPath(("/Thumbnail/" + u).Replace("//", "/"));
@@ -33,7 +33,7 @@ namespace ToolGood.Bedrock.Web
         /// <param name="u"></param>
         /// <param name="h"></param>
         /// <returns></returns>
-        public IActionResult H(string u, int h)
+        public IActionResult H(string u, int h = 200)
         {
             var path = MyHostingEnvironment.MapWebRootPath(u);
             var thumbnailPath = MyHostingEnvironment.MapWebRootPath(("/Thumbnail/" + u).Replace("//", "/"));
@@ -51,7 +51,7 @@ namespace ToolGood.Bedrock.Web
         /// <param name="u"></param>
         /// <param name="w"></param>
         /// <returns></returns>
-        public IActionResult W(string u, int w)
+        public IActionResult W(string u, int w = 200)
         {
             var path = MyHostingEnvironment.MapWebRootPath(u);
             var thumbnailPath = MyHostingEnvironment.MapWebRootPath(("/Thumbnail/" + u).Replace("//", "/"));
@@ -70,7 +70,7 @@ namespace ToolGood.Bedrock.Web
         /// <param name="w"></param>
         /// <param name="h"></param>
         /// <returns></returns>
-        public IActionResult T(string u, int w, int h)
+        public IActionResult T(string u, int w = 200, int h = 200)
         {
             var path = MyHostingEnvironment.MapWebRootPath(u);
             var thumbnailPath = MyHostingEnvironment.MapWebRootPath(("/Thumbnail/" + u).Replace("//", "/"));
@@ -87,10 +87,12 @@ namespace ToolGood.Bedrock.Web
         /// 二维码
         /// </summary>
         /// <param name="u"></param>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
         /// <returns></returns>
-        public IActionResult Qr(string u)
+        public IActionResult Qr(string u, int w = 200, int h=200)
         {
-            var bytes = QrCode.CreateUrl(u);
+            var bytes = BarcodeHelper.CreateQrCode(u,w,h);
             return File(bytes, "image/jpeg");
         }
 

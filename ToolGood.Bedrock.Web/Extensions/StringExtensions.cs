@@ -34,12 +34,12 @@ namespace ToolGood.Bedrock.Web.Extensions
             return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageWidthPrefix), url, width));
         }
 
-        public static HtmlString ToImageUrlForThumbnail(this string url, int width = 100, int height = 100)
+        public static HtmlString ToImageUrlForThumbnail(this string url, int width = 200, int height = 200)
         {
             return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageThumbnailPrefix), url, width, height));
         }
 
-        public static HtmlString ToImageUrlForQrCode(this string url)
+        public static HtmlString ToImageUrlForQrCode(this string url, int width = 200, int height = 200)
         {
             return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageQrCodePrefix), url));
         }
