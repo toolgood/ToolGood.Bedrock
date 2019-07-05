@@ -68,6 +68,12 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         }
 
         #region Success
+        /// <summary>
+        /// 返回成功
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="extendData"></param>
+        /// <returns></returns>
         protected IActionResult Success(object obj, object extendData = null)
         {
             QueryResult result = new QueryResult() {
@@ -86,7 +92,12 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
             }
             return CamelCaseJson(result);
         }
-
+        /// <summary>
+        /// 返回成功
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="objs"></param>
+        /// <returns></returns>
         protected IActionResult Success<T>(List<T> objs)
         {
             QueryResult result = new QueryResult() {
@@ -104,7 +115,12 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
             }
             return CamelCaseJson(result);
         }
-
+        /// <summary>
+        /// 返回成功
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="page"></param>
+        /// <returns></returns>
         protected IActionResult Success<T>(Page<T> page)
         {
             QueryResult result = new QueryResult() {
@@ -122,7 +138,11 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
             }
             return CamelCaseJson(result);
         }
-
+        /// <summary>
+        /// 返回成功
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         protected IActionResult Success(string msg = "SUCCESS")
         {
             QueryResult result = new QueryResult() {
@@ -143,7 +163,11 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         #endregion
 
         #region Error
-
+        /// <summary>
+        /// 返回错误
+        /// </summary>
+        /// <param name="ms"></param>
+        /// <returns></returns>
         protected IActionResult Error(ModelStateDictionary ms)
         {
             List<string> sb = new List<string>();
@@ -172,7 +196,11 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
             }
             return CamelCaseJson(result);
         }
-
+        /// <summary>
+        /// 返回错误
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         protected IActionResult Error(string msg)
         {
             QueryResult result = new QueryResult() {
@@ -190,7 +218,12 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
             }
             return CamelCaseJson(result);
         }
-
+        /// <summary>
+        /// 返回错误
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         protected IActionResult Error(int code, string msg)
         {
             QueryResult result = new QueryResult() {
@@ -208,7 +241,11 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
             }
             return CamelCaseJson(result);
         }
-
+        /// <summary>
+        /// 返回错误
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         protected IActionResult Error(object obj)
         {
             QueryResult result = new QueryResult() {
@@ -229,26 +266,11 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
 
         #endregion
 
-
-        #region JumpUrl
-        protected IActionResult JumpTopUrl(string url)
-        {
-            var content = new ContentResult();
-            content.Content = $"<script>top.location.href='{url}'</script>";
-            content.ContentType = "text/html";
-            return content;
-        }
-        protected IActionResult JumpUrl(string url)
-        {
-            var content = new ContentResult();
-            content.Content = $"<script>location.href='{url}'</script>";
-            content.ContentType = "text/html";
-            return content;
-        }
-        #endregion
-
         #region Other CreatePassword GetUserAgent MapPath
-
+        /// <summary>
+        /// 获取 UserAgent
+        /// </summary>
+        /// <returns></returns>
         protected string GetUserAgent()
         {
             return HttpContext.Request.Headers[HeaderNames.UserAgent].ToString();
@@ -263,7 +285,11 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         {
             return MyHostingEnvironment.MapPath(path);
         }
-
+        /// <summary>
+        /// 获取文件绝对路径 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         protected string MapWebRootPath(string path)
         {
             return MyHostingEnvironment.MapWebRootPath(path);
@@ -271,37 +297,65 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         #endregion
 
         #region Session
-
+        /// <summary>
+        /// 获取 SessionId
+        /// </summary>
+        /// <returns></returns>
         protected string GetSessionId()
         {
             return HttpContext.Session.Id;
         }
-
+        /// <summary>
+        /// 设置Session
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
         protected void SetSession(string key, string val)
         {
             HttpContext.Session.Set(key, Encoding.UTF8.GetBytes(val));
         }
+        /// <summary>
+        /// 设置Session
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         protected void SetSession(string key, object value)
         {
             HttpContext.Session.SetString(key, JsonConvert.SerializeObject(value));
         }
-
+        /// <summary>
+        /// 获取Session
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected string GetSession(string key)
         {
             return HttpContext.Session.GetString(key);
         }
-
+        /// <summary>
+        /// 判断session是否存在key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected bool HasSession(string key)
         {
             return HttpContext.Session.Keys.Any(q => q == key);
         }
-
+        /// <summary>
+        /// 获取Session
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected T GetSession<T>(string key)
         {
             var value = HttpContext.Session.GetString(key);
             return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
         }
-
+        /// <summary>
+        /// 依据key删除Session
+        /// </summary>
+        /// <param name="key"></param>
         protected void DeleteSession(string key)
         {
             HttpContext.Session.Remove(key);
@@ -310,12 +364,20 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         #endregion
 
         #region Cookie 操作
-
+        /// <summary>
+        /// 获取 Cookie
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected string GetCookie(string key)
         {
             return HttpContext.Request.Cookies[key];
         }
-
+        /// <summary>
+        /// 设置 Cookie
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
         protected void SetCookie(string key, string val)
         {
             HttpContext.Response.Cookies.Append(key, val, new CookieOptions() {
@@ -326,7 +388,12 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
                 SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
             });
         }
-
+        /// <summary>
+        /// 设置 Cookie
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <param name="minutes"></param>
         protected void SetCookie(string key, string val, int minutes)
         {
             HttpContext.Response.Cookies.Append(key, val, new Microsoft.AspNetCore.Http.CookieOptions() {
@@ -338,7 +405,12 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
                 SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
             });
         }
-
+        /// <summary>
+        /// 设置 Cookie
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <param name="dateTime"></param>
         protected void SetCookie(string key, string val, DateTime dateTime)
         {
             HttpContext.Response.Cookies.Append(key, val, new Microsoft.AspNetCore.Http.CookieOptions() {
@@ -350,7 +422,10 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
                 SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
             });
         }
-
+        /// <summary>
+        /// 依据cookieName 删除 cookie
+        /// </summary>
+        /// <param name="cookieName"></param>
         protected void DeleteCookie(string cookieName)
         {
             var val = Request.Cookies[cookieName];
@@ -358,12 +433,45 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
                 SetCookie(cookieName, "", DateTime.Now.AddYears(-1));
             }
         }
-
+        /// <summary>
+        /// 判断  Cookie是否包含cookieName 
+        /// </summary>
+        /// <param name="cookieName"></param>
+        /// <returns></returns>
         protected bool HasCookie(string cookieName)
         {
             return Request.Cookies.ContainsKey(cookieName);
         }
         #endregion
+
+        #region JumpUrl
+        /// <summary>
+        /// 跳转Url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        protected IActionResult JumpTopUrl(string url)
+        {
+            var content = new ContentResult();
+            content.Content = $"<script>top.location.href='{url}'</script>";
+            content.ContentType = "text/html";
+            return content;
+        }
+        /// <summary>
+        /// 跳转Url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        protected IActionResult JumpUrl(string url)
+        {
+            var content = new ContentResult();
+            content.Content = $"<script>location.href='{url}'</script>";
+            content.ContentType = "text/html";
+            return content;
+        }
+        #endregion
+
+ 
 
         #region 获取真ip
         /// <summary>

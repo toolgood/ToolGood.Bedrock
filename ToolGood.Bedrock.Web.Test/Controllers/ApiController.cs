@@ -26,7 +26,7 @@ namespace ToolGood.Bedrock.Web.Test.Controllers
             return ResumeFile("1.zip", "1.zip");
         }
 
-        public IActionResult TT()
+        public IActionResult TT(int aa)
         {
             HttpContext.Request.HttpContext.Items[ViewLocationExpander.ThemeKey] = "EE";
             //HttpContext.Request.HttpContext.Items[ViewLocationExpander.ThemeKey] = "EE";

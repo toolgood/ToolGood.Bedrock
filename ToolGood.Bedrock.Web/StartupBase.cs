@@ -26,6 +26,7 @@ using ToolGood.Bedrock.Dependency.AutofacContainer;
 using ToolGood.Bedrock.Internals;
 using ToolGood.Bedrock.Web.Loggers;
 using ToolGood.Bedrock.Web.Middlewares;
+using ToolGood.Bedrock.Web.ModelBinders;
 using ToolGood.Bedrock.Web.ResumeFiles.Executor;
 using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
 using ToolGood.Bedrock.Web.Theme;
@@ -39,15 +40,13 @@ namespace ToolGood.Bedrock.Web
     public abstract class StartupBase
     {
         public IConfiguration Configuration { get; }
-        public IContainer AutofacContainer;
-
+        public IContainer AutofacContainer { get; private set; }
 
         public StartupBase(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        protected abstract MyConfig GetMyConfig();
 
         /// <summary>
         /// 
@@ -91,7 +90,10 @@ namespace ToolGood.Bedrock.Web
             if (config.UseIHttpContextAccessor) { services.AddHttpContextAccessor(); }
 
             if (config.UseMvc) {
-                var mvcBuilder = services.AddMvc(options => { options.Filters.Add<HttpGlobalExceptionFilter>(); })
+                var mvcBuilder = services.AddMvc(options => {
+                    options.Filters.Add<HttpGlobalExceptionFilter>();
+                    if (config.UseRsaDecrypt) { options.ModelBinderProviders.Insert(0, new RsaDecryptModelBinderProvider()); }
+                })
                   .AddDataAnnotationsLocalization()
                   .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                   .AddJsonOptions(options => {
@@ -144,17 +146,7 @@ namespace ToolGood.Bedrock.Web
             AutofacContainer = (ContainerManager.Instance.Container as AutofacObjectContainer).Container;
             return new AutofacServiceProvider(AutofacContainer);
         }
-        /// <summary>
-        /// 服务注册
-        /// </summary>
-        /// <param name="services"></param>
-        public abstract void ServiceRegister(IServiceCollection services);
 
-        /// <summary>
-        /// IOC注册
-        /// </summary>
-        /// <param name="containerManager"></param>
-        public abstract void IocManagerRegister(ContainerManager containerManager);
 
         /// <summary>
         /// 
@@ -221,6 +213,24 @@ namespace ToolGood.Bedrock.Web
 
 
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected abstract MyConfig GetMyConfig();
+
+        /// <summary>
+        /// 服务注册
+        /// </summary>
+        /// <param name="services"></param>
+        public abstract void ServiceRegister(IServiceCollection services);
+
+        /// <summary>
+        /// IOC注册
+        /// </summary>
+        /// <param name="containerManager"></param>
+        public abstract void IocManagerRegister(ContainerManager containerManager);
         /// <summary>
         /// 注册路由
         /// </summary>

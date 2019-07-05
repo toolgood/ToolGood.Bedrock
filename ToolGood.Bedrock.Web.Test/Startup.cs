@@ -34,7 +34,10 @@ namespace ToolGood.Bedrock.Web.Test
 
         protected override MyConfig GetMyConfig()
         {
-            return new MyConfig();
+            return new MyConfig() {
+                UseRsaDecrypt=true,
+
+            };
         }
     }
 }
