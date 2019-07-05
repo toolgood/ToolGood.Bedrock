@@ -22,6 +22,7 @@ namespace ToolGood.Bedrock
         /// <summary>
         /// 随机数
         /// </summary>
+        /// <param name="minValue"></param>
         /// <param name="maxValue"></param>
         /// <returns></returns>
         public static int RandomInt(int minValue, int maxValue)
@@ -59,6 +60,7 @@ namespace ToolGood.Bedrock
         /// <summary>
         /// 随机数
         /// </summary>
+        /// <param name="minValue"></param>
         /// <param name="maxValue"></param>
         /// <returns></returns>
         public static double RandomDouble(int minValue, int maxValue)
@@ -70,6 +72,7 @@ namespace ToolGood.Bedrock
         /// <summary>
         /// 随机数
         /// </summary>
+        /// <param name="minValue"></param>
         /// <param name="maxValue"></param>
         /// <returns></returns>
         public static double RandomDouble(double minValue, double maxValue)

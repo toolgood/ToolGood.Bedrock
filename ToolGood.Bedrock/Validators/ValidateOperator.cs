@@ -44,7 +44,6 @@ namespace ToolGood.Bedrock.Validators
         /// </summary>
         /// <param name="validation">Validation</param>
         /// <param name="checkFactory">委托</param>
-        /// <param name="pattern">正则表达式</param>
         /// <param name="argumentName">参数名称</param>
         /// <returns>Validation</returns>
         public static Validation Check(this Validation validation, Func<bool> checkFactory, string argumentName)
@@ -61,8 +60,6 @@ namespace ToolGood.Bedrock.Validators
         /// <param name="checkedFactory">委托</param>
         /// <param name="message">自定义错误消息</param>
         /// <returns>Validation</returns>
-        /// 时间：2016/7/19 11:37
-        /// 备注：
         public static Validation Check<TException>(this Validation validation, Func<bool> checkedFactory,
             string message)
             where TException : Exception

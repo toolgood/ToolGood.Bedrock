@@ -11,26 +11,43 @@ namespace ToolGood.Bedrock
     public class HashUtil
     {
         #region CRC8
-        public static string GetCrc8String(byte[] buffer)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
+       public static string GetCrc8String(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
             var b = Crc8Hash.CRC(buffer);
             return BitConverter.ToString(new byte[] { b });
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string GetCrc8String(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
             return GetCrc8String(buffer);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static byte GetCrc8Bytes(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
             return Crc8Hash.CRC(buffer);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static byte GetCrc8Bytes(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -80,24 +97,40 @@ namespace ToolGood.Bedrock
         #endregion
 
         #region CRC16
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static string GetCrc16String(byte[] buffer)
         {
             var buffer1 = Crc16Hash.makeCrc16(buffer);
             return BitConverter.ToString(buffer1);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string GetCrc16String(string text)
         {
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
             return GetCrc16String(buffer);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static byte[] GetCrc16Bytes(byte[] buffer)
         {
             return Crc16Hash.makeCrc16(buffer);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static byte[] GetCrc16Bytes(string text)
         {
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
@@ -201,7 +234,11 @@ namespace ToolGood.Bedrock
         #endregion
 
         #region CRC32
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static string GetCrc32String(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -211,7 +248,11 @@ namespace ToolGood.Bedrock
             byte[] retVal = crc32.Finish();
             return BitConverter.ToString(retVal).Replace("-", "");
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string GetCrc32String(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -219,7 +260,11 @@ namespace ToolGood.Bedrock
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
             return GetCrc32String(buffer);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static byte[] GetCrc32Bytes(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -228,7 +273,11 @@ namespace ToolGood.Bedrock
             crc32.Append(buffer);
             return crc32.Finish();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static byte[] GetCrc32Bytes(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -322,7 +371,11 @@ namespace ToolGood.Bedrock
         #endregion
 
         #region MD5
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static string GetMd5String(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -332,7 +385,11 @@ namespace ToolGood.Bedrock
             md5.Dispose();
             return BitConverter.ToString(retVal).Replace("-", "");
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string GetMd5String(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -340,7 +397,11 @@ namespace ToolGood.Bedrock
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
             return GetMd5String(buffer);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static byte[] GetMd5Bytes(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -350,7 +411,11 @@ namespace ToolGood.Bedrock
             md5.Dispose();
             return retVal;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static byte[] GetMd5Bytes(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -361,7 +426,11 @@ namespace ToolGood.Bedrock
         #endregion
 
         #region SHA1
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string GetSha1String(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -369,7 +438,11 @@ namespace ToolGood.Bedrock
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
             return GetSha1String(buffer);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static string GetSha1String(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -379,7 +452,11 @@ namespace ToolGood.Bedrock
             osha1.Dispose();
             return BitConverter.ToString(retVal).Replace("-", "");
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static byte[] GetSha1Bytes(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -389,7 +466,11 @@ namespace ToolGood.Bedrock
             osha1.Dispose();
             return retVal;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static byte[] GetSha1Bytes(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -400,6 +481,11 @@ namespace ToolGood.Bedrock
         #endregion
 
         #region SHA256
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string GetSha256String(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -407,7 +493,11 @@ namespace ToolGood.Bedrock
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
             return GetSha256String(buffer);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static string GetSha256String(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -417,7 +507,11 @@ namespace ToolGood.Bedrock
             sha256.Dispose();
             return BitConverter.ToString(retVal).Replace("-", "");
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static byte[] GetSha256Bytes(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -428,7 +522,11 @@ namespace ToolGood.Bedrock
 
             return retVal;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static byte[] GetSha256Bytes(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -439,6 +537,11 @@ namespace ToolGood.Bedrock
         #endregion
 
         #region SHA384
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string GetSha384String(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -446,7 +549,11 @@ namespace ToolGood.Bedrock
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
             return GetSha384String(buffer);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static string GetSha384String(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -456,7 +563,11 @@ namespace ToolGood.Bedrock
             sha256.Dispose();
             return BitConverter.ToString(retVal).Replace("-", "");
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static byte[] GetSha384Bytes(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -467,7 +578,11 @@ namespace ToolGood.Bedrock
 
             return retVal;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static byte[] GetSha384Bytes(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -478,7 +593,11 @@ namespace ToolGood.Bedrock
         #endregion
 
         #region SHA512
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string GetSha512String(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -486,7 +605,11 @@ namespace ToolGood.Bedrock
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
             return GetSha512String(buffer);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static string GetSha512String(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -496,7 +619,11 @@ namespace ToolGood.Bedrock
             sha512.Dispose();
             return BitConverter.ToString(retVal).Replace("-", "");
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public static byte[] GetSha512Bytes(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -507,7 +634,11 @@ namespace ToolGood.Bedrock
 
             return retVal;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static byte[] GetSha512Bytes(string text)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -518,6 +649,12 @@ namespace ToolGood.Bedrock
         #endregion
 
         #region HMACMD5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static string GetHmacMd5String(byte[] buffer, string secret)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -529,6 +666,12 @@ namespace ToolGood.Bedrock
                 return BitConverter.ToString(hashmessage).Replace("-", "");
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static string GetHmacMd5String(string text, string secret)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -536,6 +679,12 @@ namespace ToolGood.Bedrock
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
             return GetHmacMd5String(buffer, secret);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static byte[] GetHmacMd5Bytes(byte[] buffer, string secret)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -546,6 +695,12 @@ namespace ToolGood.Bedrock
                 return hmacsha256.ComputeHash(buffer);
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static byte[] GetHmacMd5Bytes(string text, string secret)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -557,6 +712,12 @@ namespace ToolGood.Bedrock
         #endregion
 
         #region HMACSHA1
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static string GetHmacSha1String(byte[] buffer, string secret)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -568,6 +729,12 @@ namespace ToolGood.Bedrock
                 return BitConverter.ToString(hashmessage).Replace("-", "");
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static string GetHmacSha1String(string text, string secret)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -575,6 +742,12 @@ namespace ToolGood.Bedrock
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
             return GetHmacSha1String(buffer, secret);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static byte[] GetHmacSha1Bytes(byte[] buffer, string secret)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -585,6 +758,12 @@ namespace ToolGood.Bedrock
                 return hmacsha256.ComputeHash(buffer);
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static byte[] GetHmacSha1Bytes(string text, string secret)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -596,6 +775,12 @@ namespace ToolGood.Bedrock
         #endregion
 
         #region HMACSHA256
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static string GetHmacSha256String(byte[] buffer, string secret)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -607,6 +792,12 @@ namespace ToolGood.Bedrock
                 return BitConverter.ToString(hashmessage).Replace("-", "");
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static string GetHmacSha256String(string text, string secret)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -614,6 +805,12 @@ namespace ToolGood.Bedrock
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
             return GetHmacSha256String(buffer, secret);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static byte[] GetHmacSha256Bytes(byte[] buffer, string secret)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -624,6 +821,12 @@ namespace ToolGood.Bedrock
                 return hmacsha256.ComputeHash(buffer);
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static byte[] GetHmacSha256Bytes(string text, string secret)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -635,6 +838,12 @@ namespace ToolGood.Bedrock
         #endregion
 
         #region HMACSHA384
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static string GetHmacSha384String(byte[] buffer, string secret)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -646,6 +855,12 @@ namespace ToolGood.Bedrock
                 return BitConverter.ToString(hashmessage).Replace("-", "");
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static string GetHmacSha384String(string text, string secret)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -653,6 +868,12 @@ namespace ToolGood.Bedrock
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
             return GetHmacSha384String(buffer, secret);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static byte[] GetHmacSha384Bytes(byte[] buffer, string secret)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -663,6 +884,12 @@ namespace ToolGood.Bedrock
                 return hmacsha256.ComputeHash(buffer);
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static byte[] GetHmacSha384Bytes(string text, string secret)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -674,6 +901,12 @@ namespace ToolGood.Bedrock
         #endregion
 
         #region HMACSHA512
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static string GetHmacSha512String(byte[] buffer, string secret)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -685,6 +918,12 @@ namespace ToolGood.Bedrock
                 return BitConverter.ToString(hashmessage).Replace("-", "");
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static string GetHmacSha512String(string text, string secret)
         {
             if (text == null) throw new ArgumentNullException("text");
@@ -692,6 +931,12 @@ namespace ToolGood.Bedrock
             var buffer = System.Text.Encoding.UTF8.GetBytes(text);
             return GetHmacSha512String(buffer, secret);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static byte[] GetHmacSha512Bytes(byte[] buffer, string secret)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
@@ -702,6 +947,12 @@ namespace ToolGood.Bedrock
                 return hmacsha256.ComputeHash(buffer);
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         public static byte[] GetHmacSha512Bytes(string text, string secret)
         {
             if (text == null) throw new ArgumentNullException("text");

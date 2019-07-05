@@ -8,6 +8,9 @@ using System.Web;
 
 namespace ToolGood.Bedrock.Web.Extensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ObjectExtensions
     {
         #region ToHtml
@@ -731,6 +734,7 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// Value 为显示的值  Key为传送的值
         /// </summary>
         /// <param name="dict"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
         public static HtmlString ToOption<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey value)
         {
@@ -1157,8 +1161,6 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// </summary>
         /// <param name="txt"></param>
         /// <param name="equalString"></param>
-        /// <param name="trueString"></param>
-        /// <param name="falseString"></param>
         /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this string txt, string equalString)
         {
@@ -1453,8 +1455,6 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// </summary>
         /// <param name="txt"></param>
         /// <param name="equalString"></param>
-        /// <param name="trueString"></param>
-        /// <param name="falseString"></param>
         /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this string txt, string equalString)
         {

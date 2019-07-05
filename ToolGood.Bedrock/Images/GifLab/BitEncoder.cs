@@ -55,12 +55,9 @@ namespace ToolGood.Bedrock.Images.GifLab
         /// 编码
         /// </summary>
         /// <param name="inByte">输入数据</param>
-        /// <param name="inBit">输入数据的bit位数</param>
         internal void Add(int inByte)
         {         
-         
             current_Val  |= (inByte << (current_Bit));
-
             current_Bit += inBit;
          
             while (current_Bit >= 8)

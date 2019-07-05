@@ -23,6 +23,20 @@ namespace ToolGood.Bedrock.Web
             _webRootPath = MyHostingEnvironment.MapPath(_webPath);
             _allowedExtensions = new List<string> { "jpg", "jpe", "jpeg", "gif", "png", "svg", "txt", "pdf", "odp", "ods", "odt", "rtf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "csv", "ogv", "avi", "mkv", "mp4", "webm", "m4v", "ogg", "mp3", "wav", "zip", "rar", "md" };
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="path"></param>
+        /// <param name="name"></param>
+        /// <param name="files"></param>
+        /// <param name="old"></param>
+        /// <param name="new"></param>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <param name="content"></param>
+        /// <param name="thumbnail"></param>
+        /// <returns></returns>
         public IActionResult Index(string mode, string path, string name, List<IFormFile> files, string old, string @new, string source, string target, string content, bool thumbnail)
         {
             if (!string.IsNullOrWhiteSpace(path) && path.StartsWith("/"))

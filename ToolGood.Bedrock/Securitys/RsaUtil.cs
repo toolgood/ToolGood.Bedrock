@@ -78,7 +78,6 @@ namespace ToolGood.Bedrock
         /// RSA 的密钥产生 产生私钥
         /// </summary>
         /// <param name="xmlKeys"></param>
-        /// <param name="xmlPublicKey"></param>
         public static void CreateKey(out string xmlKeys)
         {
             System.Security.Cryptography.RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
@@ -89,8 +88,8 @@ namespace ToolGood.Bedrock
         /// <summary>
         /// RSA 的密钥产生 产生私钥
         /// </summary>
+        /// <param name="keySize"></param>
         /// <param name="xmlKeys"></param>
-        /// <param name="xmlPublicKey"></param>
         public static void CreateKey(int keySize, out string xmlKeys)
         {
             System.Security.Cryptography.RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(keySize);
@@ -112,6 +111,7 @@ namespace ToolGood.Bedrock
         /// <summary>
         /// RSA 的密钥产生 产生私钥 和公钥
         /// </summary>
+        /// <param name="keySize"></param>
         /// <param name="xmlKeys"></param>
         /// <param name="xmlPublicKey"></param>
         public static void CreateKey(int keySize, out string xmlKeys, out string xmlPublicKey)
@@ -177,8 +177,8 @@ namespace ToolGood.Bedrock
         /// <summary>
         /// 私钥解密 返回 UTF8格式
         /// </summary>
-        /// <param name="xmlPrivateKey"></param>
-        /// <param name="DecryptString">Base64格式</param>
+        /// <param name="xmlPublicKey"></param>
+        /// <param name="EncryptString">Base64格式</param>
         /// <returns></returns>
         public static string PrivateDecrypt(string xmlPublicKey, string EncryptString)
         {

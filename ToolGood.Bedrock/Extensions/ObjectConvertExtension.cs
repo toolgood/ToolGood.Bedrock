@@ -287,7 +287,7 @@ namespace System
         /// <summary>
         /// object ToString转化
         /// </summary>
-        /// <param name="dataColumn">object</param>
+        /// <param name="obj">object</param>
         /// <returns></returns>
 
         public static string ToSafeString(this object obj)

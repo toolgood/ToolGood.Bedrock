@@ -86,9 +86,15 @@ namespace ToolGood.Bedrock
             return r;
         }
 
-        /// <summary> 计算担保手续费 <param name="FEvaluatePrice">评估价</param> <param
-        /// name="FMonthPayAmount">月还款</param> <param name="FLoanPeriod">按揭期限</param> <param
-        /// name="FLoanAmount">贷款金额</param> <param name="FBankRate">银行利率</param> <returns>计算结果值</returns>
+        /// <summary>
+        /// 计算担保手续费
+        /// </summary>
+        /// <param name="FEvaluatePrice">评估价</param>
+        /// <param name="FMonthPayAmount">月还款</param>
+        /// <param name="FLoanPeriod">按揭期限</param>
+        /// <param name="FLoanAmount">贷款金额</param>
+        /// <param name="FBankRate">银行利率</param>
+        /// <returns>计算结果值</returns>
         public static CalculationResult GetFGuaranteeFee(decimal FEvaluatePrice, decimal FMonthPayAmount, Int32 FLoanPeriod, decimal FLoanAmount, decimal FBankRate)
         {
             CalculationResult r = new CalculationResult();
@@ -148,11 +154,16 @@ namespace ToolGood.Bedrock
             }
             return r;
         }
-
-        /// <summary> 计算实际首付比例 <param name="FCarAmount">车价</param> <param
-        /// name="FEvaluatePrice">评估价</param> <param name="FMonthPayAmount">月还款</param> <param
-        /// name="FLoanPeriod">按揭期限</param> <param name="FLoanAmount">贷款金额</param> <param
-        /// name="FBankRate">银行利率</param> <returns>执行结果</returns>
+        /// <summary>
+        /// 计算实际首付比例
+        /// </summary>
+        /// <param name="FEvaluatePrice"></param>
+        /// <param name="FCarAmount">车价</param>
+        /// <param name="FMonthPayAmount">月还款</param>
+        /// <param name="FLoanPeriod">按揭期限</param>
+        /// <param name="FLoanAmount">贷款金额</param>
+        /// <param name="FBankRate">银行利率</param>
+        /// <returns>执行结果</returns>
         public static CalculationResult GetFRealFirstPayAmountRatio(decimal FEvaluatePrice, decimal FCarAmount, decimal FMonthPayAmount, Int32 FLoanPeriod, decimal FLoanAmount, decimal FBankRate)
         {
             CalculationResult r = new CalculationResult();
@@ -175,6 +186,7 @@ namespace ToolGood.Bedrock
         /// <param name="FMonthPayAmount">月还款</param>
         /// <param name="FLoanPeriod">按揭期限</param>
         /// <param name="FBankRate">银行利率</param>
+        /// <param name="FLoanBank"></param>
         /// <returns>执行结果</returns>
         public static CalculationResult GetFRealLoanAmount(decimal FLoanAmount, decimal FMonthPayAmount, Int32 FLoanPeriod, decimal FBankRate, int FLoanBank)
         {
@@ -253,9 +265,12 @@ namespace ToolGood.Bedrock
         /// <summary>
         /// 计算每月实际还款
         /// </summary>
-        /// <param name="FRealLoanAmount">实际贷款额</param>
+        /// <param name="FEvaluatePrice"></param>
+        /// <param name="FMonthPayAmount"></param>
         /// <param name="FLoanPeriod">按揭期限</param>
-        /// <param name="BankEnum">银行枚举</param>
+        /// <param name="FLoanAmount"></param>
+        /// <param name="FBankRate"></param>
+        /// <param name="iSCeiling"></param>
         /// <returns>计算结果值</returns>
         public static CalculationResult GetFRealMonthPayAmount(decimal FEvaluatePrice, decimal FMonthPayAmount, Int32 FLoanPeriod, decimal FLoanAmount, decimal FBankRate, Int32 iSCeiling)
         {

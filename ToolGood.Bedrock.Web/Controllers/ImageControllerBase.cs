@@ -8,6 +8,9 @@ using ToolGood.Bedrock.Web.Mime;
 
 namespace ToolGood.Bedrock.Web
 {
+    /// <summary>
+    /// 图片操作
+    /// </summary>
     public abstract class ImageControllerBase : WebControllerBaseCore
     {
         /// <summary>

@@ -168,7 +168,7 @@ namespace ToolGood.Bedrock.Images
         /// </summary>
         /// <param name="srcBmp">图片路径</param>
         /// <param name="bXDir">如果扭曲则选择为True</param>
-        /// <param name="nMultValue">波形的幅度倍数，越大扭曲的程度越高，一般为3</param>
+        /// <param name="dMultValue">波形的幅度倍数，越大扭曲的程度越高，一般为3</param>
         /// <param name="dPhase">波形的起始相位，取值区间[0-2*PI)</param>
         /// <returns></returns>
         private Bitmap TwistImage(Bitmap srcBmp, bool bXDir, double dMultValue, double dPhase)

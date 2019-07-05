@@ -63,7 +63,8 @@ namespace System
         /// <summary>
         /// 根据键移除
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
         /// <param name="data"></param>
         /// <param name="key">键值</param>
         /// <returns></returns>

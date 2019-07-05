@@ -299,7 +299,7 @@ namespace ToolGood.Bedrock.Images.GifLab
         /// <summary>
         /// 写入应用程序展集合
         /// </summary>
-        /// <param name="comments">写入应用程序展集合</param>
+        /// <param name="applications">写入应用程序展集合</param>
         internal void SetApplicationExtensions(List<ApplicationEx> applications)
         {
             foreach (ApplicationEx ap in applications)

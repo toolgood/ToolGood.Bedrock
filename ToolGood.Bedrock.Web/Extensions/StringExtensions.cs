@@ -9,44 +9,91 @@ using System.IO;
 namespace ToolGood.Bedrock.Web.Extensions
 {
     /// <summary>
-    /// 
+    /// 字符串扩展
     /// </summary>
     public static class StringExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static string ImageCutPrefix = "/Image/C/?u={0}&w={1}&h={2}";
+        /// <summary>
+        /// 
+        /// </summary>
         public static string ImageHeightPrefix = "/Image/H/?u={0}&h={1}";
+        /// <summary>
+        /// 
+        /// </summary>
         public static string ImageWidthPrefix = "/Image/W/?u={0}&w={1}";
+        /// <summary>
+        /// 
+        /// </summary>
         public static string ImageThumbnailPrefix = "/Image/T/?u={0}&w={1}&h={2}";
+        /// <summary>
+        /// 
+        /// </summary>
         public static string ImageQrCodePrefix = "/Image/Qr/?u={0}&w={1}&h={2}";
 
-
+        /// <summary>
+        /// 转成 剪切的图片Url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public static HtmlString ToImageUrlForCut(this string url, int width = 100, int height = 100)
         {
             return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageCutPrefix), url, width, height));
         }
-
+        /// <summary>
+        /// 转成锁定高的图片Url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public static HtmlString ToImageUrlForHeight(this string url, int height = 100)
         {
             return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageHeightPrefix), url, height));
         }
-
+        /// <summary>
+        /// 转成锁定宽的图片Url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="width"></param>
+        /// <returns></returns>
         public static HtmlString ToImageUrlForWidth(this string url, int width = 100)
         {
             return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageWidthPrefix), url, width));
         }
-
+        /// <summary>
+        /// 转成缩小的图片Url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public static HtmlString ToImageUrlForThumbnail(this string url, int width = 200, int height = 200)
         {
             return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageThumbnailPrefix), url, width, height));
         }
-
+        /// <summary>
+        /// 转成二维码
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public static HtmlString ToImageUrlForQrCode(this string url, int width = 200, int height = 200)
         {
             return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageQrCodePrefix), url, width, height));
         }
 
 
-
+        /// <summary>
+        /// 获取文件的 fa 的 class 名称
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         public static HtmlString GetIconClass(this string file)
         {
             if (string.IsNullOrWhiteSpace(file))
@@ -72,6 +119,13 @@ namespace ToolGood.Bedrock.Web.Extensions
                 case ".rar":
                 case ".7z":
                 case ".iso":
+                case ".zipx":
+                case ".tar":
+                case ".taz":
+                case ".gz":
+                case ".gzip":
+                case ".bzip":
+                case ".bzip2":
                     return new HtmlString("fa fa-file-archive-o");
                 case ".ppt":
                 case ".pptx":
@@ -95,6 +149,7 @@ namespace ToolGood.Bedrock.Web.Extensions
                 case ".jpeg":
                 case ".png":
                 case ".gif":
+                case ".ico":
                     return new HtmlString("fa fa-image-o");
                 case ".java":
                 case ".py":

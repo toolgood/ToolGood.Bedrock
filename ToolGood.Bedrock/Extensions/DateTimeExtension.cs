@@ -71,6 +71,7 @@ namespace System
         /// 将时间戳转为时间
         /// </summary>
         /// <param name="totalSeconds"></param>
+        /// <param name="kind"></param>
         /// <returns>时间</returns>
         public static DateTime ToDateTime(this long totalSeconds, DateTimeKind kind= DateTimeKind.Local)
         {

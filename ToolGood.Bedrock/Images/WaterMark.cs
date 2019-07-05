@@ -284,20 +284,20 @@ namespace ToolGood.Bedrock.Images
                     return ImageFormat.Jpeg;
             }
         }
-        /// <summary>
-        /// 获取图像编码解码器的所有相关信息
-        /// </summary>
-        /// <param name="mimeType">包含编码解码器的多用途网际邮件扩充协议 (MIME) 类型的字符串</param>
-        /// <returns>返回图像编码解码器的所有相关信息</returns>
-        private static ImageCodecInfo GetCodecInfo(string mimeType)
-        {
-            ImageCodecInfo[] CodecInfo = ImageCodecInfo.GetImageEncoders();
-            foreach (ImageCodecInfo ici in CodecInfo) {
-                if (ici.MimeType == mimeType)
-                    return ici;
-            }
-            return null;
-        }
+        ///// <summary>
+        ///// 获取图像编码解码器的所有相关信息
+        ///// </summary>
+        ///// <param name="mimeType">包含编码解码器的多用途网际邮件扩充协议 (MIME) 类型的字符串</param>
+        ///// <returns>返回图像编码解码器的所有相关信息</returns>
+        //private static ImageCodecInfo GetCodecInfo(string mimeType)
+        //{
+        //    ImageCodecInfo[] CodecInfo = ImageCodecInfo.GetImageEncoders();
+        //    foreach (ImageCodecInfo ici in CodecInfo) {
+        //        if (ici.MimeType == mimeType)
+        //            return ici;
+        //    }
+        //    return null;
+        //}
 
     }
 

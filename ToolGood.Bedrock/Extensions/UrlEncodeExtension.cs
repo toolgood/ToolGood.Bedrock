@@ -22,7 +22,7 @@ namespace System
         /// 对字符串进行Url编码
         /// </summary>
         /// <param name="str">要编码的字符串</param>
-        /// <param name="encodeName">编码格式</param>
+        /// <param name="encoding">编码格式</param>
         /// <returns>Url编码后的字符</returns>
         public static string UrlEncode(this string str, Encoding encoding)
         {
@@ -58,7 +58,7 @@ namespace System
         /// 对字符串进行Url解码
         /// </summary>
         /// <param name="str">需要解码的字符串</param>
-        /// <param name="decodeName">编码格式</param>
+        /// <param name="encoding">编码格式</param>
         /// <returns>Url解码后的字符串</returns>
         public static string UrlDecode(this string str, Encoding encoding)
         {

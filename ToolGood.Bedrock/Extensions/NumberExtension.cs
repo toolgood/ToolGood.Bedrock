@@ -2,6 +2,9 @@
 
 namespace System
 {
+    /// <summary>
+    /// 数字扩展
+    /// </summary>
     public static class NumberExtension
     {
         /// <summary>
@@ -46,6 +49,7 @@ namespace System
         /// 将double数字四舍五入保留两位小数
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="digits"></param>
         /// <returns></returns>
         public static double Round(this double input, int digits = 2)
         {
@@ -56,6 +60,7 @@ namespace System
         /// 将double数字四舍五入保留两位小数
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="digits"></param>
         /// <returns></returns>
         public static double Round(this double? input, int digits = 2)
         {
@@ -69,6 +74,7 @@ namespace System
         /// 将decimal数字四舍五入保留两位小数
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="digits"></param>
         /// <returns></returns>
         public static decimal Round(this decimal input, int digits = 2)
         {
@@ -80,6 +86,7 @@ namespace System
         /// 将decimal数字四舍五入保留两位小数
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="digits"></param>
         /// <returns></returns>
         public static decimal Round(this decimal? input, int digits = 2)
         {

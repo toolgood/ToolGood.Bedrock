@@ -179,6 +179,7 @@ namespace ToolGood.Bedrock
         /// HTTP Put方式请求数据.
         /// </summary>
         /// <param name="url">URL.</param>
+        /// <param name="param"></param>
         /// <returns></returns>
         public static string HttpPut(string url, string param = null)
         {
@@ -220,6 +221,7 @@ namespace ToolGood.Bedrock
         /// HTTP Delete方式请求数据.
         /// </summary>
         /// <param name="url">URL.</param>
+        /// <param name="param"></param>
         /// <returns></returns>
         public static string HttpDelete(string url, string param = null)
         {

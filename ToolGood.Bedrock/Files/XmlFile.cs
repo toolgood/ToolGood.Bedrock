@@ -19,9 +19,11 @@ namespace ToolGood.Bedrock.Files
             }
             strXmlFile = XmlFile;
         }
-
+        /// <summary>
         /// * 使用示列: 示例： XmlHelper.Delete( "/Node", "") XmlHelper.Delete( "/Node", "Attribute")
-        /// </summary> <param name="node">节点</param> <param name="attribute">属性名，非空时删除该节点属性值，否则删除节点值</param>
+        /// </summary>
+        /// <param name="node">节点</param>
+        /// <param name="attribute">属性名，非空时删除该节点属性值，否则删除节点值</param>
         public void Delete(string node, string attribute)
         {
             try {
@@ -92,9 +94,13 @@ namespace ToolGood.Bedrock.Files
             objNode.AppendChild(objElement);
         }
 
-        /// <summary> <summary> 插入一节点和此节点的一子节点。 示例：xmlTool.InsertNode("Book","Author","ISBN","0004");
-        /// </summary> <param name="MainNode">主节点</param> <param name="ChildNode">子节点</param> <param
-        /// name="Element">元素</param> <param name="Content">内容</param>
+        /// <summary>
+        /// 插入一节点和此节点的一子节点。 示例：xmlTool.InsertNode("Book","Author","ISBN","0004");
+        /// </summary>
+        /// <param name="MainNode">主节点</param>
+        /// <param name="ChildNode">子节点</param>
+        /// <param name="Element">元素</param>
+        /// <param name="Content">内容</param>
         public void InsertNode(string MainNode, string ChildNode, string Element, string Content)
         {
             //插入一节点和此节点的一子节点。

@@ -40,11 +40,23 @@ using ToolGood.Bedrock.Images.GifLab;
 
 namespace ToolGood.Bedrock.Images
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public enum SizeMode
     {
+        /// <summary>
+        /// 大图
+        /// </summary>
         Large,
+        /// <summary>
+        /// 正常
+        /// </summary>
         Normal
     }
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class GifHelper
     {
         #region 对gif动画添加水印-字体颜色确定
@@ -52,6 +64,7 @@ namespace ToolGood.Bedrock.Images
         /// 对gif动画添加水印
         /// </summary>
         /// <param name="gifFilePath">原gif动画的路径</param>
+        /// <param name="sizeMode"></param>
         /// <param name="text">水印文字</param>
         /// <param name="textForceColor">水印文字的颜色，因为gif不是真彩色图片，所以在显示的时候，该颜色可能有所误差，但基本上可以确定颜色范围</param>
         /// <param name="font">字体</param>

@@ -326,7 +326,7 @@ namespace ToolGood.Bedrock
         /// 验证是否是文件路径
         /// <para>eg:CheckHelper.IsFilePath(@"C:\alipay\log.txt");==>true</para>
         /// </summary>
-        /// <param name="data">验证字符串</param>
+        /// <param name="txt">验证字符串</param>
         /// <returns>是否是文件路径</returns>
         public static bool IsFilePath(string txt)
         {
@@ -368,7 +368,7 @@ namespace ToolGood.Bedrock
         /// <summary>
         /// 是否是十六进制字符串
         /// </summary>
-        /// <param name="data">验证数据</param>
+        /// <param name="txt">验证数据</param>
         /// <returns>是否是十六进制字符串</returns>
         public static bool IsHexString(string txt)
         {

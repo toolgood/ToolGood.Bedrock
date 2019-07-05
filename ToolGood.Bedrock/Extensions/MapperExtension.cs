@@ -48,6 +48,7 @@ namespace System
         /// <summary>
         /// 对象映射
         /// </summary>
+        /// <typeparam name="TSource"></typeparam>
         /// <typeparam name="TDestination"></typeparam>
         /// <param name="source"></param>
         /// <param name="ignoreNames">忽略字段</param>

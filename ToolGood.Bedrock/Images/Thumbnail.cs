@@ -33,7 +33,6 @@ namespace ToolGood.Bedrock.Images
         /// </summary>
         /// <param name="path"></param>
         /// <param name="height"></param>
-        /// <param name="width"></param>
         /// <returns></returns>
         public static string GetFileNameForHeight(string path,   int height)
         {
@@ -46,7 +45,6 @@ namespace ToolGood.Bedrock.Images
         /// 获取 锁定宽的图片名称
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="height"></param>
         /// <param name="width"></param>
         /// <returns></returns>
         public static string GetFileNameForWidth(string path, int width)

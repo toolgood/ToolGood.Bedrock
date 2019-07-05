@@ -136,7 +136,7 @@ namespace ToolGood.Bedrock.Web.ThirdPartys.Weixin
                     result = JsonConvert.DeserializeObject<T>(s);
                 }
                 return result;
-            } catch (Exception ex) {
+            } catch {
                 return default(T);
             } finally {
                 if (response != null) {
@@ -200,9 +200,9 @@ namespace ToolGood.Bedrock.Web.ThirdPartys.Weixin
         /// <summary>
         /// 服务号：上传多媒体文件
         /// </summary>
-        /// <param name="accesstoken">调用接口凭据</param>
-        /// <param name="filename">文件路径</param>
-        /// <param name="contenttype">文件Content-Type类型(例如：image/jpeg、audio/mpeg)</param>
+        /// <param name="uacaccess_tokenrl">调用接口凭据</param>
+        /// <param name="path">文件路径</param>
+        /// <param name="fileExt">文件Content-Type类型(例如：image/jpeg、audio/mpeg)</param>
         /// <returns></returns>
         public static WxMeterUploadRes UploadFile(string uacaccess_tokenrl, string path, string fileExt)
         {
@@ -412,10 +412,6 @@ namespace ToolGood.Bedrock.Web.ThirdPartys.Weixin
         /// </summary>
         public string title { get; set; }
 
-        /// <summary>
-        /// 文件名称
-        /// </summary>
-        //public string name { get; set; }
 
         /// <summary>
         /// 作者

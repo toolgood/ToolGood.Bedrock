@@ -2,6 +2,9 @@
 
 namespace ToolGood.Bedrock.Web.Constants
 {
+    /// <summary>
+    /// 文件常量
+    /// </summary>
     public static class FileConstants
     {
         public static List<string> Video {

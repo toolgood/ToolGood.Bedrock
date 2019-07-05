@@ -49,9 +49,9 @@ namespace ToolGood.Bedrock.Images.GifLab
         /// <summary>
         /// 八叉树的构造函数
         /// </summary>
-        /// <param name="leaf">是否是叶子节点</param>
+        /// <param name="colorDepth"></param>
         /// <param name="level">层级</param>
-        /// <param name="parent">父节点</param>
+        /// <param name="tree"></param>
         internal OcTreeNode(int colorDepth,int level,OcTree tree)
         {
             this.ColorDepth = colorDepth;

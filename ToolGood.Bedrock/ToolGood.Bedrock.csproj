@@ -11,7 +11,8 @@
     <Copyright>Copyright 2016-2019 ToolGood</Copyright>
     <Authors>ToolGood</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.1</Version>
+    <Version>1.0.0.2</Version>
+    <FileVersion>1.0.0.2</FileVersion>
   </PropertyGroup>
 
 
@@ -22,7 +23,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
-    <PackageReference Include="ToolGood.Algorithm" Version="1.3.3.3" />
+    <PackageReference Include="ToolGood.Algorithm" Version="1.3.3.4" />
     <PackageReference Include="ToolGood.AntiDuplication" Version="2.0.0.1" />
     <PackageReference Include="ToolGood.RcxCrypto" Version="1.3.0" />
     <PackageReference Include="ToolGood.ReadyGo3" Version="3.3.0.10" />

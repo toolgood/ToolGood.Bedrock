@@ -2,6 +2,9 @@
 
 namespace ToolGood.Bedrock
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class Base62
     {
         private const string ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -21,7 +24,9 @@ namespace ToolGood.Bedrock
         }
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     public static class Base58
     {
         private const string ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
@@ -40,7 +45,9 @@ namespace ToolGood.Bedrock
             return bytes.Reverse().ToArray();
         }
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public static class Base52
     {
         private const string ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -60,7 +67,9 @@ namespace ToolGood.Bedrock
         }
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     public static class Base36
     {
         private const string ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyz";
@@ -79,7 +88,9 @@ namespace ToolGood.Bedrock
             return bytes.Reverse().ToArray();
         }
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public static class Base32
     {
         private const string ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyz";
@@ -98,7 +109,9 @@ namespace ToolGood.Bedrock
             return bytes.Reverse().ToArray();
         }
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public static class Base26
     {
         private const string ALPHABET = "abcdefghijklmnopqrstuvwxyz";

@@ -44,12 +44,12 @@ namespace ToolGood.Bedrock.Images.GifLab
     /// </summary>
     internal class GifEncoder
     {
-        #region private fileds      
-        byte[] gct;
-        short width;
-        short heigt = 0;
-        Hashtable table = new Hashtable();
-        #endregion  
+        //#region private fileds      
+        //byte[] gct;
+        //short width;
+        //short heigt = 0;
+        //Hashtable table = new Hashtable();
+        //#endregion  
 
        static  void SetFrames(List<GifFrame> frames,StreamHelper streamHelper,Stream fs)
         {

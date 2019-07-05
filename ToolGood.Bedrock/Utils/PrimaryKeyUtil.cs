@@ -22,7 +22,7 @@ namespace ToolGood.Bedrock
         /// 获取有序的唯一ID。
         /// http://www.codeproject.com/Articles/388157/GUIDs-as-fast-primary-keys-under-multiple-database
         /// </summary>
-        /// <param name="sequentialGuidType">有序GUID的类型（sqlServer用AtEnd，mysql用AsString或者AsBinary，oracle用AsBinary，postgresql用AsString或者AsBinary）</param>
+        /// <param name="guidType">有序GUID的类型（sqlServer用AtEnd，mysql用AsString或者AsBinary，oracle用AsBinary，postgresql用AsString或者AsBinary）</param>
         /// <returns></returns>
         public static Guid GenerateGuid_2(SequentialGuidType guidType = SequentialGuidType.SequentialAtEnd)
         {
