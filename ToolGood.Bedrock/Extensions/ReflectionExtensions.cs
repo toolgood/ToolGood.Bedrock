@@ -9,12 +9,14 @@ namespace System
 {
     public static class ReflectionExtensions
     {
-        public static bool HasProperty(this object obj, string name)
+        public static bool HasProperty<T>(this T obj, string name)
+            where T : class
         {
             return obj.GetType().GetRuntimeProperty(name) != null;
         }
 
-        public static bool HasValue(this object obj, string name)
+        public static bool HasValue<T>(this T obj, string name)
+             where T : class
         {
             var currentProperty = obj.GetType().GetRuntimeProperty(name);
             if (currentProperty == null)
@@ -24,10 +26,18 @@ namespace System
             return caurrentValue != defaultValue;
         }
 
-        public static void SetValue(this object obj, string name, object value)
+        public static void SetValue<T>(this T obj, string name, object value)
+             where T : class
         {
             obj.GetType().GetRuntimeProperty(name).SetValue(obj, value);
         }
+
+        public static object GetValue<T>(this T obj, string name)
+         where T : class
+        {
+            return obj.GetType().GetRuntimeProperty(name).GetValue(obj);
+        }
+
 
         public static IEnumerable<T> GetImplementationsOf<T>(this Assembly assembly)
         {
@@ -63,20 +73,7 @@ namespace System
             return result;
         }
 
-        //public static IEnumerable<Assembly> GetRuntimeAssemblies()
-        //{
-        //    var result = new List<Assembly>();
 
-
-
-        //    var runtimeId = RuntimeEnvironment.GetRuntimeIdentifier();
-        //    var assemblyNames = DependencyContext.Default.GetRuntimeAssemblyNames(runtimeId);
-        //    foreach (var assemblyName in assemblyNames) {
-        //        var assembly = Assembly.Load(assemblyName);
-        //        result.Add(assembly);
-        //    }
-        //    return result;
-        //}
     }
 
 }
