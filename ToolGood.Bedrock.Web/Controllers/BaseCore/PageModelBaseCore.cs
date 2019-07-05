@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using ToolGood.Bedrock.Web.Constants;
 using ToolGood.Bedrock.Web.Mime;
 using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
+using ToolGood.Bedrock.Web.Theme;
 using ToolGood.ReadyGo3;
 
 namespace ToolGood.Bedrock.Web.Controllers.BaseCore
@@ -606,5 +607,6 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
             };
         }
         #endregion
+
     }
 }

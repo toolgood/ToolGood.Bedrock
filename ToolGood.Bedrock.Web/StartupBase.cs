@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -26,6 +28,8 @@ using ToolGood.Bedrock.Web.Loggers;
 using ToolGood.Bedrock.Web.Middlewares;
 using ToolGood.Bedrock.Web.ResumeFiles.Executor;
 using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
+using ToolGood.Bedrock.Web.Theme;
+using IStartup = ToolGood.Bedrock.Web.Theme.IStartup;
 
 namespace ToolGood.Bedrock.Web
 {
@@ -52,6 +56,8 @@ namespace ToolGood.Bedrock.Web
         /// <returns></returns>
         public virtual IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            var hostingEnvironment = services.BuildServiceProvider().GetService<IHostingEnvironment>();
+
             var config = GetMyConfig();
             if (config.UseResponseCaching) { services.AddResponseCaching(); }
             if (config.UseResponseCompression) {
@@ -83,8 +89,10 @@ namespace ToolGood.Bedrock.Web
                 });
             }
             if (config.UseIHttpContextAccessor) { services.AddHttpContextAccessor(); }
+
             if (config.UseMvc) {
-                services.AddMvc(options => { options.Filters.Add<HttpGlobalExceptionFilter>(); })
+                var mvcBuilder = services.AddMvc(options => { options.Filters.Add<HttpGlobalExceptionFilter>(); })
+                  .AddDataAnnotationsLocalization()
                   .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                   .AddJsonOptions(options => {
                       options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -95,27 +103,43 @@ namespace ToolGood.Bedrock.Web
                       options.SerializerSettings.Converters.Add(new JsonCustomDoubleNullConvert());// json序列化时， 防止double，末尾出现小数点浮动,
                   }
               );
+                if (config.UsePlugin) {
+                    mvcBuilder.AddRazorOptions(options => {
+                        foreach (var assembly in AppLoader.Instance(hostingEnvironment).AppAssemblies) {
+                            var reference = MetadataReference.CreateFromFile(assembly.Location);
+                            options.AdditionalCompilationReferences.Add(reference);
+                        }
+                    });
+                    services.Configure<RazorViewEngineOptions>(options => {
+                        foreach (var assembly in AppLoader.Instance(hostingEnvironment).AppAssemblies) {
+                            var embeddedFileProvider = new EmbeddedFileProvider(assembly, assembly.GetName().Name);
+                            options.FileProviders.Add(embeddedFileProvider);
+                        }
+                    });
+                }
+                if (config.UseTheme) {
+                    mvcBuilder.AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
+                    services.Configure<RazorViewEngineOptions>(options => { options.ViewLocationExpanders.Add(new ViewLocationExpander()); });
+                }
+
             }
             services.TryAddSingleton<IActionResultExecutor<ResumePhysicalFileResult>, ResumePhysicalFileResultExecutor>();
             services.TryAddSingleton<IActionResultExecutor<ResumeVirtualFileResult>, ResumeVirtualFileResultExecutor>();
             services.TryAddSingleton<IActionResultExecutor<ResumeFileStreamResult>, ResumeFileStreamResultExecutor>();
             services.TryAddSingleton<IActionResultExecutor<ResumeFileContentResult>, ResumeFileContentResultExecutor>();
 
-            if (config.UseCors) {
-                services.AddCors(options => {
-                    options.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
-                });
-            }
-
+            if (config.UseCors) { services.AddCors(options => { options.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials()); }); }
 
             services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
 
             ServiceRegister(services);
-
+            if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(hostingEnvironment).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.ConfigureServices(services, Configuration); } }
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
             IocManagerRegister(ContainerManager.UseAutofacContainer(builder));
+            if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(hostingEnvironment).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.IocManagerRegister(ContainerManager.Instance); } }
+
             ContainerManager.BeginLeftScope();
             AutofacContainer = (ContainerManager.Instance.Container as AutofacObjectContainer).Container;
             return new AutofacServiceProvider(AutofacContainer);
@@ -170,6 +194,9 @@ namespace ToolGood.Bedrock.Web
             }
             #endregion
 
+            if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(env).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.Configure(app); } }
+
+
             if (config.UseSession) { app.UseCookiePolicy(); app.UseSession(); } else if (config.UseCookie) { app.UseCookiePolicy(); }
             if (config.UseResponseCaching) { app.UseResponseCaching(); }
             if (config.UseResponseCompression) { app.UseResponseCompression(); }
@@ -179,6 +206,7 @@ namespace ToolGood.Bedrock.Web
             app.UseQueryArgs();
 
             if (config.UseMvc) {
+                app.UseMiddleware<ThemeMiddleware>();
                 app.UseMvc(routes => {
                     RouteRegister(routes);
                     routes.MapRoute(

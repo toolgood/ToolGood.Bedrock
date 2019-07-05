@@ -12,5 +12,8 @@
         public bool UseCors { get; set; } = false;
 
         public bool UseIHttpContextAccessor { get; set; } = true;
+
+        public bool UseTheme { get; set; } = false;
+        public bool UsePlugin { get; set; } = false;
     }
 }

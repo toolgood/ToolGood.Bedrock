@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ToolGood.Bedrock.Web.Controllers;
+using ToolGood.Bedrock.Web.Theme;
 
 namespace ToolGood.Bedrock.Web.Test.Controllers
 {
@@ -23,6 +24,15 @@ namespace ToolGood.Bedrock.Web.Test.Controllers
         {
 
             return ResumeFile("1.zip", "1.zip");
+        }
+
+        public IActionResult TT()
+        {
+            HttpContext.Request.HttpContext.Items[ViewLocationExpander.ThemeKey] = "EE";
+            //HttpContext.Request.HttpContext.Items[ViewLocationExpander.ThemeKey] = "EE";
+
+            return View();
+
         }
     }
 }

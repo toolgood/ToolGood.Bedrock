@@ -11,8 +11,8 @@
     <Copyright>Copyright 2016-2019 ToolGood</Copyright>
     <Authors>ToolGood</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.2</Version>
-    <FileVersion>1.0.0.2</FileVersion>
+    <Version>1.0.0.3</Version>
+    <FileVersion>1.0.0.3</FileVersion>
   </PropertyGroup>
 
 
