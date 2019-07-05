@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace ToolGood.Bedrock.Utils
+namespace ToolGood.Bedrock
 {
     public static class SeoUtil
     {
