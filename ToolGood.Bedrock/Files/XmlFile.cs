@@ -6,8 +6,8 @@ namespace ToolGood.Bedrock.Files
 {
     public class XmlFile
     {
-        protected XmlDocument objXmlDoc = new XmlDocument();
-        protected string strXmlFile;
+        private XmlDocument objXmlDoc = new XmlDocument();
+        private string strXmlFile;
 
         public XmlFile(string XmlFile)
         {

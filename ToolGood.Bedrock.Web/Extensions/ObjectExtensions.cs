@@ -512,59 +512,146 @@ namespace ToolGood.Bedrock.Web.Extensions
             var t = txt == equalString ? trueString : falseString;
             return new HtmlString(t);
         }
-
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this Int16 txt, Int16 equalValue, string trueString, string falseString = "")
         {
             var t = txt == equalValue ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this Int32 txt, Int32 equalValue, string trueString, string falseString = "")
         {
             var t = txt == equalValue ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this Int64 txt, Int64 equalValue, string trueString, string falseString = "")
         {
             var t = txt == equalValue ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this UInt16 txt, UInt16 equalValue, string trueString, string falseString = "")
         {
             var t = txt == equalValue ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this UInt32 txt, UInt32 equalValue, string trueString, string falseString = "")
         {
             var t = txt == equalValue ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this UInt64 txt, UInt64 equalValue, string trueString, string falseString = "")
         {
             var t = txt == equalValue ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this Single txt, Single equalValue, string trueString, string falseString = "")
         {
             var t = Math.Round(txt - equalValue, 10) == 0.0f ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this Double txt, Double equalValue, string trueString, string falseString = "")
         {
             var t = Math.Round(txt - equalValue, 10) == 0.0d ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this Decimal txt, Decimal equalValue, string trueString, string falseString = "")
         {
             var t = Math.Round(txt - equalValue, 10) == 0.0m ? trueString : falseString;
             return new HtmlString(t);
         }
 
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this Int16? txt, Int16 equalValue, string trueString, string falseString = "")
         {
             if (object.Equals(null, txt)) { return new HtmlString(""); }
             var t = txt == equalValue ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this Int32? txt, Int32 equalValue, string trueString, string falseString = "")
         {
             if (object.Equals(null, txt)) { return new HtmlString(""); }
@@ -572,6 +659,14 @@ namespace ToolGood.Bedrock.Web.Extensions
             var t = txt == equalValue ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this Int64? txt, Int64 equalValue, string trueString, string falseString = "")
         {
             if (object.Equals(null, txt)) { return new HtmlString(""); }
@@ -579,6 +674,14 @@ namespace ToolGood.Bedrock.Web.Extensions
             var t = txt == equalValue ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this UInt16? txt, UInt16 equalValue, string trueString, string falseString = "")
         {
             if (object.Equals(null, txt)) { return new HtmlString(""); }
@@ -586,6 +689,14 @@ namespace ToolGood.Bedrock.Web.Extensions
             var t = txt == equalValue ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this UInt32? txt, UInt32 equalValue, string trueString, string falseString = "")
         {
             if (object.Equals(null, txt)) { return new HtmlString(""); }
@@ -593,6 +704,14 @@ namespace ToolGood.Bedrock.Web.Extensions
             var t = txt == equalValue ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this UInt64? txt, UInt64 equalValue, string trueString, string falseString = "")
         {
             if (object.Equals(null, txt)) { return new HtmlString(""); }
@@ -600,6 +719,14 @@ namespace ToolGood.Bedrock.Web.Extensions
             var t = txt == equalValue ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this Single? txt, Single equalValue, string trueString, string falseString = "")
         {
             if (object.Equals(null, txt)) { return new HtmlString(""); }
@@ -607,6 +734,14 @@ namespace ToolGood.Bedrock.Web.Extensions
             var t = Math.Round(txt.Value - equalValue, 10) == 0.0f ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this Double? txt, Double equalValue, string trueString, string falseString = "")
         {
             if (object.Equals(null, txt)) { return new HtmlString(""); }
@@ -614,6 +749,14 @@ namespace ToolGood.Bedrock.Web.Extensions
             var t = Math.Round(txt.Value - equalValue, 10) == 0.0d ? trueString : falseString;
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="equalValue"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static HtmlString ToHtmlWhenIs(this Decimal? txt, Decimal equalValue, string trueString, string falseString = "")
         {
             if (object.Equals(null, txt)) { return new HtmlString(""); }
@@ -978,7 +1121,12 @@ namespace ToolGood.Bedrock.Web.Extensions
         #endregion
 
         #region ToChecked
-
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked<T>(this T b, T checkValue)
         {
             if (object.Equals(null, b)) {
@@ -1003,6 +1151,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this Int16 b)
         {
             if (b > 0) {
@@ -1010,6 +1163,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this Int32 b)
         {
             if (b > 0) {
@@ -1017,6 +1175,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this Int64 b)
         {
             if (b > 0) {
@@ -1024,6 +1187,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this UInt16 b)
         {
             if (b > 0) {
@@ -1031,6 +1199,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this UInt32 b)
         {
             if (b > 0) {
@@ -1038,6 +1211,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this UInt64 b)
         {
             if (b > 0) {
@@ -1046,6 +1224,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             return new HtmlString("");
         }
 
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this Single b)
         {
             if (b > 0) {
@@ -1053,6 +1236,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this Double b)
         {
             if (b > 0) {
@@ -1060,6 +1248,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this Decimal b)
         {
             if (b > 0) {
@@ -1068,6 +1261,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             return new HtmlString("");
         }
 
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this bool? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1077,6 +1275,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this Int16? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1085,6 +1288,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this Int32? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1093,6 +1301,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this Int64? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1101,6 +1314,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this UInt16? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1109,6 +1327,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this UInt32? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1118,6 +1341,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this UInt64? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1128,6 +1356,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             return new HtmlString("");
         }
 
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this Single? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1137,6 +1370,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this Double? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1146,6 +1384,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToChecked(this Decimal? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1167,83 +1410,173 @@ namespace ToolGood.Bedrock.Web.Extensions
             var t = txt == equalString ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this Int16 b, Int16 equalValue)
         {
             var t = b == equalValue ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this Int32 b, Int32 equalValue)
         {
             var t = b == equalValue ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this Int64 b, Int64 equalValue)
         {
             var t = b == equalValue ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this UInt16 b, UInt16 equalValue)
         {
             var t = b == equalValue ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this UInt32 b, UInt32 equalValue)
         {
             var t = b == equalValue ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this UInt64 b, UInt64 equalValue)
         {
             var t = b == equalValue ? "checked" : "";
             return new HtmlString(t);
         }
 
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this Single b, Single equalValue)
         {
             var t = Math.Round(b - equalValue, 10) == 0.0f ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this Double b, Double equalValue)
         {
             var t = Math.Round(b - equalValue, 10) == 0.0d ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this Decimal b, Decimal equalValue)
         {
             var t = Math.Round(b - equalValue, 10) == 0.0M ? "checked" : "";
             return new HtmlString(t);
         }
 
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this Int16? b, Int16 equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = b == equalValue ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this Int32? b, Int32 equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = b == equalValue ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this Int64? b, Int64 equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = b == equalValue ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this UInt16? b, UInt16 equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = b == equalValue ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this UInt32? b, UInt32 equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = b == equalValue ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this UInt64? b, UInt64 equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1251,18 +1584,36 @@ namespace ToolGood.Bedrock.Web.Extensions
             return new HtmlString(t);
         }
 
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this Single? b, Single equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = Math.Round(b.Value - equalValue, 10) == 0.0f ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this Double? b, Double equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = Math.Round(b.Value - equalValue, 10) == 0.0d ? "checked" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToCheckedWhenIs(this Decimal? b, Decimal equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1272,6 +1623,12 @@ namespace ToolGood.Bedrock.Web.Extensions
         #endregion
 
         #region ToSelected
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected<T>(this T b, T checkValue)
         {
             if (object.Equals(null, b)) {
@@ -1284,6 +1641,11 @@ namespace ToolGood.Bedrock.Web.Extensions
         }
 
 
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this bool b)
         {
             if (b) {
@@ -1291,6 +1653,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this Int16 b)
         {
             if (b > 0) {
@@ -1298,6 +1665,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this Int32 b)
         {
             if (b > 0) {
@@ -1305,6 +1677,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this Int64 b)
         {
             if (b > 0) {
@@ -1312,6 +1689,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this UInt16 b)
         {
             if (b > 0) {
@@ -1319,6 +1701,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this UInt32 b)
         {
             if (b > 0) {
@@ -1326,6 +1713,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this UInt64 b)
         {
             if (b > 0) {
@@ -1334,6 +1726,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             return new HtmlString("");
         }
 
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this Single b)
         {
             if (b > 0) {
@@ -1341,6 +1738,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this Double b)
         {
             if (b > 0) {
@@ -1348,6 +1750,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this Decimal b)
         {
             if (b > 0) {
@@ -1358,6 +1765,11 @@ namespace ToolGood.Bedrock.Web.Extensions
 
 
 
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this bool? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1367,6 +1779,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this Int16? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1376,6 +1793,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this Int32? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1385,6 +1807,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this Int64? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1394,6 +1821,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this UInt16? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1403,6 +1835,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this UInt32? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1412,6 +1849,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this UInt64? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1422,6 +1864,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             return new HtmlString("");
         }
 
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this Single? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1431,6 +1878,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this Double? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1440,6 +1892,11 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static HtmlString ToSelected(this Decimal? b)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1462,47 +1919,101 @@ namespace ToolGood.Bedrock.Web.Extensions
             return new HtmlString(t);
         }
 
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this Int16 b, Int16 equalValue)
         {
             var t = b == equalValue ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this Int32 b, Int32 equalValue)
         {
             var t = b == equalValue ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this Int64 b, Int64 equalValue)
         {
             var t = b == equalValue ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this UInt16 b, UInt16 equalValue)
         {
             var t = b == equalValue ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this UInt32 b, UInt32 equalValue)
         {
             var t = b == equalValue ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this UInt64 b, UInt64 equalValue)
         {
             var t = b == equalValue ? "selected" : "";
             return new HtmlString(t);
         }
 
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this Single b, Single equalValue)
         {
             var t = Math.Round(b - equalValue, 10) == 0.0f ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this Double b, Double equalValue)
         {
             var t = Math.Round(b - equalValue, 10) == 0.0d ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this Decimal b, Decimal equalValue)
         {
             var t = Math.Round(b - equalValue, 10) == 0.0m ? "selected" : "";
@@ -1510,36 +2021,72 @@ namespace ToolGood.Bedrock.Web.Extensions
         }
 
 
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this Int16? b, Int16 equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = b == equalValue ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this Int32? b, Int32 equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = b == equalValue ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this Int64? b, Int64 equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = b == equalValue ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this UInt16? b, UInt16 equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = b == equalValue ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this UInt32? b, UInt32 equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = b == equalValue ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this UInt64? b, UInt64 equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
@@ -1547,18 +2094,36 @@ namespace ToolGood.Bedrock.Web.Extensions
             return new HtmlString(t);
         }
 
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this Single? b, Single equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = Math.Round(b.Value - equalValue, 10) == 0.0f ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this Double? b, Double equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
             var t = Math.Round(b.Value - equalValue, 10) == 0.0f ? "selected" : "";
             return new HtmlString(t);
         }
+        /// <summary>
+        /// 转成 HtmlString 类型
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="equalValue"></param>
+        /// <returns></returns>
         public static HtmlString ToSelectedWhenIs(this Decimal? b, Decimal equalValue)
         {
             if (object.Equals(null, b)) { return new HtmlString(""); }
