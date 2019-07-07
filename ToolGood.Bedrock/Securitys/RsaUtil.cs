@@ -25,8 +25,8 @@ namespace ToolGood.Bedrock
 
             //rsa.FromXmlString(xmlKeys);
             var p = rsa.ExportParameters(false);
-            Modulus = BitConverter.ToString(p.Modulus).Replace("-", "");
-            Exponent = BitConverter.ToString(p.Exponent).Replace("-", "");
+            Modulus = Base64.ToBase64String(p.Modulus);
+            Exponent = Base64.ToBase64String(p.Exponent);
         }
 
         private static string ToXmlString(RSA rsa, bool includePrivateParameters)

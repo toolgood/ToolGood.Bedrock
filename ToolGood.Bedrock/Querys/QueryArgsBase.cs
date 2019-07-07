@@ -16,37 +16,17 @@ namespace ToolGood.Bedrock
             SqlTimes = new List<DebugSqlTime>();
             Logs = new List<DebugLog>();
         }
-        public QueryArgsBase(QueryArgsBase inArgs)
-        {
-            CancellationTokenSource = inArgs.CancellationTokenSource; //必须放在前面
-
-            UseNow = inArgs.UseNow;
-            UseToday = inArgs.UseToday;
-
-            BatchNum = inArgs.BatchNum;
-
-            UseSqlLog = inArgs.UseSqlLog;
-            SqlQueryTimeout = inArgs.SqlQueryTimeout;
-
-            UseDebugLog = inArgs.UseDebugLog;
-            UseErrorLog = inArgs.UseErrorLog;
-            UseFatalLog = inArgs.UseFatalLog;
-            UseInfoLog = inArgs.UseInfoLog;
-            UseWarnLog = inArgs.UseWarnLog;
-
-            SqlTimes = inArgs.SqlTimes;
-            Logs = inArgs.Logs;
-        }
  
 
         internal HttpContext HttpContext;
         public HttpContext GetHttpContext() { return HttpContext; }
+
         public void SetHttpContext(HttpContext value) { HttpContext = value; }
 
         /// <summary>
         /// 使用调试模式
         /// </summary>
-        public bool? UseDebuggingMode { get; set; }
+        public bool? UseLog { get; set; }
 
         #region 日期 时间 
         /// <summary>
@@ -65,53 +45,6 @@ namespace ToolGood.Bedrock
         /// 批序号
         /// </summary>
         public string BatchNum { get; set; }
-
-        #region  日志
-
-        #region SQL
-        /// <summary>
-        /// sql查询超时，毫秒，设置后，超过该值的sql语句才被记录
-        /// </summary>
-        public int? SqlQueryTimeout { get; set; }
-
-        /// <summary>
-        /// 使用sql 监视
-        /// </summary>
-        public bool? UseSqlLog { get; set; }
-
-        #endregion
-
-        #region 日志
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? UseDebugLog { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? UseInfoLog { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? UseWarnLog { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? UseErrorLog { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? UseFatalLog { get; set; }
-
-
-        #endregion
-
-        #endregion
 
         private CancellationTokenSource CancellationTokenSource;
         public CancellationTokenSource GetCancellationTokenSource()
@@ -158,7 +91,7 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public DateTime GetNow(bool isRealNow = false)
         {
-            if (UseDebuggingMode == false) { return DateTime.Now; }
+            if (UseLog == false) { return DateTime.Now; }
 
             if (isRealNow) {
                 return DateTime.Now;
@@ -181,7 +114,7 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public DateTime GetUtcNow(bool isRealNow = false)
         {
-            if (UseDebuggingMode == false) { return DateTime.UtcNow; }
+            if (UseLog == false) { return DateTime.UtcNow; }
 
             if (isRealNow) {
                 return DateTime.UtcNow;
@@ -251,18 +184,12 @@ namespace ToolGood.Bedrock
             inArgs.UseToday = UseToday;
 
             inArgs.BatchNum = BatchNum;
-
-            inArgs.UseSqlLog = UseSqlLog;
-            inArgs.SqlQueryTimeout = SqlQueryTimeout;
-
-            inArgs.UseDebugLog = UseDebugLog;
-            inArgs.UseErrorLog = UseErrorLog;
-            inArgs.UseFatalLog = UseFatalLog;
-            inArgs.UseInfoLog = UseInfoLog;
-            inArgs.UseWarnLog = UseWarnLog;
+            inArgs.UseLog = UseLog;
 
             inArgs.SqlTimes = SqlTimes;
             inArgs.Logs = Logs;
+
+            inArgs.SetHttpContext(HttpContext);
         }
 
     }

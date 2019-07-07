@@ -26,18 +26,12 @@ namespace ToolGood.Bedrock
         private static void WriteLog(LogType type, string msg)
         {
             var queryArgs = QueryArgs;
-            if (queryArgs == null || queryArgs.UseDebuggingMode == null || queryArgs.UseDebuggingMode == false) {
+            if (queryArgs == null || queryArgs.UseLog == null || queryArgs.UseLog == false) {
                 if (type == LogType.Debug && UseDebug == false) return;
                 if (type == LogType.Error && UseError == false) return;
                 if (type == LogType.Fatal && UseFatal == false) return;
                 if (type == LogType.Info && UseInfo == false) return;
                 if (type == LogType.Warn && UseWarn == false) return;
-            } else {
-                if (type == LogType.Debug && ((queryArgs.UseDebugLog == null && UseDebug == false) || queryArgs.UseDebugLog == false)) return;
-                if (type == LogType.Error && ((queryArgs.UseErrorLog == null && UseError == false) || queryArgs.UseErrorLog == false)) return;
-                if (type == LogType.Fatal && ((queryArgs.UseFatalLog == null && UseFatal == false) || queryArgs.UseFatalLog == false)) return;
-                if (type == LogType.Info && ((queryArgs.UseInfoLog == null && UseInfo == false) || queryArgs.UseInfoLog == false)) return;
-                if (type == LogType.Warn && ((queryArgs.UseWarnLog == null && UseWarn == false) || queryArgs.UseWarnLog == false)) return;
             }
             if (QueryArgs != null) {
                 QueryArgs.Logs.Add(new DebugLog() {
@@ -90,10 +84,8 @@ namespace ToolGood.Bedrock
         public static void Sql(DateTime startTime, DateTime endTime, string sql, object[] args, string errorMessage)
         {
             var queryArgs = QueryArgs;
-            if (queryArgs == null || queryArgs.UseDebuggingMode == null || queryArgs.UseDebuggingMode == false) {
+            if (queryArgs == null || queryArgs.UseLog == null || queryArgs.UseLog == false) {
                 if (UseSql == false) return;
-            } else {
-                if ((queryArgs.UseSqlLog == null && UseSql == false) || queryArgs.UseSqlLog == false) return;
             }
             if (QueryArgs != null) {
                 QueryArgs.SqlTimes.Add(new DebugSqlTime() {

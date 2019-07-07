@@ -20,6 +20,12 @@ namespace ToolGood.Bedrock
         [JsonProperty("data", NullValueHandling = NullValueHandling.Ignore)]
         public object Data { get; set; }
 
+        /// <summary>
+        /// 密文
+        /// </summary>
+        [JsonProperty("ciphertext", NullValueHandling = NullValueHandling.Ignore)]
+        public string Ciphertext { get; set; }
+
         [JsonProperty("extendData", NullValueHandling = NullValueHandling.Ignore)]
         public object ExtendData { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
@@ -20,34 +21,20 @@ namespace ToolGood.Bedrock.Web.Middlewares
         {
             QueryArgsBase queryArgs = new QueryArgsBase();
             if (context.Request.Headers["Content-Type"].ToSafeString().Contains("json") == false) {
-                queryArgs.UseDebuggingMode = GetBool(context, "UseDebuggingMode");
-                queryArgs.UseDebugLog = GetBool(context, "UseDebugLog");
-                queryArgs.UseErrorLog = GetBool(context, "UseErrorLog");
-                queryArgs.UseFatalLog = GetBool(context, "UseFatalLog");
-                queryArgs.UseInfoLog = GetBool(context, "UseInfoLog");
-                queryArgs.UseSqlLog = GetBool(context, "UseSqlLog");
-                queryArgs.UseWarnLog = GetBool(context, "UseWarnLog");
+                queryArgs.UseLog = GetBool(context, "UseDebuggingMode");
                 queryArgs.UseToday = GetDateTime(context, "UseToday");
                 queryArgs.UseNow = GetDateTime(context, "UseNow");
                 queryArgs.BatchNum = GetString(context, "BatchNum");
-                queryArgs.SqlQueryTimeout = GetInt(context, "SqlQueryTimeout");
             } else {
                 using (var buffer = new MemoryStream()) {
                     context.Request.Body.Position = 0;
                     context.Request.Body.CopyTo(buffer);
                     context.Request.Body.Position = 0;
                     var json = JObject.Parse(Encoding.UTF8.GetString(buffer.ToArray()));
-                    queryArgs.UseDebuggingMode = GetBool(json, "UseDebuggingMode");
-                    queryArgs.UseDebugLog = GetBool(json, "UseDebugLog");
-                    queryArgs.UseErrorLog = GetBool(json, "UseErrorLog");
-                    queryArgs.UseFatalLog = GetBool(json, "UseFatalLog");
-                    queryArgs.UseInfoLog = GetBool(json, "UseInfoLog");
-                    queryArgs.UseSqlLog = GetBool(json, "UseSqlLog");
-                    queryArgs.UseWarnLog = GetBool(json, "UseWarnLog");
+                    queryArgs.UseLog = GetBool(json, "UseDebuggingMode");
                     queryArgs.UseToday = GetDateTime(json, "UseToday");
                     queryArgs.UseNow = GetDateTime(json, "UseNow");
                     queryArgs.BatchNum = GetString(json, "BatchNum");
-                    queryArgs.SqlQueryTimeout = GetInt(json, "SqlQueryTimeout");
                 }
             }
 
@@ -158,4 +145,26 @@ namespace ToolGood.Bedrock.Web.Middlewares
             return builder.UseMiddleware<QueryArgsMiddleware>();
         }
     }
+
+    public class QueryArgsModelBinder : IModelBinder
+    {
+        public async Task BindModelAsync(ModelBindingContext bindingContext)
+        {
+
+
+
+        }
+    }
+
+    public class QueryArgsModelBinderProvider : IModelBinderProvider
+    {
+        public IModelBinder GetBinder(ModelBinderProviderContext context)
+        {
+            var b = context.Metadata.ContainerType.IsDefined(typeof(QueryArgsBase), true);
+
+
+            return new QueryArgsModelBinder();
+        }
+    }
+
 }
