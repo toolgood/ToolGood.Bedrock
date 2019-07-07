@@ -17,9 +17,6 @@
     <FileVersion>1.0.0.6</FileVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Theme\AppDescriptor.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
