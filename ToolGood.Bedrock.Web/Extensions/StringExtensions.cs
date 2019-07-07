@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Html;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ToolGood.Bedrock.Images;
-using System.Web;
 using System.IO;
+using System.Text;
+using System.Web;
 
 namespace ToolGood.Bedrock.Web.Extensions
 {
@@ -197,7 +195,7 @@ namespace ToolGood.Bedrock.Web.Extensions
             foreach (var item in sp) {
                 var ss = item.Split("=");
                 if (ss[0] != parameterName) {
-                    if (stringBuilder.Length>0) {
+                    if (stringBuilder.Length > 0) {
                         stringBuilder.Append("&");
                     } else {
                         stringBuilder.Append("?");
@@ -215,4 +213,5 @@ namespace ToolGood.Bedrock.Web.Extensions
 
 
     }
+
 }
