@@ -201,7 +201,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        protected IActionResult Error(string msg)
+        protected IActionResult Error(string msg = "ERROR")
         {
             QueryResult result = new QueryResult() {
                 Code = ErrorCode,

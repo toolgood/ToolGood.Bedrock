@@ -198,7 +198,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        protected IActionResult Error(string msg)
+        protected IActionResult Error(string msg = "ERROR")
         {
             QueryResult result = new QueryResult() {
                 Code = ErrorCode,
@@ -490,8 +490,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected string GetRealIP()
         {
-            string result = String.Empty;
-            result = Request.Headers["HTTP_X_FORWARDED_FOR"];
+            string result = Request.Headers["HTTP_X_FORWARDED_FOR"];
             //可能有代理 
             if (!string.IsNullOrWhiteSpace(result)) {
                 //没有"." 肯定是非IP格式
@@ -733,7 +732,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <param name="themeName"></param>
         protected void SetThemeName(string themeName)
         {
-            HttpContext.Request.HttpContext.Items[ViewLocationExpander.ThemeKey] = "themeName";
+            HttpContext.Request.HttpContext.Items[WebConstants.Theme] = themeName;
         }
     }
 }

@@ -8,22 +8,22 @@ namespace ToolGood.Bedrock.Web.Theme
 {
     public class ViewLocationExpander : IViewLocationExpander
     {
-        public const string ThemeKey = "Theme";
+        //public const string ThemeKey = "Theme";
 
         public void PopulateValues(ViewLocationExpanderContext context)
         {
             string theme = "Default";
-            if (context.ActionContext.HttpContext.Items.ContainsKey(ThemeKey)) {
-                theme = context.ActionContext.HttpContext.Items[ThemeKey].ToString();
+            if (context.ActionContext.HttpContext.Items.ContainsKey(Constants.WebConstants.Theme)) {
+                theme = context.ActionContext.HttpContext.Items[Constants.WebConstants.Theme].ToString();
             }
-            context.Values[ThemeKey] = theme;
+            context.Values[Constants.WebConstants.Theme] = theme;
         }
 
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
             string theme;
 
-            if (context.Values.TryGetValue(ThemeKey, out theme)) {
+            if (context.Values.TryGetValue(Constants.WebConstants.Theme, out theme)) {
                 viewLocations = new[]
                 {
                     $"/Themes/{theme}/{{1}}/{{0}}.cshtml",

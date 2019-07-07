@@ -17,7 +17,7 @@ namespace ToolGood.Bedrock.Web.Theme
 
         public Task Invoke(HttpContext context)
         {
-            context.Request.HttpContext.Items[ViewLocationExpander.ThemeKey] = "Default";
+            context.Request.HttpContext.Items[Constants.WebConstants.Theme] = "Default";
             return _next(context);
         }
 

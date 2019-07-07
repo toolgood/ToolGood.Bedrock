@@ -30,8 +30,6 @@ namespace ToolGood.Bedrock.Web.Constants
         }
 
 
-        public static string RootPath = null;
-
         public static string ImagePath = "/upload/images/";
         public static string FilePath = "/upload/files/";
         public static string VideoPath = "/upload/videos/";
