@@ -34,7 +34,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
                 LogUtil.QueryArgs = QueryArgs;
                 ViewData["QueryArgs"] = QueryArgs;
             }
- 
+
             base.OnActionExecuting(context);
         }
 
@@ -356,6 +356,21 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         protected void DeleteSession(string key)
         {
             HttpContext.Session.Remove(key);
+        }
+
+        /// <summary>
+        /// 核对Session
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        protected bool CheckSession(string key, string val)
+        {
+            var sessionCode = HttpContext.Session.GetString(key);
+            if (string.IsNullOrEmpty(sessionCode) || sessionCode != val) {
+                return false;
+            }
+            return true;
         }
 
         #endregion

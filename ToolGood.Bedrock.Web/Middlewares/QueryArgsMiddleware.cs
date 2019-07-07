@@ -19,7 +19,7 @@ namespace ToolGood.Bedrock.Web.Middlewares
         public async Task Invoke(HttpContext context)
         {
             QueryArgsBase queryArgs = new QueryArgsBase();
-            if (context.Request.Headers["Content-Type"].ToString().Contains("json") == false) {
+            if (context.Request.Headers["Content-Type"].ToSafeString().Contains("json") == false) {
                 queryArgs.UseDebuggingMode = GetBool(context, "UseDebuggingMode");
                 queryArgs.UseDebugLog = GetBool(context, "UseDebugLog");
                 queryArgs.UseErrorLog = GetBool(context, "UseErrorLog");
@@ -64,7 +64,7 @@ namespace ToolGood.Bedrock.Web.Middlewares
                 if (string.IsNullOrEmpty(value) == false) {
                     return value.ToSafeBool(false);
                 }
-            } else if (context.Request.Method == "POST") {
+            } else if (context.Request.Method == "POST" && context.Request.HasFormContentType) {
                 if (context.Request.Form != null && context.Request.Form.ContainsKey(key)) {
                     var value = context.Request.Form[key].ToString();
                     if (string.IsNullOrEmpty(value) == false) {
@@ -81,7 +81,7 @@ namespace ToolGood.Bedrock.Web.Middlewares
                 if (string.IsNullOrEmpty(value) == false) {
                     return value.ToSafeDateTime(DateTime.Now);
                 }
-            } else if (context.Request.Method == "POST") {
+            } else if (context.Request.Method == "POST" && context.Request.HasFormContentType) {
                 if (context.Request.Form != null && context.Request.Form.ContainsKey(key)) {
                     var value = context.Request.Form[key].ToString();
                     if (string.IsNullOrEmpty(value) == false) {
@@ -98,7 +98,7 @@ namespace ToolGood.Bedrock.Web.Middlewares
                 if (string.IsNullOrEmpty(value) == false) {
                     return value.ToSafeInt32(0);
                 }
-            } else if (context.Request.Method == "POST") {
+            } else if (context.Request.Method == "POST" && context.Request.HasFormContentType) {
                 if (context.Request.Form != null && context.Request.Form.ContainsKey(key)) {
                     var value = context.Request.Form[key].ToString();
                     if (string.IsNullOrEmpty(value) == false) {
@@ -112,7 +112,7 @@ namespace ToolGood.Bedrock.Web.Middlewares
         {
             if (context.Request.Query.ContainsKey(key)) {
                 return context.Request.Query[key].ToString();
-            } else if (context.Request.Method == "POST") {
+            } else if (context.Request.Method == "POST" && context.Request.HasFormContentType) {
                 if (context.Request.Form != null && context.Request.Form.ContainsKey(key)) {
                     return context.Request.Form[key].ToString();
                 }
