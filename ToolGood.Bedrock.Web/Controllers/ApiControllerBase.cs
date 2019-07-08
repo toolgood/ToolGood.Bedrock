@@ -13,6 +13,7 @@ namespace ToolGood.Bedrock.Web
         {
             if (!this.ModelState.IsValid) {
                 context.Result = Error(ModelState);
+                return;
             }
             base.OnActionExecuting(context);
         }

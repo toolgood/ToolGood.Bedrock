@@ -139,7 +139,7 @@ namespace ToolGood.Bedrock
         /// 使用自定义当前时间，定义日期
         /// </summary>
         /// <param name="dateTime"></param>
-        public static void UseTody(DateTime dateTime)
+        public static void UseToday(DateTime dateTime)
         {
             UseToday(dateTime.Year, dateTime.Month, dateTime.Day);
         }

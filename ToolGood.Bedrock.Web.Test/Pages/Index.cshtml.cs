@@ -11,8 +11,9 @@ namespace ToolGood.Bedrock.Web.Test.Pages
     [ApiLogFilter]
     public class IndexModel : WebPageModelBase
     {
-        public void OnGet()
+        public void OnGet(int id)
         {
+            var ss = id;
             var value = GetCookie("key");
 
             SetCookie("key", "4444");

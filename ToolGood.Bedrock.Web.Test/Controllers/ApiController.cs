@@ -28,11 +28,21 @@ namespace ToolGood.Bedrock.Web.Test.Controllers
 
         public IActionResult TT(int aa)
         {
-            HttpContext.Request.HttpContext.Items[ViewLocationExpander.ThemeKey] = "EE";
+            HttpContext.Request.HttpContext.Items[Constants.WebConstants.Theme] = "EE";
             //HttpContext.Request.HttpContext.Items[ViewLocationExpander.ThemeKey] = "EE";
 
             return View();
 
         }
+
+        public IActionResult AA(QueryArgs2 queryArgs)
+        {
+            return Success();
+        }
+
+    }
+    public class QueryArgs2 : QueryArgsBase
+    {
+        public string id { get; set; }
     }
 }

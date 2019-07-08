@@ -49,9 +49,5 @@
         /// </summary>
         public bool UsePlugin { get; set; } = false;
 
-        /// <summary>
-        /// 使用 RSA 解密
-        /// </summary>
-        public bool UseRsaDecrypt { get; set; } = false;
     }
 }

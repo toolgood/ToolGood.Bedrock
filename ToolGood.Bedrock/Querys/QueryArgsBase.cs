@@ -16,7 +16,7 @@ namespace ToolGood.Bedrock
             SqlTimes = new List<DebugSqlTime>();
             Logs = new List<DebugLog>();
         }
- 
+
 
         internal HttpContext HttpContext;
         public HttpContext GetHttpContext() { return HttpContext; }
@@ -29,15 +29,34 @@ namespace ToolGood.Bedrock
         public bool? UseLog { get; set; }
 
         #region 日期 时间 
+        private DateTime? _UseToday;
+
         /// <summary>
         /// 使用今天
         /// </summary>
-        public DateTime? UseToday { set; get; }
+        public DateTime? UseToday {
+            set {
+                if (value != null) {
+                    DateTimeUtil.UseToday(value.Value);
+                }
+                _UseToday = value;
+            }
+            get { return _UseToday; }
+        }
+        private DateTime? _UseNow;
 
         /// <summary>
         /// 使用当前时间
         /// </summary>
-        public DateTime? UseNow { set; get; }
+        public DateTime? UseNow {
+            set {
+                if (value != null) {
+                    DateTimeUtil.UseNow(value.Value);
+                }
+                _UseNow = value;
+            }
+            get { return _UseNow; }
+        }
 
         #endregion
 

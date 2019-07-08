@@ -26,7 +26,6 @@ using ToolGood.Bedrock.Dependency.AutofacContainer;
 using ToolGood.Bedrock.Internals;
 using ToolGood.Bedrock.Web.Loggers;
 using ToolGood.Bedrock.Web.Middlewares;
-using ToolGood.Bedrock.Web.ModelBinders;
 using ToolGood.Bedrock.Web.ResumeFiles.Executor;
 using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
 using ToolGood.Bedrock.Web.Theme;
@@ -92,8 +91,10 @@ namespace ToolGood.Bedrock.Web
             if (config.UseMvc) {
                 var mvcBuilder = services.AddMvc(options => {
                     options.Filters.Add<HttpGlobalExceptionFilter>();
-                    if (config.UseRsaDecrypt) { options.ModelBinderProviders.Insert(0, new RsaDecryptModelBinderProvider()); }
+                    //if (config.UseRsaDecrypt) { options.ModelBinderProviders.Insert(0, new RsaDecryptModelBinderProvider()); }
+                    //options.ModelBinderProviders.Insert(0, new QueryArgsModelBinderProvider());
                 })
+                  .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                   .AddDataAnnotationsLocalization()
                   .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                   .AddJsonOptions(options => {
@@ -120,7 +121,6 @@ namespace ToolGood.Bedrock.Web
                     });
                 }
                 if (config.UseTheme) {
-                    mvcBuilder.AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
                     services.Configure<RazorViewEngineOptions>(options => { options.ViewLocationExpanders.Add(new ViewLocationExpander()); });
                 }
 
@@ -188,17 +188,19 @@ namespace ToolGood.Bedrock.Web
 
             if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(env).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.Configure(app); } }
 
-
             if (config.UseSession) { app.UseCookiePolicy(); app.UseSession(); } else if (config.UseCookie) { app.UseCookiePolicy(); }
             if (config.UseResponseCaching) { app.UseResponseCaching(); }
             if (config.UseResponseCompression) { app.UseResponseCompression(); }
             if (config.UseCors) { app.UseCors(); }
 
             app.UseEnableRequestRewind();
-            app.UseQueryArgs();
+            ApplicationRegister(app);
 
             if (config.UseMvc) {
-                app.UseMiddleware<ThemeMiddleware>();
+                if (config.UseTheme) {
+                    app.UseMiddleware<ThemeMiddleware>();
+                }
+
                 app.UseMvc(routes => {
                     RouteRegister(routes);
                     routes.MapRoute(
@@ -224,19 +226,22 @@ namespace ToolGood.Bedrock.Web
         /// 服务注册
         /// </summary>
         /// <param name="services"></param>
-        public abstract void ServiceRegister(IServiceCollection services);
+        public virtual void ServiceRegister(IServiceCollection services) { }
 
         /// <summary>
         /// IOC注册
         /// </summary>
         /// <param name="containerManager"></param>
-        public abstract void IocManagerRegister(ContainerManager containerManager);
+        public virtual void IocManagerRegister(ContainerManager containerManager) { }
         /// <summary>
         /// 注册路由
         /// </summary>
         /// <param name="routes"></param>
-        public abstract void RouteRegister(IRouteBuilder routes);
-
-
+        public virtual void RouteRegister(IRouteBuilder routes) { }
+        /// <summary>
+        /// app注册 
+        /// </summary>
+        /// <param name="app"></param>
+        public virtual void ApplicationRegister(IApplicationBuilder app) { }
     }
 }

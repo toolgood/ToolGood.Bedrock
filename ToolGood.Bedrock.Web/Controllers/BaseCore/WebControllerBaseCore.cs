@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using ToolGood.Bedrock.Web.Constants;
+using ToolGood.Bedrock.Web.Internals;
 using ToolGood.Bedrock.Web.Mime;
 using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
 using ToolGood.Bedrock.Web.Theme;
@@ -29,35 +30,19 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         {
             ViewData["SuccessCode"] = SuccessCode;
             ViewData["ErrorCode"] = ErrorCode;
-            if (HttpContext.Items.ContainsKey("ToolGood.Bedrock.QueryArgsBase")) {
-                QueryArgs = HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgsBase;
-                LogUtil.QueryArgs = QueryArgs;
-                ViewData["QueryArgs"] = QueryArgs;
-            }
 
+            QueryArgs = HttpContextHelper.BuildQueryArgs(context.HttpContext, context.ActionArguments);
+            ViewData["QueryArgs"] = QueryArgs;
+ 
             base.OnActionExecuting(context);
         }
 
 
-        protected void SetQueryArgs(QueryArgsBase queryArgsBase)
-        {
-            if (HttpContext.Items.ContainsKey("ToolGood.Bedrock.QueryArgsBase")) {
-                var queryArgs = HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgsBase;
-                foreach (var log in queryArgs.Logs) {
-                    queryArgsBase.Logs.Add(log);
-                }
-                foreach (var sqlTime in queryArgs.SqlTimes) {
-                    queryArgsBase.SqlTimes.Add(sqlTime);
-                }
-            }
-
-            QueryArgs = queryArgsBase;
-            QueryArgs.SetHttpContext(this.HttpContext);
-            HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] = queryArgsBase;
-            LogUtil.QueryArgs = queryArgsBase;
-            ViewData["QueryArgs"] = QueryArgs;
-        }
-
+        /// <summary>
+        /// 首字母小写json
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         protected IActionResult CamelCaseJson(object data)
         {
             var json = data.ToJson();
