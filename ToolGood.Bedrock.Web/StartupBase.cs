@@ -70,6 +70,7 @@ namespace ToolGood.Bedrock.Web
                 services.AddSession(options => {
                     options.Cookie.Name = "sid";
                     options.IdleTimeout = TimeSpan.FromHours(3);
+                    options.IOTimeout = TimeSpan.FromSeconds(1);
                     options.Cookie.IsEssential = true;
                     options.Cookie.HttpOnly = true;
                     options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
