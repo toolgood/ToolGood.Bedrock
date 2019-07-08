@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
-namespace System
+namespace System.Data
 {
     public static class DataTableExtension
     {

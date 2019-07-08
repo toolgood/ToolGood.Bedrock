@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
-namespace ToolGood.Bedrock
+namespace System.Data
 {
     /// <summary>
     /// DataTable
@@ -22,6 +23,7 @@ namespace ToolGood.Bedrock
         {
             var type = typeof(T);
             var properties = type.GetProperties().ToList();
+            properties.RemoveAll(q => q.CanRead == false);
             var newDt = new DataTable(type.Name);
             properties.ForEach(propertie => {
                 Type columnType;
@@ -43,6 +45,37 @@ namespace ToolGood.Bedrock
 
             return newDt;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static List<T> ToList<T>(DataTable dt)
+        {
+            var lst = new List<T>();
+            var plist = new List<System.Reflection.PropertyInfo>(typeof(T).GetProperties());
+            plist.RemoveAll(q => q.CanWrite == false);
+
+            foreach (DataRow item in dt.Rows) {
+                T t = System.Activator.CreateInstance<T>();
+                for (int i = 0; i < dt.Columns.Count; i++) {
+                    PropertyInfo info = plist.Find(p => p.Name == dt.Columns[i].ColumnName);
+                    if (info != null) {
+                        if (!Convert.IsDBNull(item[i])) {
+                            var obj = item[i].ConvertTo(info.PropertyType);
+                            info.SetValue(t, obj, null);
+                        }
+                    }
+                }
+                lst.Add(t);
+            }
+            return lst;
+        }
+
+         
+
 
     }
 

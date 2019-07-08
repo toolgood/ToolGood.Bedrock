@@ -366,5 +366,44 @@ namespace System
         }
         #endregion
 
+        /// <summary>
+        /// 转成类型
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static T ConvertTo<T>(this object value)
+        {
+            var obj = ConvertTo(value, typeof(T));
+            return (T)obj;
+        }
+
+        /// <summary>
+        /// 转成类型
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static object ConvertTo(this object value, Type type)
+        {
+            if (value == null && type.IsGenericType) return Activator.CreateInstance(type);
+            if (value == null) return null;
+            if (type == value.GetType()) return value;
+            if (type.IsEnum) {
+                if (value is string)
+                    return Enum.Parse(type, value as string);
+                else
+                    return Enum.ToObject(type, value);
+            }
+            if (!type.IsInterface && type.IsGenericType) {
+                Type innerType = type.GetGenericArguments()[0];
+                object innerValue = ConvertTo(value, innerType);
+                return Activator.CreateInstance(type, new object[] { innerValue });
+            }
+            if (value is string && type == typeof(Guid)) return new Guid(value as string);
+            if (value is string && type == typeof(Version)) return new Version(value as string);
+            if (!(value is IConvertible)) return value;
+            return Convert.ChangeType(value, type);
+        }
     }
 }

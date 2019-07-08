@@ -37,6 +37,8 @@ namespace ToolGood.Bedrock.Web.Test.Controllers
 
         public IActionResult AA(QueryArgs2 queryArgs)
         {
+            
+            var t = QueryArgs.BatchNum;
             return Success();
         }
 
