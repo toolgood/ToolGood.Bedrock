@@ -64,7 +64,7 @@ namespace System
             } else if (dateTime.Kind == DateTimeKind.Unspecified) {
                 return (long)(dateTime - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified)).TotalSeconds;
             }
-            return (long)(dateTime - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Local)).TotalSeconds;
+            return (long)(dateTime.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
         }
 
         /// <summary>

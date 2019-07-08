@@ -13,7 +13,7 @@ namespace System
         /// <param name="camelCase"></param>
         /// <param name="indented"></param>
         /// <returns></returns>
-        public static string ToJson(this object obj, bool camelCase = true, bool indented = false)
+        public static string ToJson<T>(this T obj, bool camelCase = true, bool indented = false) where T : class
         {
             if (object.Equals(null, obj)) { return ""; }
 
@@ -40,7 +40,7 @@ namespace System
         /// <param name="camelCase"></param>
         /// <param name="indented"></param>
         /// <returns>json格式的字符串</returns>
-        public static string ToJsonIgnoreNull<T>(this T obj, bool camelCase = true, bool indented = false)
+        public static string ToJsonIgnoreNull<T>(this T obj, bool camelCase = true, bool indented = false) where T : class
         {
             if (object.Equals(null, obj)) { return ""; }
 
@@ -67,7 +67,7 @@ namespace System
         /// <typeparam name="T"></typeparam>
         /// <param name="json"></param>
         /// <returns></returns>
-        public static T ToObject<T>(this string json)
+        public static T ToObject<T>(this string json) where T : class
         {
             if (object.Equals(null, json)) { return default(T); }
 

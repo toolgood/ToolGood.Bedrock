@@ -16,6 +16,30 @@ namespace System
             return source.Where(element => seenKeys.Add(keySelector(element)));
         }
 
+
+        /// <summary>
+        /// 转成字典 
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="keyFun"></param>
+        /// <param name="valueFun"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Dictionary<T1, T2> ToDictionary<T1, T2, T3>(this IEnumerable<T3> list, Func<T3, T1> keyFun, Func<T3, T2> valueFun, T1 key, T2 value)
+        {
+            Dictionary<T1, T2> dict = new Dictionary<T1, T2>();
+            dict.Add(key, value);
+            if (list == null) return dict;
+            foreach (var item in list) {
+                dict.Add(keyFun(item), valueFun(item));
+            }
+            return dict;
+        }
+
         /// <summary>
         /// 遍历执行方法
         /// </summary>
@@ -93,26 +117,6 @@ namespace System
             return source == null || source.Count <= 0;
         }
 
-        /// <summary>
-        ///     Adds an item to the collection if it's not already in the collection.
-        /// </summary>
-        /// <param name="source">Collection</param>
-        /// <param name="item">Item to check and add</param>
-        /// <typeparam name="T">Type of the items in the collection</typeparam>
-        /// <returns>Returns True if added, returns False if not.</returns>
-        public static bool AddIfNotContains<T>(this ICollection<T> source, T item)
-        {
-            if (source == null) {
-                throw new ArgumentNullException(nameof(source));
-            }
-
-            if (source.Contains(item)) {
-                return false;
-            }
-
-            source.Add(item);
-            return true;
-        }
 
 
 
