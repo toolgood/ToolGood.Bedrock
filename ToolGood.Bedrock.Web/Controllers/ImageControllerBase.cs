@@ -106,7 +106,7 @@ namespace ToolGood.Bedrock.Web
         [HttpGet]
         public virtual IActionResult Qr(string u, int w = 200, int h = 200)
         {
-            var bytes = BarcodeHelper.CreateQrCode(u, w, h);
+            var bytes = BarcodeHelper.CreateQrCode(System.Web.HttpUtility.UrlDecode(u), w, h);
             return File(bytes, "image/jpeg");
         }
 
