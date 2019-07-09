@@ -14,23 +14,23 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// <summary>
         /// 
         /// </summary>
-        public static string ImageCutPrefix = "/Image/C/?u={0}&w={1}&h={2}";
+        public static string ImageCutPrefix = "/Image/C{1}x{2}/{0}";
         /// <summary>
         /// 
         /// </summary>
-        public static string ImageHeightPrefix = "/Image/H/?u={0}&h={1}";
+        public static string ImageHeightPrefix = "/Image/H{1}/{0}";
         /// <summary>
         /// 
         /// </summary>
-        public static string ImageWidthPrefix = "/Image/W/?u={0}&w={1}";
+        public static string ImageWidthPrefix = "/Image/W{1}/{0}";
         /// <summary>
         /// 
         /// </summary>
-        public static string ImageThumbnailPrefix = "/Image/T/?u={0}&w={1}&h={2}";
+        public static string ImageThumbnailPrefix = "/Image/T{1}x{2}/{0}";
         /// <summary>
         /// 
         /// </summary>
-        public static string ImageQrCodePrefix = "/Image/Qr/?u={0}&w={1}&h={2}";
+        public static string ImageQrCodePrefix = "/Image/Qr{1}x{2}/{0}";
 
         /// <summary>
         /// 转成 剪切的图片Url
@@ -41,7 +41,7 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// <returns></returns>
         public static HtmlString ToImageUrlForCut(this string url, int width = 100, int height = 100)
         {
-            return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageCutPrefix), url, width, height));
+            return new HtmlString(string.Format(ImageCutPrefix, HttpUtility.UrlEncode(url), width, height));
         }
         /// <summary>
         /// 转成锁定高的图片Url
@@ -51,7 +51,7 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// <returns></returns>
         public static HtmlString ToImageUrlForHeight(this string url, int height = 100)
         {
-            return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageHeightPrefix), url, height));
+            return new HtmlString(string.Format(ImageHeightPrefix, HttpUtility.UrlEncode(url), height));
         }
         /// <summary>
         /// 转成锁定宽的图片Url
@@ -61,7 +61,7 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// <returns></returns>
         public static HtmlString ToImageUrlForWidth(this string url, int width = 100)
         {
-            return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageWidthPrefix), url, width));
+            return new HtmlString(string.Format(ImageWidthPrefix, HttpUtility.UrlEncode(url), width));
         }
         /// <summary>
         /// 转成缩小的图片Url
@@ -72,7 +72,7 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// <returns></returns>
         public static HtmlString ToImageUrlForThumbnail(this string url, int width = 200, int height = 200)
         {
-            return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageThumbnailPrefix), url, width, height));
+            return new HtmlString(string.Format(ImageThumbnailPrefix, HttpUtility.UrlEncode(url), width, height));
         }
         /// <summary>
         /// 转成二维码
@@ -83,7 +83,7 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// <returns></returns>
         public static HtmlString ToImageUrlForQrCode(this string url, int width = 200, int height = 200)
         {
-            return new HtmlString(string.Format(HttpUtility.UrlDecode(ImageQrCodePrefix), url, width, height));
+            return new HtmlString(string.Format(ImageQrCodePrefix, HttpUtility.UrlEncode(url), width, height));
         }
 
 

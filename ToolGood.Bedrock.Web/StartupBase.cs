@@ -209,6 +209,27 @@ namespace ToolGood.Bedrock.Web
                      template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
                     );
                     routes.MapRoute(
+                        name: "imageDefaultC",
+                        template: "Image/C{w:int}x{h:int}/{*u}",
+                        defaults: new { controller = "Image", action = "C", });
+                    routes.MapRoute(
+                        name: "imageDefaultH",
+                        template: "Image/H{h:int}/{*u}",
+                        defaults: new { controller = "Image", action = "H", });
+                    routes.MapRoute(
+                        name: "imageDefaultW",
+                        template: "Image/W{w:int}/{*u}",
+                        defaults: new { controller = "Image", action = "W", });
+                    routes.MapRoute(
+                        name: "imageDefaultT",
+                        template: "Image/T{w:int}x{h:int}/{*u}",
+                        defaults: new { controller = "Image", action = "T", });
+                    routes.MapRoute(
+                        name: "imageDefaultQR",
+                        template: "Image/qr{w:int}x{h:int}/{*u}",
+                        defaults: new { controller = "Image", action = "QR", });
+
+                    routes.MapRoute(
                         name: "default",
                         template: "{controller=Home:exists}/{action=Index}/{id?}");
                 });
