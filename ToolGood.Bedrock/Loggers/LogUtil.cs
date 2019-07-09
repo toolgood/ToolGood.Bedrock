@@ -8,7 +8,7 @@ namespace ToolGood.Bedrock
     public class LogUtil
     {
         [ThreadStatic]
-        public static QueryArgsBase QueryArgs;
+        public static QueryArgs QueryArgs;
         private static List<ILogger> allLoggers = new List<ILogger>();
 
         public static bool UseDebug { get; set; } = true;

@@ -13,7 +13,7 @@ namespace ToolGood.Bedrock.Web.Loggers
         public void OnException(ExceptionContext context)
         {
             if (context.HttpContext.Items.ContainsKey("ToolGood.Bedrock.QueryArgsBase")) {
-                LogUtil.QueryArgs = context.HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgsBase;
+                LogUtil.QueryArgs = context.HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgs;
             }
             LogUtil.Error(context.Exception);
 

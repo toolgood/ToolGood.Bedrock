@@ -5,7 +5,9 @@ using ToolGood.ReadyGo3;
 
 namespace ToolGood.Bedrock
 {
-
+    /// <summary>
+    /// 查询结果
+    /// </summary>
     public class QueryResult
     {
         [JsonProperty("code",NullValueHandling = NullValueHandling.Ignore)]

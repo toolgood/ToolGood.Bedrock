@@ -9,7 +9,7 @@ namespace ToolGood.Bedrock.Web
     {
         protected int SuccessCode { get { return CommonConstants.SuccessCode; } }
         protected int ErrorCode { get { return CommonConstants.ErrorCode; } }
-        protected QueryArgsBase QueryArgs { get; set; }
+        protected QueryArgs QueryArgs { get; set; }
 
         public Task<IViewComponentResult> InvokeAsync()
         {
@@ -17,7 +17,7 @@ namespace ToolGood.Bedrock.Web
             ViewData["ErrorCode"] = ErrorCode;
 
             if (HttpContext.Items.ContainsKey("ToolGood.Bedrock.QueryArgsBase")) {
-                QueryArgs = HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgsBase;
+                QueryArgs = HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgs;
                 LogUtil.QueryArgs = QueryArgs;
                 ViewData["QueryArgs"] = QueryArgs;
             }

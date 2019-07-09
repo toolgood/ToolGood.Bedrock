@@ -9,10 +9,10 @@ namespace ToolGood.Bedrock.Web.Internals
 {
     internal class HttpContextHelper
     {
-        public static QueryArgsBase BuildQueryArgs(HttpContext context, IDictionary<string, object> args)
+        public static QueryArgs BuildQueryArgs(HttpContext context, IDictionary<string, object> args)
         {
             foreach (var item in args) {
-                var queryArgsBase = item.Value as QueryArgsBase;
+                var queryArgsBase = item.Value as QueryArgs;
                 if (queryArgsBase != null) {
                     queryArgsBase.SetHttpContext(context);
                     context.Items["ToolGood.Bedrock.QueryArgsBase"] = queryArgsBase;
@@ -21,12 +21,12 @@ namespace ToolGood.Bedrock.Web.Internals
                  }
             }
             if (context.Items.ContainsKey("ToolGood.Bedrock.QueryArgsBase")) {
-                var queryArgsBase = context.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgsBase;
+                var queryArgsBase = context.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgs;
                 LogUtil.QueryArgs = queryArgsBase;
                 return queryArgsBase;
             }
 
-            QueryArgsBase queryArgs = new QueryArgsBase();
+            QueryArgs queryArgs = new QueryArgs();
             if (context.Request.Headers["Content-Type"].ToSafeString().Contains("json") == false) {
                 queryArgs.UseLog = GetBool(context, "UseLog");
                 queryArgs.UseToday = GetDateTime(context, "UseToday");

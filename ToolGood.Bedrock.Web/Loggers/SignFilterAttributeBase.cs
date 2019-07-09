@@ -89,7 +89,7 @@ namespace ToolGood.Bedrock.Web
             }
             if (hash.ToLower() != sign.ToLower()) {
                 if (context.HttpContext.Items.ContainsKey("ToolGood.Bedrock.QueryArgsBase")) {
-                    LogUtil.QueryArgs = context.HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgsBase;
+                    LogUtil.QueryArgs = context.HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgs;
                 }
                 LogUtil.Error("Sign is error.");
                 context.Result = Error("Sign is error.");

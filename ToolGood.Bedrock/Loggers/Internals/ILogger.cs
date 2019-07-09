@@ -10,7 +10,7 @@
         bool UseSql { get; set; }
 
         void WriteLog(string type, string msg);
-        void WriteLog(QueryArgsBase queryArgs, LogType type, string msg);
+        void WriteLog(QueryArgs queryArgs, LogType type, string msg);
 
     }
 

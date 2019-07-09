@@ -36,7 +36,7 @@ namespace ToolGood.Bedrock.Web
 
 
             if (context.HttpContext.Items.ContainsKey("ToolGood.Bedrock.QueryArgsBase")) {
-                LogUtil.QueryArgs = context.HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgsBase;
+                LogUtil.QueryArgs = context.HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgs;
             }
             if (context.Exception != null) {
                 LogUtil.Error(context.Exception);

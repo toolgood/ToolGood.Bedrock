@@ -37,7 +37,7 @@ namespace ToolGood.Bedrock.Web.Test.Pages
         //}
 
     }
-    public class QueryArgs : QueryArgsBase
+    public class QueryArgs : Bedrock.QueryArgs
     {
         //public override bool UseDebuggingMode => false;
     }

@@ -11,7 +11,7 @@ namespace System
         /// <returns></returns>
         public static string ToEasyString(this DateTime value)
         {
-            DateTime now = DateTime.Now;
+            DateTime now = DateTimeUtil.Now;
             if (now < value) return value.ToString("yyyy-MM-dd");
             TimeSpan dep = now - value;
             if (dep.TotalMinutes < 1) {

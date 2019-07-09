@@ -23,7 +23,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
     {
         protected int SuccessCode { get { return CommonConstants.SuccessCode; } }
         protected int ErrorCode { get { return CommonConstants.ErrorCode; } }
-        protected QueryArgsBase QueryArgs { get; set; }
+        protected QueryArgs QueryArgs { get; set; }
 
 
         public override void OnActionExecuting(ActionExecutingContext context)

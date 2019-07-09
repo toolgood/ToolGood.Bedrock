@@ -19,7 +19,7 @@ namespace ToolGood.Bedrock.Web
             if (IsShip(context)) { return; }
 
             if (context.HttpContext.Items.ContainsKey("ToolGood.Bedrock.QueryArgsBase")) {
-                LogUtil.QueryArgs = context.HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgsBase;
+                LogUtil.QueryArgs = context.HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgs;
             }
             LogUtil.Request(GetActionArguments(context.HttpContext, context.ActionArguments));
             base.OnActionExecuting(context);
@@ -30,7 +30,7 @@ namespace ToolGood.Bedrock.Web
             if (IsShip(context)) { return; }
 
             if (context.HttpContext.Items.ContainsKey("ToolGood.Bedrock.QueryArgsBase")) {
-                LogUtil.QueryArgs = context.HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgsBase;
+                LogUtil.QueryArgs = context.HttpContext.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgs;
             }
             if (context.Exception != null) {
                 LogUtil.Error(context.Exception);

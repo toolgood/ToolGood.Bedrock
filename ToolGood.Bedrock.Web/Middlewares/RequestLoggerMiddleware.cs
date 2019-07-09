@@ -34,7 +34,7 @@ namespace ToolGood.Bedrock.Web.Middlewares
                 }
             }  
             if (context.Items.ContainsKey("ToolGood.Bedrock.QueryArgsBase")) {
-                LogUtil.QueryArgs = context.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgsBase;
+                LogUtil.QueryArgs = context.Items["ToolGood.Bedrock.QueryArgsBase"] as QueryArgs;
             }
             LogUtil.Request(msg);
             await _next.Invoke(context);

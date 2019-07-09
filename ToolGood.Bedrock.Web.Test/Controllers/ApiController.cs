@@ -43,7 +43,7 @@ namespace ToolGood.Bedrock.Web.Test.Controllers
         }
 
     }
-    public class QueryArgs2 : QueryArgsBase
+    public class QueryArgs2 : QueryArgs
     {
         public string id { get; set; }
     }

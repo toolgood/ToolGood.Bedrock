@@ -35,7 +35,7 @@ namespace ToolGood.Bedrock.Internals
             WriteLog(type.ToString(), context);
         }
 
-        public virtual void WriteLog(QueryArgsBase queryArgs, LogType type, string msg)
+        public virtual void WriteLog(QueryArgs queryArgs, LogType type, string msg)
         {
             if (queryArgs == null || queryArgs.UseLog == null || queryArgs.UseLog == false) {
                 if (type == LogType.Debug && UseDebug == false) return;
@@ -54,7 +54,7 @@ namespace ToolGood.Bedrock.Internals
 
         public abstract void WriteLog(string type, string content);
 
-        protected virtual string FormatLog(string type, string content, QueryArgsBase queryArgs)
+        protected virtual string FormatLog(string type, string content, QueryArgs queryArgs)
         {
             var Time = DateTime.Now;
             var log = new StringBuilder(Log_Prefix);
