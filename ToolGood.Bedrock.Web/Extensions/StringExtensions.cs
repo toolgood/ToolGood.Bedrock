@@ -41,7 +41,8 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// <returns></returns>
         public static HtmlString ToImageUrlForCut(this string url, int width = 100, int height = 100)
         {
-            return new HtmlString(string.Format(ImageCutPrefix, HttpUtility.UrlEncode(url), width, height));
+            //return new HtmlString(string.Format(ImageCutPrefix, HttpUtility.UrlEncode(url), width, height));
+            return new HtmlString(string.Format(ImageCutPrefix, (url), width, height));
         }
         /// <summary>
         /// 转成锁定高的图片Url
@@ -51,7 +52,8 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// <returns></returns>
         public static HtmlString ToImageUrlForHeight(this string url, int height = 100)
         {
-            return new HtmlString(string.Format(ImageHeightPrefix, HttpUtility.UrlEncode(url), height));
+            //return new HtmlString(string.Format(ImageHeightPrefix, HttpUtility.UrlEncode(url), height));
+            return new HtmlString(string.Format(ImageHeightPrefix, (url), height));
         }
         /// <summary>
         /// 转成锁定宽的图片Url
@@ -61,7 +63,8 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// <returns></returns>
         public static HtmlString ToImageUrlForWidth(this string url, int width = 100)
         {
-            return new HtmlString(string.Format(ImageWidthPrefix, HttpUtility.UrlEncode(url), width));
+            //return new HtmlString(string.Format(ImageWidthPrefix, HttpUtility.UrlEncode(url), width));
+            return new HtmlString(string.Format(ImageWidthPrefix, (url), width));
         }
         /// <summary>
         /// 转成缩小的图片Url
@@ -72,7 +75,8 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// <returns></returns>
         public static HtmlString ToImageUrlForThumbnail(this string url, int width = 200, int height = 200)
         {
-            return new HtmlString(string.Format(ImageThumbnailPrefix, HttpUtility.UrlEncode(url), width, height));
+            //return new HtmlString(string.Format(ImageThumbnailPrefix, HttpUtility.UrlEncode(url), width, height));
+            return new HtmlString(string.Format(ImageThumbnailPrefix, (url), width, height));
         }
         /// <summary>
         /// 转成二维码
