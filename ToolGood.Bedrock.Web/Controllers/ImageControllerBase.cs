@@ -31,6 +31,12 @@ namespace ToolGood.Bedrock.Web
                 Directory.CreateDirectory(Path.GetDirectoryName(newPath));
                 System.IO.File.WriteAllBytes(newPath, bytes);
             }
+
+            FileInfo fileInfo = new FileInfo(newPath);
+            Response.Headers["Cache-Control"] = "max-age=315360000";
+            Response.Headers["Etag"] = fileInfo.LastWriteTime.ToString("yyyyMMddHHmmss_") + fileInfo.Length.ToString();
+            Response.Headers["Date"] = DateTime.Now.ToString("r");
+            Response.Headers["Expires"] = DateTime.Now.AddYears(100).ToString("r");
             var contentType = new MimeMapper().GetMimeFromExtension(Path.GetExtension(newPath));
             return PhysicalFile(newPath, contentType);
         }
@@ -51,6 +57,11 @@ namespace ToolGood.Bedrock.Web
                 Directory.CreateDirectory(Path.GetDirectoryName(newPath));
                 System.IO.File.WriteAllBytes(newPath, bytes);
             }
+            FileInfo fileInfo = new FileInfo(newPath);
+            Response.Headers["Cache-Control"] = "max-age=315360000";
+            Response.Headers["Etag"] = fileInfo.LastWriteTime.ToString("yyyyMMddHHmmss_") + fileInfo.Length.ToString();
+            Response.Headers["Date"] = DateTime.Now.ToString("r");
+            Response.Headers["Expires"] = DateTime.Now.AddYears(100).ToString("r");
             var contentType = new MimeMapper().GetMimeFromExtension(Path.GetExtension(newPath));
             return PhysicalFile(newPath, contentType);
         }
@@ -71,6 +82,11 @@ namespace ToolGood.Bedrock.Web
                 Directory.CreateDirectory(Path.GetDirectoryName(newPath));
                 System.IO.File.WriteAllBytes(newPath, bytes);
             }
+            FileInfo fileInfo = new FileInfo(newPath);
+            Response.Headers["Cache-Control"] = "max-age=315360000";
+            Response.Headers["Etag"] = fileInfo.LastWriteTime.ToString("yyyyMMddHHmmss_") + fileInfo.Length.ToString();
+            Response.Headers["Date"] = DateTime.Now.ToString("r");
+            Response.Headers["Expires"] = DateTime.Now.AddYears(100).ToString("r");
             var contentType = new MimeMapper().GetMimeFromExtension(Path.GetExtension(newPath));
             return PhysicalFile(newPath, contentType);
         }
@@ -92,6 +108,11 @@ namespace ToolGood.Bedrock.Web
                 Directory.CreateDirectory(Path.GetDirectoryName(newPath));
                 System.IO.File.WriteAllBytes(newPath, bytes);
             }
+            FileInfo fileInfo = new FileInfo(newPath);
+            Response.Headers["Cache-Control"] = "max-age=315360000";
+            Response.Headers["Etag"] = fileInfo.LastWriteTime.ToString("yyyyMMddHHmmss_") + fileInfo.Length.ToString();
+            Response.Headers["Date"] = DateTime.Now.ToString("r");
+            Response.Headers["Expires"] = DateTime.Now.AddYears(100).ToString("r");
             var contentType = new MimeMapper().GetMimeFromExtension(Path.GetExtension(newPath));
             return PhysicalFile(newPath, contentType);
         }
@@ -106,6 +127,10 @@ namespace ToolGood.Bedrock.Web
         [HttpGet]
         public virtual IActionResult Qr(string u, int w = 200, int h = 200)
         {
+            Response.Headers["Cache-Control"] = "max-age=315360000";
+            Response.Headers["Etag"] = DateTime.Now.ToString("yyyyMMddHHmmss");
+            Response.Headers["Date"] = DateTime.Now.ToString("r");
+            Response.Headers["Expires"] = DateTime.Now.AddYears(100).ToString("r");
             var bytes = BarcodeHelper.CreateQrCode(System.Web.HttpUtility.UrlDecode(u), w, h);
             return File(bytes, "image/jpeg");
         }

@@ -13,6 +13,13 @@ namespace ToolGood.Bedrock.Web.Test.Pages
     {
         public void OnGet(int id)
         {
+            var g = Guid.Parse("DC1F08A3-9B49-4F01-A99D-534D755823F2").ToString("N");
+            var gg = Guid.Parse("F7E8DDF1-62B9-4D2F-BB1A-57E6898C5A91").ToString("N");
+
+            var t = Guid.NewGuid().ToString("N");
+
+ 
+
             var ss = id;
             var value = GetCookie("key");
 
@@ -21,7 +28,7 @@ namespace ToolGood.Bedrock.Web.Test.Pages
             var s = GetSession("key");
 
             SetSession("key", "123456");
-             
+
         }
 
         //public void OnPost()
