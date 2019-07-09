@@ -14,10 +14,10 @@ namespace ToolGood.Bedrock.Web.Mime
         /// </summary>
         public const string DefaultMime = "application/octet-stream";
 
-        /// <summary>
-        /// 在文件路径中搜索文件扩展名的默认正则表达式
-        /// </summary>
-        private readonly Regex _pathExtensionPattern = new Regex("\\.(\\w*)$");
+        ///// <summary>
+        ///// 在文件路径中搜索文件扩展名的默认正则表达式
+        ///// </summary>
+        //private readonly Regex _pathExtensionPattern = new Regex("\\.(\\w*)$");
 
         /// <summary>
         /// Mime类型的默认字典(Content types)
@@ -51,16 +51,11 @@ namespace ToolGood.Bedrock.Web.Mime
         /// <returns></returns>
         public IMimeMapper Extend(params MimeMappingItem[] extensions)
         {
-            if (extensions != null)
-            {
-                foreach (var mapping in extensions)
-                {
-                    if (MimeTypes.ContainsKey(mapping.Extension))
-                    {
+            if (extensions != null) {
+                foreach (var mapping in extensions) {
+                    if (MimeTypes.ContainsKey(mapping.Extension)) {
                         MimeTypes[mapping.Extension] = mapping.MimeType;
-                    }
-                    else
-                    {
+                    } else {
                         MimeTypes.Add(mapping.Extension, mapping.MimeType);
                     }
                 }
@@ -76,8 +71,10 @@ namespace ToolGood.Bedrock.Web.Mime
         public string GetMimeFromExtension(string fileExtension)
         {
             fileExtension = (fileExtension ?? string.Empty).ToLower();
-            fileExtension = fileExtension.Trim().StartsWith(".") ? fileExtension.Replace(".", "") : fileExtension;
+            if (MimeTypes.ContainsKey(fileExtension)) { return MimeTypes[fileExtension]; }
 
+            fileExtension= System.IO.Path.GetExtension(fileExtension);
+            //fileExtension = fileExtension.Trim().StartsWith(".") ? fileExtension.Replace(".", "") : fileExtension;
             return MimeTypes.ContainsKey(fileExtension) ? MimeTypes[fileExtension] : DefaultMime;
         }
 
@@ -88,23 +85,23 @@ namespace ToolGood.Bedrock.Web.Mime
         /// <returns></returns>
         public string GetMimeFromPath(string path)
         {
-            var extension = GetExtension(path);
+            var extension = System.IO.Path.GetExtension(path);
+            //var extension = GetExtension(path);
             return GetMimeFromExtension(extension);
         }
 
-        /// <summary>
-        /// 获取扩展名
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        protected string GetExtension(string path)
-        {
-            var match = _pathExtensionPattern.Match(path ?? string.Empty);
-            if (match.Groups.Count > 1)
-            {
-                return match.Groups[1].Value;
-            }
-            return null;
-        }
+        ///// <summary>
+        ///// 获取扩展名
+        ///// </summary>
+        ///// <param name="path"></param>
+        ///// <returns></returns>
+        //protected string GetExtension(string path)
+        //{
+        //    var match = _pathExtensionPattern.Match(path ?? string.Empty);
+        //    if (match.Groups.Count > 1) {
+        //        return match.Groups[1].Value;
+        //    }
+        //    return null;
+        //}
     }
 }

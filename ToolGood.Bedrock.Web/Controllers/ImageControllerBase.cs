@@ -31,12 +31,13 @@ namespace ToolGood.Bedrock.Web
                 Directory.CreateDirectory(Path.GetDirectoryName(newPath));
                 System.IO.File.WriteAllBytes(newPath, bytes);
             }
-
             FileInfo fileInfo = new FileInfo(newPath);
             Response.Headers["Cache-Control"] = "max-age=315360000";
-            Response.Headers["Etag"] = fileInfo.LastWriteTime.ToString("yyyyMMddHHmmss_") + fileInfo.Length.ToString();
+            var etag = fileInfo.LastWriteTime.ToString("yyyyMMddHHmmss_") + fileInfo.Length.ToString();
+            Response.Headers["Etag"] = etag;
             Response.Headers["Date"] = DateTime.Now.ToString("r");
             Response.Headers["Expires"] = DateTime.Now.AddYears(100).ToString("r");
+            if (Request.Headers.ContainsKey("If-None-Match") && Request.Headers["If-None-Match"] == etag) { return StatusCode(304); }
             var contentType = new MimeMapper().GetMimeFromExtension(Path.GetExtension(newPath));
             return PhysicalFile(newPath, contentType);
         }
@@ -59,9 +60,11 @@ namespace ToolGood.Bedrock.Web
             }
             FileInfo fileInfo = new FileInfo(newPath);
             Response.Headers["Cache-Control"] = "max-age=315360000";
-            Response.Headers["Etag"] = fileInfo.LastWriteTime.ToString("yyyyMMddHHmmss_") + fileInfo.Length.ToString();
+            var etag = fileInfo.LastWriteTime.ToString("yyyyMMddHHmmss_") + fileInfo.Length.ToString();
+            Response.Headers["Etag"] = etag;
             Response.Headers["Date"] = DateTime.Now.ToString("r");
             Response.Headers["Expires"] = DateTime.Now.AddYears(100).ToString("r");
+            if (Request.Headers.ContainsKey("If-None-Match") && Request.Headers["If-None-Match"] == etag) { return StatusCode(304); }
             var contentType = new MimeMapper().GetMimeFromExtension(Path.GetExtension(newPath));
             return PhysicalFile(newPath, contentType);
         }
@@ -84,9 +87,11 @@ namespace ToolGood.Bedrock.Web
             }
             FileInfo fileInfo = new FileInfo(newPath);
             Response.Headers["Cache-Control"] = "max-age=315360000";
-            Response.Headers["Etag"] = fileInfo.LastWriteTime.ToString("yyyyMMddHHmmss_") + fileInfo.Length.ToString();
+            var etag = fileInfo.LastWriteTime.ToString("yyyyMMddHHmmss_") + fileInfo.Length.ToString();
+            Response.Headers["Etag"] = etag;
             Response.Headers["Date"] = DateTime.Now.ToString("r");
             Response.Headers["Expires"] = DateTime.Now.AddYears(100).ToString("r");
+            if (Request.Headers.ContainsKey("If-None-Match") && Request.Headers["If-None-Match"] == etag) { return StatusCode(304); }
             var contentType = new MimeMapper().GetMimeFromExtension(Path.GetExtension(newPath));
             return PhysicalFile(newPath, contentType);
         }
@@ -110,9 +115,11 @@ namespace ToolGood.Bedrock.Web
             }
             FileInfo fileInfo = new FileInfo(newPath);
             Response.Headers["Cache-Control"] = "max-age=315360000";
-            Response.Headers["Etag"] = fileInfo.LastWriteTime.ToString("yyyyMMddHHmmss_") + fileInfo.Length.ToString();
+            var etag = fileInfo.LastWriteTime.ToString("yyyyMMddHHmmss_") + fileInfo.Length.ToString();
+            Response.Headers["Etag"] = etag;
             Response.Headers["Date"] = DateTime.Now.ToString("r");
             Response.Headers["Expires"] = DateTime.Now.AddYears(100).ToString("r");
+            if (Request.Headers.ContainsKey("If-None-Match") && Request.Headers["If-None-Match"] == etag) { return StatusCode(304); }
             var contentType = new MimeMapper().GetMimeFromExtension(Path.GetExtension(newPath));
             return PhysicalFile(newPath, contentType);
         }
