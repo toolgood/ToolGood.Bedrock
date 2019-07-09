@@ -21,6 +21,20 @@ namespace ToolGood.Bedrock
         /// <summary>
         /// 获取当前时间
         /// </summary>
+        public static DateTime Now { get { return GetNow(); } }
+        /// <summary>
+        /// 获取当前日期
+        /// </summary>
+        public static DateTime Today { get { return GetNow().Date; } }
+        /// <summary>
+        /// 获取当前日期 Utc
+        /// </summary>
+        public static DateTime UtcNow { get { return GetUtcNow(); } }
+
+
+        /// <summary>
+        /// 获取当前时间
+        /// </summary>
         /// <param name="isRealNow">是否取真实的电脑时间</param>
         /// <returns></returns>
         public static DateTime GetNow(bool isRealNow = false)
