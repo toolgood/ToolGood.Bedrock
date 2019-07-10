@@ -1,7 +1,11 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using ToolGood.RcxCrypto;
 
@@ -64,6 +68,12 @@ namespace ToolGood.Bedrock
         /// 核对数据
         /// </summary>
         /// <returns></returns>
+        public abstract string CheckDate();
+
+        /// <summary>
+        /// 核对数据
+        /// </summary>
+        /// <returns></returns>
         public abstract bool CheckDate(out string errMsg);
     }
     /// <summary>
@@ -79,6 +89,12 @@ namespace ToolGood.Bedrock
         public T Data { get; set; }
 
         /// <summary>
+        /// 解密后的参数 JSON 格式
+        /// </summary>
+        [JsonIgnore]
+        public JObject JData { get; set; }
+
+        /// <summary>
         /// 解密
         /// </summary>
         /// <param name="xmlKey"></param>
@@ -91,34 +107,122 @@ namespace ToolGood.Bedrock
 
                 var bs = ThreeRCX.Encrypt(Base64.FromBase64ForUrlString(Ciphertext), key);//解密
                 var json = Encoding.UTF8.GetString(bs);
-                Data = JsonConvert.DeserializeObject<T>(json);
+                //Data = JsonConvert.DeserializeObject<T>(json);
+                JData = JObject.Parse(json);
+                Data = JData.ToObject<T>();
                 return true;
             } catch { }
             return false;
         }
 
-        public override bool CheckDate(out string errMsg)
+        /// <summary>
+        /// 核对数据
+        /// </summary>
+        /// <returns></returns>
+        public override string CheckDate()
         {
-            var type = typeof(T);
-            var pis = type.GetProperties().ToList();
-            pis.RemoveAll(q => q.CanRead == false || q.CanWrite == false);
-
-            foreach (var pi in pis) {
-                var atts = pi.GetCustomAttributes(true);
-                if (atts.Length == 0) { continue; }
-
-                //TODO:
-
-
-
-
-            }
-
-
-
-            errMsg = "";
-            return false;
+            string errMsg;
+            CheckDate(typeof(T), Data, JData, null, out errMsg);
+            return errMsg;
         }
 
+        /// <summary>
+        /// 核对数据
+        /// </summary>
+        /// <param name="errMsg"></param>
+        /// <returns></returns>
+        public override bool CheckDate(out string errMsg)
+        {
+            return CheckDate(typeof(T), Data, JData, null, out errMsg);
+        }
+
+        private bool CheckDate(Type type, object value, JToken jObject, string baseName, out string errMsg)
+        {
+            if (type.IsClass == false && SimpleTypes.Contains(type) == false) { errMsg = null; return true; }
+
+            var pis = type.GetProperties();
+            foreach (var pi in pis) {
+                if (pi.CanRead == false) { continue; }
+                object obj = pi.GetGetMethod().Invoke(value, null);
+                if (obj is DateTime && (DateTime)obj == DateTime.MinValue) {
+                    errMsg = $"{GetPropertyName(baseName, pi.Name)} is null.";
+                    return false;
+                }
+
+                var atts = pi.GetCustomAttributes<ValidationAttribute>(true).ToList();
+                if (atts.Count > 0) {
+                    foreach (var att in atts) {
+                        if (att is RequiredAttribute && jObject[pi.Name] == null) {
+                            errMsg = att.FormatErrorMessage(GetPropertyName(baseName, pi.Name));
+                            return false;
+                        } else if (att.IsValid(obj) == false) {
+                            errMsg = att.FormatErrorMessage(GetPropertyName(baseName, pi.Name));
+                            return false;
+                        }
+                    }
+                }
+
+                if (pi.PropertyType.IsClass && obj != null && SimpleTypes.Contains(pi.PropertyType) == false) {
+                    var list = obj as IList;
+                    if (list != null) {
+                        var jArray = jObject[pi.Name] as JArray;
+
+                        for (int i = 0; i < list.Count; i++) {
+                            var item = list[i];
+                            if (object.Equals(null, item) == false) {
+                                var jitem = jArray[i];
+                                var itemType = item.GetType();
+                                if (itemType.IsClass == false && SimpleTypes.Contains(itemType) == false) { continue; }
+                                if (CheckDate(itemType, item, jitem, GetPropertyName(baseName, pi.Name, i), out errMsg) == false) {
+                                    return false;
+                                }
+                            }
+                        }
+                    } else {
+                        if (CheckDate(pi.PropertyType, obj, jObject[pi.Name], GetPropertyName(baseName, pi.Name), out errMsg) == false) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            errMsg = null;
+            return true;
+        }
+
+
+
+        private static HashSet<Type> SimpleTypes = new HashSet<Type>() {
+            typeof(string)
+            ,typeof(byte),typeof(sbyte),typeof(char),typeof(Boolean),typeof(Guid)
+            ,typeof(UInt16),typeof(UInt32),typeof(UInt64),typeof(Int16),typeof(Int32),typeof(Int64)
+            ,typeof(Single),typeof(Double),typeof(Decimal)
+            ,typeof(DateTime),typeof(DateTimeOffset),typeof(TimeSpan)
+            ,typeof(IntPtr),typeof(UIntPtr)
+            ,typeof(byte?),typeof(sbyte?),typeof(char?), typeof(Boolean?),typeof(Guid?)
+            ,typeof(UInt16?),typeof(UInt32?),typeof(UInt64?),typeof(Int16?),typeof(Int32?),typeof(Int64?)
+            ,typeof(Single?),typeof(Double?),typeof(Decimal?)
+            ,typeof(DateTime?),typeof(DateTimeOffset?),typeof(TimeSpan?)
+            ,typeof(IntPtr?),typeof(UIntPtr?)
+        };
+
+        private string GetPropertyName(string baseName, string propertyName, int index = -1)
+        {
+            if (string.IsNullOrEmpty(baseName)) {
+                if (index == -1) {
+                    return propertyName;
+                }
+                return $"{propertyName}[{index}]";
+            }
+            if (index == -1) {
+                return $"{baseName}.{propertyName}";
+            }
+            return $"{baseName}.{propertyName}[{index}]";
+        }
+
+
     }
+
+
+
+
 }

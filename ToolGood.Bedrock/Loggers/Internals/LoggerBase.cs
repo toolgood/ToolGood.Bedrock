@@ -121,7 +121,7 @@ namespace ToolGood.Bedrock.Internals
         }
         private bool MatchType(Type type, MethodBase mi)
         {
-            if (type == typeof(TextLogger) || type == typeof(AssertUtil) || type == typeof(LogUtil)) {
+            if (type == typeof(TextLogger) /*|| type == typeof(AssertUtil) */|| type == typeof(LogUtil)) {
                 return true;
             }
             var ts = type.GetInterfaces();
