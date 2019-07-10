@@ -53,7 +53,7 @@ namespace ToolGood.Bedrock
             var st = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Timestamp);
             if (Math.Abs(st.Seconds) > 15) { return false; }
 
-            var txt = $"{Ciphertext}|{RsaKey}|{Timestamp}";
+            var txt = $"{Ciphertext.ToSafeString()}|{RsaKey.ToSafeString()}|{Timestamp.ToSafeString()}";
             var hash = HashUtil.GetMd5String(txt);
             return Sign.ToUpper() == hash;
         }
