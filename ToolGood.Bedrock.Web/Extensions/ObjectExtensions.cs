@@ -11,7 +11,7 @@ namespace ToolGood.Bedrock.Web.Extensions
     /// <summary>
     /// 
     /// </summary>
-    public static class ObjectExtensions
+     public static partial class ObjectExtensions
     {
         #region ToHtml
         /// <summary>
@@ -864,7 +864,7 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// </summary>
         /// <param name="dict"></param>
         /// <returns></returns>
-        public static HtmlString ToOption<TKey, TValue>(this Dictionary<TKey, TValue> dict)
+        public static HtmlString ToOption<TKey, TValue>(this IDictionary<TKey, TValue> dict)
         {
             string html = "<option value=\"{0}\">{1}</option>";
             StringBuilder sb = new StringBuilder();
@@ -879,7 +879,7 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// <param name="dict"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static HtmlString ToOption<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey value)
+        public static HtmlString ToOption<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey value)
         {
             string html = "<option value=\"{0}\" {2}>{1}</option>";
             StringBuilder sb = new StringBuilder();
