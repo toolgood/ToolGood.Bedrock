@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ToolGood.Bedrock.Attributes
 {
+    /// <summary>
+    /// 值范围验证
+    /// </summary>
     public class BetweenAttribute : RangeAttribute
     {
         public BetweenAttribute(double minimum, double maximum) : base(minimum, maximum)

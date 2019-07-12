@@ -1,5 +1,8 @@
 ﻿namespace ToolGood.Bedrock.Attributes
 {
+    /// <summary>
+    /// 用户名验证
+    /// </summary>
     public class UserNameAttribute : System.ComponentModel.DataAnnotations.RegularExpressionAttribute
     {
         public UserNameAttribute() : base("^[a-z0-9_]{4,20}$")

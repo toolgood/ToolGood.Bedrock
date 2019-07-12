@@ -5,6 +5,9 @@ using System.Text;
 
 namespace ToolGood.Bedrock.Attributes
 {
+    /// <summary>
+    /// 主键验证特性
+    /// </summary>
     public class IdNumAttribute : ValidationAttribute
     {
         public IdNumAttribute()

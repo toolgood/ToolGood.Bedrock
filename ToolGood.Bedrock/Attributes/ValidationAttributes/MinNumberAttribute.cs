@@ -1,5 +1,8 @@
 ﻿namespace ToolGood.Bedrock.Attributes
 {
+    /// <summary>
+    /// 最小值验证特性
+    /// </summary>
     public class MinNumberAttribute : System.ComponentModel.DataAnnotations.RangeAttribute
     {
         public MinNumberAttribute(double minimum) : base(minimum, double.MaxValue)
