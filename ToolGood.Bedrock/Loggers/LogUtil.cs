@@ -5,6 +5,9 @@ using ToolGood.Bedrock.Internals;
 
 namespace ToolGood.Bedrock
 {
+    /// <summary>
+    /// 日志操作
+    /// </summary>
     public class LogUtil
     {
         [ThreadStatic]

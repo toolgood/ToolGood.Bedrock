@@ -11,6 +11,9 @@ namespace ToolGood.Bedrock.Attributes
     /// </summary>
     public class TelephoneAttribute : RegularExpressionAttribute
     {
+        /// <summary>
+        /// 坐机号码验证特性
+        /// </summary>
         public TelephoneAttribute() : base(ValidatorRegex.Telephone)
         {
             ErrorMessage = "坐机号码不正确";

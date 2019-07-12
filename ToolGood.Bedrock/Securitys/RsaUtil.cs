@@ -17,7 +17,12 @@ namespace ToolGood.Bedrock
     {
 
         #region RSA 的密钥产生
-
+        /// <summary>
+        /// 获取参数
+        /// </summary>
+        /// <param name="xmlKeys"></param>
+        /// <param name="Modulus"></param>
+        /// <param name="Exponent"></param>
         public static void GetParams(string xmlKeys, out string Modulus, out string Exponent)
         {
             RSA rsa = new RSACryptoServiceProvider();

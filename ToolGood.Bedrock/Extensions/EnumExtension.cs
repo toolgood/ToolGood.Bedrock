@@ -45,7 +45,11 @@ namespace System
                 return dict[Convert.ToInt32(@enum)];
             }
         }
-
+        /// <summary>
+        /// 获取描述
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static Dictionary<int, string> GetDescriptions(Type type)
         {
             var typeHandle = type.TypeHandle;

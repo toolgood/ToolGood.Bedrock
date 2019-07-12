@@ -19,7 +19,7 @@ namespace ToolGood.Bedrock.Test
                 }
             };
             int a = 2;
-
+           
 
             var msg = password.CheckDate();
             var vvv = "".IsNotNull();

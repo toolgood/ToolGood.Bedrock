@@ -2,6 +2,9 @@
 
 namespace ToolGood.Bedrock.Web
 {
+    /// <summary>
+    /// 对应asp.net的 HostingEnvironment
+    /// </summary>
     public static class MyHostingEnvironment
     {
         internal static bool IsDevelopment { get; set; }
@@ -13,11 +16,20 @@ namespace ToolGood.Bedrock.Web
         internal static string WebRootPath { get; set; }
 
         internal static string ContentRootPath { get; set; }
-
+        /// <summary>
+        /// 获取文件物理路径  
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string MapPath(string path)
         {
             return IsAbsolute(path) ? path : Path.Combine(ContentRootPath, path.TrimStart('~', '/').Replace("/", Path.DirectorySeparatorChar.ToString()));
         }
+        /// <summary>
+        /// 以WebRoot为根目录获取文件物理路径  
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string MapWebRootPath(string path)
         {
             return IsAbsolute(path) ? path : Path.Combine(WebRootPath, path.TrimStart('~', '/').Replace("/", Path.DirectorySeparatorChar.ToString()));
