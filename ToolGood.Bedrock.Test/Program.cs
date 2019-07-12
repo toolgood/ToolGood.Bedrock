@@ -3,6 +3,7 @@ using System.Linq;
 using ToolGood.Bedrock;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using ToolGood.Bedrock.Tools;
 
 namespace ToolGood.Bedrock.Test
 {
@@ -10,6 +11,8 @@ namespace ToolGood.Bedrock.Test
     {
         static void Main(string[] args)
         {
+ 
+
             UserPassword password = new UserPassword();
             password.Data = new UserPassword.Dto() {
                 //UserName="111",

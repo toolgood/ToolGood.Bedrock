@@ -5,7 +5,10 @@ using System.Text.RegularExpressions;
 
 namespace ToolGood.Bedrock
 {
-    public static class ValidatorRegex
+    /// <summary>
+    /// 常用正则
+    /// </summary>
+    public static class Regexs
     {
         /// <summary>
         /// 手机正则
@@ -119,11 +122,9 @@ namespace ToolGood.Bedrock
         /// </summary>
         internal const string MacCheck = @"^[0-9A-F]{2}([-:][0-9A-F]{2}){5,6}$";
 
-        /// <summary>
-        /// 手机正则
-        /// </summary>
+
         private static Regex _MobileRegex;
-        public static Regex MobileRegex {
+        internal static Regex MobileRegex {
             get {
                 if (_MobileRegex == null) {
                     _MobileRegex = new Regex(Mobile);
@@ -131,18 +132,17 @@ namespace ToolGood.Bedrock
                 return _MobileRegex;
             }
         }
-
+        /// <summary>
+        /// 是否为手机号
+        /// </summary>
         public static bool IsMobile(string txt)
         {
             return MobileRegex.IsMatch(txt);
         }
 
 
-        /// <summary>
-        /// 邮箱
-        /// </summary>
         private static Regex _EmailRegex;
-        public static Regex EmailRegex {
+        internal static Regex EmailRegex {
             get {
                 if (_EmailRegex == null) {
                     _EmailRegex = new Regex(Email);
@@ -150,17 +150,19 @@ namespace ToolGood.Bedrock
                 return _EmailRegex;
             }
         }
+
+        /// <summary>
+        /// 是否为邮箱
+        /// </summary>
         public static bool IsEmail(string txt)
         {
             return EmailRegex.IsMatch(txt);
         }
 
 
-        /// <summary>
-        /// 中文
-        /// </summary>
+
         private static Regex _ChineseRegex;
-        public static Regex ChineseRegex {
+        internal static Regex ChineseRegex {
             get {
                 if (_ChineseRegex == null) {
                     _ChineseRegex = new Regex(Chinese);
@@ -168,7 +170,9 @@ namespace ToolGood.Bedrock
                 return _ChineseRegex;
             }
         }
-
+        /// <summary>
+        /// 是否为中文
+        /// </summary>
         public static bool IsChinese(string txt)
         {
             return ChineseRegex.IsMatch(txt);
@@ -178,7 +182,7 @@ namespace ToolGood.Bedrock
         /// 电话
         /// </summary>
         private static Regex _TelephoneRegex;
-        public static Regex TelephoneRegex {
+        internal static Regex TelephoneRegex {
             get {
                 if (_TelephoneRegex == null) {
                     _TelephoneRegex = new Regex(Telephone);
@@ -186,16 +190,19 @@ namespace ToolGood.Bedrock
                 return _TelephoneRegex;
             }
         }
+        /// <summary>
+        /// 是否为坐机
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
         public static bool IsTelephone(string txt)
         {
             return TelephoneRegex.IsMatch(txt);
         }
 
-        /// <summary>
-        /// Ipv4
-        /// </summary>
+
         private static Regex _Ipv4Regex;
-        public static Regex Ipv4Regex {
+        internal static Regex Ipv4Regex {
             get {
                 if (_Ipv4Regex == null) {
                     _Ipv4Regex = new Regex(Ipv4);
@@ -203,14 +210,16 @@ namespace ToolGood.Bedrock
                 return _Ipv4Regex;
             }
         }
-
+        /// <summary>
+        /// Ipv4
+        /// </summary>
         public static bool IsIpv4(string txt)
         {
             return Ipv4Regex.IsMatch(txt);
         }
 
         private static Regex _Ipv6Regex;
-        public static Regex Ipv6Regex {
+        internal static Regex Ipv6Regex {
             get {
                 if (_Ipv6Regex == null) {
                     _Ipv6Regex = new Regex(Ipv6, RegexOptions.IgnoreCase);
@@ -218,6 +227,9 @@ namespace ToolGood.Bedrock
                 return _Ipv6Regex;
             }
         }
+        /// <summary>
+        /// Ipv6
+        /// </summary>
         public static bool IsIpv6(string txt)
         {
             return Ipv6Regex.IsMatch(txt);
@@ -225,7 +237,7 @@ namespace ToolGood.Bedrock
 
 
         private static Regex _DateRegex;
-        public static Regex DateRegex {
+        internal static Regex DateRegex {
             get {
                 if (_DateRegex == null) {
                     _DateRegex = new Regex(Date);
@@ -233,14 +245,18 @@ namespace ToolGood.Bedrock
                 return _DateRegex;
             }
         }
-
+        /// <summary>
+        /// 是否为日期
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
         public static bool IsDate(string txt)
         {
             return DateRegex.IsMatch(txt);
         }
 
         private static Regex _TimeRegex;
-        public static Regex TimeRegex {
+        internal static Regex TimeRegex {
             get {
                 if (_TimeRegex == null) {
                     _TimeRegex = new Regex(Time);
@@ -248,14 +264,18 @@ namespace ToolGood.Bedrock
                 return _TimeRegex;
             }
         }
-
+        /// <summary>
+        /// 是否为时间
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
         public static bool IsTime(string txt)
         {
             return TimeRegex.IsMatch(txt);
         }
 
         private static Regex _DateTimeRegex;
-        public static Regex DateTimeRegex {
+        internal static Regex DateTimeRegex {
             get {
                 if (_DateTimeRegex == null) {
                     _DateTimeRegex = new Regex(DateTime);
@@ -263,13 +283,18 @@ namespace ToolGood.Bedrock
                 return _DateTimeRegex;
             }
         }
+        /// <summary>
+        /// 是否为日期
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
         public static bool IsDateTime(string txt)
         {
             return DateTimeRegex.IsMatch(txt);
         }
 
         private static Regex _NumericRegex;
-        public static Regex NumericRegex {
+        internal static Regex NumericRegex {
             get {
                 if (_NumericRegex == null) {
                     _NumericRegex = new Regex(Numeric);
@@ -277,14 +302,18 @@ namespace ToolGood.Bedrock
                 return _NumericRegex;
             }
         }
-
+        /// <summary>
+        /// 是否为数字
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
         public static bool IsNumeric(string txt)
         {
             return NumericRegex.IsMatch(txt);
         }
 
         private static Regex _ZipcodeRegex;
-        public static Regex ZipcodeRegex {
+        internal static Regex ZipcodeRegex {
             get {
                 if (_ZipcodeRegex == null) {
                     _ZipcodeRegex = new Regex(Zipcode);
@@ -292,14 +321,18 @@ namespace ToolGood.Bedrock
                 return _ZipcodeRegex;
             }
         }
-
+        /// <summary>
+        /// 是否为邮政编码
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
         public static bool IsZipcode(string txt)
         {
             return ZipcodeRegex.IsMatch(txt);
         }
 
         private static Regex _IdCardRegex;
-        public static Regex IdCardRegex {
+        internal static Regex IdCardRegex {
             get {
                 if (_IdCardRegex == null) {
                     _IdCardRegex = new Regex(IdCard);
@@ -307,14 +340,40 @@ namespace ToolGood.Bedrock
                 return _IdCardRegex;
             }
         }
-        public static bool IsIdCard(string txt)
+        /// <summary>
+        /// 是否为有效身份证
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsIdCard(string value)
         {
-            return IdCardRegex.IsMatch(txt);
+            if (value == null)
+                return false;
+            var v = value.ToString();
+            if (Regexs.IdCardRegex.IsMatch(v) == false) {
+                return false;
+            }
+            if (v.Length == 18) {
+                return Check18(v);
+            } else if (v.Length == 15) {
+                return true;
+            }
+            return false;
+        }
+        private static bool Check18(string id)
+        {
+            int[] weights = new int[] { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
+            string checks = "10X98765432";
+            int val = 0;
+            for (var i = 0; i < 17; i++) {
+                val += (id[i] - '0') * weights[i];
+            }
+            return id[17] == checks[val % 11];
         }
 
 
         private static Regex _FileCheckRegex;
-        public static Regex FileCheckRegex {
+        internal static Regex FileCheckRegex {
             get {
                 if (_FileCheckRegex == null) {
                     _FileCheckRegex = new Regex(FileCheck);
@@ -334,7 +393,7 @@ namespace ToolGood.Bedrock
         }
 
         private static Regex _UrlRegex;
-        public static Regex UrlRegex {
+        internal static Regex UrlRegex {
             get {
                 if (_UrlRegex == null) {
                     _UrlRegex = new Regex(UrlCheck);
@@ -357,7 +416,7 @@ namespace ToolGood.Bedrock
 
 
         private static Regex _HexStringRegex;
-        public static Regex HexStringRegex {
+        internal static Regex HexStringRegex {
             get {
                 if (_HexStringRegex == null) {
                     _HexStringRegex = new Regex(HexStringCheck);
@@ -376,7 +435,7 @@ namespace ToolGood.Bedrock
         }
 
         private static Regex _NaturalNumberRegex;
-        public static Regex NaturalNumberRegex {
+        internal static Regex NaturalNumberRegex {
             get {
                 if (_NaturalNumberRegex == null) {
                     _NaturalNumberRegex = new Regex(IntCheck);

@@ -6122,7 +6122,7 @@ namespace ToolGood.Bedrock
                 return false;
             }
 
-            if (ValidatorRegex.IdCardRegex.IsMatch(id)==false) {
+            if (Regexs.IdCardRegex.IsMatch(id)==false) {
                 error = "格式错误";
                 return false;
             }

@@ -39,7 +39,7 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public static bool IsVaildate(string phoneNum)
         {
-            return ValidatorRegex.MobileRegex.IsMatch(phoneNum);
+            return Regexs.MobileRegex.IsMatch(phoneNum);
         }
 
         /// <summary>
