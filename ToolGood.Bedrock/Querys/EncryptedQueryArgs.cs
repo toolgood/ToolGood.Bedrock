@@ -3,10 +3,10 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using ToolGood.Bedrock.Attributes;
 using ToolGood.RcxCrypto;
 
 namespace ToolGood.Bedrock
@@ -149,10 +149,10 @@ namespace ToolGood.Bedrock
                     return false;
                 }
 
-                var atts = pi.GetCustomAttributes<ValidationAttribute>(true).ToList();
+                var atts = pi.GetCustomAttributes<System.ComponentModel.DataAnnotations.ValidationAttribute>(true).ToList();
                 if (atts.Count > 0) {
                     foreach (var att in atts) {
-                        if (att is RequiredAttribute && jObject[pi.Name] == null) {
+                        if ((att is System.ComponentModel.DataAnnotations.RequiredAttribute || att is RequiredAttribute) && jObject[pi.Name] == null) {
                             errMsg = att.FormatErrorMessage(GetPropertyName(baseName, pi.Name));
                             return false;
                         } else if (att.IsValid(obj) == false) {

@@ -13,4 +13,8 @@ namespace ToolGood.Bedrock.Attributes
             ErrorMessage = "手机号码不正确";
         }
     }
+    public class PhoneAttribute : MobileAttribute
+    {
+
+    }
 }
