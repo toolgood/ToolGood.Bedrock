@@ -5,7 +5,7 @@ namespace System
     /// <summary>
     /// 数字扩展
     /// </summary>
-    public static class NumberExtension
+    public static partial class ObjectExtension
     {
         /// <summary>
         /// 显示文件大小
@@ -102,9 +102,11 @@ namespace System
         /// <param name="value">The value to be checked</param>
         /// <param name="minInclusiveValue">Minimum (inclusive) value</param>
         /// <param name="maxInclusiveValue">Maximum (inclusive) value</param>
-        public static bool IsBetween<T>(this T value, T minInclusiveValue, T maxInclusiveValue) where T : IComparable//<T>
+        public static bool IsBetween<T>(this T value, T minInclusiveValue, T maxInclusiveValue) where T : IComparable
         {
             return value.CompareTo(minInclusiveValue) >= 0 && value.CompareTo(maxInclusiveValue) <= 0;
         }
+
+
     }
 }

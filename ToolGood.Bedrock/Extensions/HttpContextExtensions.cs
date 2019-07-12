@@ -6,9 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace System
 {
-
-
-    public static class HttpContextExtensions
+    public static partial class ObjectExtension
     {
         /// <summary>
         /// 获取真ip
@@ -59,6 +57,7 @@ namespace System
             }
             return result;
         }
+
         private static bool IsIPAddress(string str)
         {
             if (string.IsNullOrWhiteSpace(str) || str.Length < 7 || str.Length > 15)
@@ -78,5 +77,15 @@ namespace System
         {
             return context.Session.Id;
         }
+
+        /// <summary>
+        /// 获取 UserAgent
+        /// </summary>
+        /// <returns></returns>
+        public static string GetUserAgent(this HttpContext context)
+        {
+            return context.Request.Headers["User-Agent"].ToSafeString();
+        }
+
     }
 }

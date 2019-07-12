@@ -5,18 +5,35 @@ using System.Threading.Tasks;
 
 namespace System
 {
-    public static class TaskExtension
+    /// <summary>
+    /// 任务设置
+    /// </summary>
+    public static partial class ObjectExtension
     {
+        /// <summary>
+        /// 转成任务
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static Task<T> ToTask<T>(this T source)
         {
             return Task.FromResult(source);
         }
-
+        /// <summary>
+        /// 运行task
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="task"></param>
+        /// <returns></returns>
         public static T RunSync<T>(this Task<T> task)
         {
             return RunSync(() => task);
         }
-
+        /// <summary>
+        /// 运行task
+        /// </summary>
+        /// <param name="task"></param>
         public static void RunSync(this Task task)
         {
             RunSync(() => task);

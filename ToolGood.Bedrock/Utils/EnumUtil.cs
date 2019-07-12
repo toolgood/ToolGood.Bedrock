@@ -13,7 +13,7 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public static Dictionary<int, string> GetDescriptions(Type type)
         {
-            return EnumExtension.GetDescriptions(type);
+            return ObjectExtension.GetDescriptions(type);
         }
 
 

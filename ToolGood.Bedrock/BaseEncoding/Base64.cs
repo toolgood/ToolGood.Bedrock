@@ -11,12 +11,20 @@ namespace ToolGood.Bedrock
     /// </summary>
     public static class Base64
     {
-
+        /// <summary>
+        /// 转成 Base64String
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static string ToBase64String(byte[] input)
         {
             return Convert.ToBase64String(input);
         }
-
+        /// <summary>
+        ///  转成 byte[] 
+        /// </summary>
+        /// <param name="base64"></param>
+        /// <returns></returns>
         public static byte[] FromBase64String(string base64)
         {
             return FromBase64ForUrlString(base64);

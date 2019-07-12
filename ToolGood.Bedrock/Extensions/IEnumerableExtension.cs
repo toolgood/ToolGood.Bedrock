@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace System
 {
-    public static partial class IEnumerableExtension
+    public static partial class ObjectExtension
     {
         /// <summary>
         /// 去重
         /// </summary>
-        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IList<TSource> source, Func<TSource, TKey> keySelector)
         {
             var seenKeys = new HashSet<TKey>();
             return source.Where(element => seenKeys.Add(keySelector(element)));
@@ -29,7 +29,7 @@ namespace System
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static Dictionary<T1, T2> ToDictionary<T1, T2, T3>(this IEnumerable<T3> list, Func<T3, T1> keyFun, Func<T3, T2> valueFun, T1 key, T2 value)
+        public static Dictionary<T1, T2> ToDictionary<T1, T2, T3>(this IList<T3> list, Func<T3, T1> keyFun, Func<T3, T2> valueFun, T1 key, T2 value)
         {
             Dictionary<T1, T2> dict = new Dictionary<T1, T2>();
             dict.Add(key, value);
@@ -46,7 +46,7 @@ namespace System
         /// <typeparam name="T"></typeparam>
         /// <param name="enumerable"></param>
         /// <param name="action">要执行的方法</param>
-        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
+        public static IEnumerable<T> ForEach<T>(this IList<T> enumerable, Action<T> action)
         {
             foreach (var element in enumerable) {
                 action(element);
@@ -62,7 +62,7 @@ namespace System
         /// <param name="source"></param>
         /// <param name="fun"></param>
         /// <returns></returns>
-        public static List<TResult> ToList<T, TResult>(this IEnumerable<T> source, Func<T, TResult> fun)
+        public static List<TResult> ToList<T, TResult>(this IList<T> source, Func<T, TResult> fun)
         {
             List<TResult> result = new List<TResult>();
             source.ForEach(m => result.Add(fun(m)));
@@ -77,7 +77,7 @@ namespace System
         /// <param name="enumerable"></param>
         /// <param name="action">要执行的方法</param>
         /// <returns></returns>
-        public static Task ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, Task> action)
+        public static Task ForEachAsync<T>(this IList<T> enumerable, Func<T, Task> action)
         {
             return Task.WhenAll(from item in enumerable select Task.Run(() => action(item)));
         }
@@ -88,7 +88,7 @@ namespace System
         /// <typeparam name="T"></typeparam>
         /// <param name="enumerable"></param>
         /// <returns></returns>
-        public static bool IsNotEmpty<T>(this IEnumerable<T> enumerable)
+        public static bool IsNotEmpty<T>(this IList<T> enumerable)
         {
             if (enumerable == null) return false;
             if (enumerable.Any()) {
@@ -103,7 +103,7 @@ namespace System
         /// <typeparam name="T"></typeparam>
         /// <param name="enumerable"></param>
         /// <returns></returns>
-        public static bool IsEmpty<T>(this IEnumerable<T> enumerable)
+        public static bool IsEmpty<T>(this IList<T> enumerable)
         {
             return !(enumerable.IsNotEmpty());
         }
@@ -112,7 +112,7 @@ namespace System
         /// <summary>
         ///     Checks whatever given collection object is null or has no item.
         /// </summary>
-        public static bool IsNullOrEmpty<T>(this ICollection<T> source)
+        public static bool IsNullOrEmpty<T>(this IList<T> source)
         {
             return source == null || source.Count <= 0;
         }

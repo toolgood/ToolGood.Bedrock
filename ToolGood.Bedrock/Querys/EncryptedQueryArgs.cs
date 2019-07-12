@@ -121,8 +121,7 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public override string CheckDate()
         {
-            string errMsg;
-            CheckDate(typeof(T), Data, JData, null, out errMsg);
+            CheckDate(typeof(T), Data, JData, null, out string errMsg);
             return errMsg;
         }
 
@@ -163,8 +162,7 @@ namespace ToolGood.Bedrock
                 }
 
                 if (pi.PropertyType.IsClass && obj != null && SimpleTypes.Contains(pi.PropertyType) == false) {
-                    var list = obj as IList;
-                    if (list != null) {
+                    if (obj is IList list) {
                         var jArray = jObject[pi.Name] as JArray;
 
                         for (int i = 0; i < list.Count; i++) {

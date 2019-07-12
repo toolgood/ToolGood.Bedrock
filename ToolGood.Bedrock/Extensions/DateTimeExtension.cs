@@ -3,7 +3,7 @@ using ToolGood.Bedrock;
 
 namespace System
 {
-    public static class DateTimeExtension
+    public static partial class ObjectExtension
     {
         /// <summary>
         /// 转成简化时间
@@ -68,17 +68,17 @@ namespace System
             return (long)(dateTime.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
         }
 
-        /// <summary>
-        /// 将时间戳转为时间
-        /// </summary>
-        /// <param name="totalSeconds"></param>
-        /// <param name="kind"></param>
-        /// <returns>时间</returns>
-        public static DateTime ToDateTime(this long totalSeconds, DateTimeKind kind= DateTimeKind.Local)
-        {
-            var start = new DateTime(1970, 1, 1, 0, 0, 0, kind);
-            return start.AddSeconds(totalSeconds);
-        }
+        ///// <summary>
+        ///// 将时间戳转为时间
+        ///// </summary>
+        ///// <param name="totalSeconds"></param>
+        ///// <param name="kind"></param>
+        ///// <returns>时间</returns>
+        //public static DateTime ToDateTime(this long totalSeconds, DateTimeKind kind= DateTimeKind.Local)
+        //{
+        //    var start = new DateTime(1970, 1, 1, 0, 0, 0, kind);
+        //    return start.AddSeconds(totalSeconds);
+        //}
 
 
         /// <summary>

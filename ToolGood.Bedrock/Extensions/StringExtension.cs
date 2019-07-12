@@ -8,7 +8,7 @@ namespace System
     /// <summary>
     /// 字符串扩展方法
     /// </summary>
-    public static class StringExtension
+    public static partial class ObjectExtension
     {
         #region 字符串扩展
         /// <summary>忽略大小写的字符串相等比较，判断是否以任意一个待比较字符串相等</summary>
@@ -104,43 +104,59 @@ namespace System
         #endregion
 
         #region 空判断
-        /// <summary>
-        /// 对象是空
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public static bool IsNull(this string obj)
-        {
-            return obj == null;
-        }
+        ///// <summary>
+        ///// 对象是空
+        ///// </summary>
+        ///// <param name="obj"></param>
+        ///// <returns></returns>
+        //public static bool IsNull(this string obj)
+        //{
+        //    return obj == null;
+        //}
+
+        ///// <summary>
+        ///// 对象不为空
+        ///// </summary>
+        ///// <param name="obj"></param>
+        ///// <returns></returns>
+        //public static bool IsNotNull(this string obj)
+        //{
+        //    return obj != null;
+        //}
 
         /// <summary>
-        /// 对象不为空
+        /// 对家是否为空
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="inputStr"></param>
         /// <returns></returns>
-        public static bool IsNotNull(this string obj)
-        {
-            return obj != null;
-        }
-
-
         public static bool IsNullOrEmpty(this string inputStr)
         {
             return string.IsNullOrEmpty(inputStr);
         }
-
+        /// <summary>
+        /// 对家是否为空
+        /// </summary>
+        /// <param name="inputStr"></param>
+        /// <returns></returns>
         public static bool IsNullOrWhiteSpace(this string inputStr)
         {
             return string.IsNullOrWhiteSpace(inputStr);
         }
 
-
+        /// <summary>
+        /// 对家是否为空
+        /// </summary>
+        /// <param name="inputStr"></param>
+        /// <returns></returns>
         public static bool IsNotSet(this string inputStr)
         {
             return string.IsNullOrWhiteSpace(inputStr);
         }
-
+        /// <summary>
+        /// 对家是否不为空
+        /// </summary>
+        /// <param name="inputStr"></param>
+        /// <returns></returns>
         public static bool IsSet(this string inputStr)
         {
             return string.IsNullOrWhiteSpace(inputStr) == false;
@@ -148,18 +164,36 @@ namespace System
 
         #endregion
 
-        #region 字符串截取
-
+        #region 替换字符串
+        /// <summary>
+        /// 替换字符串
+        /// </summary>
+        /// <param name="inputStr"></param>
+        /// <param name="oldStr"></param>
+        /// <param name="newStr"></param>
+        /// <returns></returns>
         public static string TryReplace(this string inputStr, string oldStr, string newStr)
         {
             return inputStr.IsNullOrEmpty() ? inputStr : inputStr.Replace(oldStr, newStr);
         }
-
+        /// <summary>
+        /// 替换字符串
+        /// </summary>
+        /// <param name="inputStr"></param>
+        /// <param name="pattern"></param>
+        /// <param name="replacement"></param>
+        /// <returns></returns>
         public static string RegexReplace(this string inputStr, string pattern, string replacement)
         {
             return inputStr.IsNullOrEmpty() ? inputStr : Regex.Replace(inputStr, pattern, replacement);
         }
-
+        /// <summary>
+        /// 替换字符串
+        /// </summary>
+        /// <param name="inputStr"></param>
+        /// <param name="pattern"></param>
+        /// <param name="replaceFunc"></param>
+        /// <returns></returns>
         public static string RegexReplace(this string inputStr, string pattern, Func<Match, string> replaceFunc)
         {
             return inputStr.IsNullOrEmpty() ? inputStr : Regex.Replace(inputStr, pattern, new MatchEvaluator(replaceFunc));

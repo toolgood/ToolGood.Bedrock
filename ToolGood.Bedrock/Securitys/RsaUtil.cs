@@ -415,7 +415,11 @@ namespace ToolGood.Bedrock
             //result = ASCIIEncoding.ASCII.GetString(source);
             return result;
         }
-
+        /// <summary>
+        /// 解密 Pem 的私钥
+        /// </summary>
+        /// <param name="pemstr"></param>
+        /// <returns></returns>
         public static RSACryptoServiceProvider DecodePemPrivateKey(String pemstr)
         {
             byte[] pkcs8privatekey;
@@ -426,7 +430,11 @@ namespace ToolGood.Bedrock
             } else
                 return null;
         }
-
+        /// <summary>
+        /// 解密 Pem 的公钥
+        /// </summary>
+        /// <param name="pkcs8"></param>
+        /// <returns></returns>
         public static RSACryptoServiceProvider DecodePrivateKeyInfo(byte[] pkcs8)
         {
             byte[] SeqOID = { 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00 };
@@ -493,7 +501,11 @@ namespace ToolGood.Bedrock
             }
             return true;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="privkey"></param>
+        /// <returns></returns>
         public static RSACryptoServiceProvider DecodeRSAPrivateKey(byte[] privkey)
         {
             byte[] MODULUS, E, D, P, Q, DP, DQ, IQ;

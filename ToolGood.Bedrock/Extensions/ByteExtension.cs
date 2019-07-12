@@ -8,7 +8,7 @@ namespace System
     /// <summary>
     /// 字节数组操作扩展类
     /// </summary>
-    public static class ByteExtension
+    public static partial class ObjectExtension
     {
         #region 将字符串转为字节数组
 
@@ -46,28 +46,13 @@ namespace System
 
         #endregion 将字符串转为字节数组
 
-
-        public static byte[] ToBytesForHexString(this string hexString)
-        {
-            byte[] bytes = new byte[hexString.Length / 2];
-
-            for (int i = 0; i < hexString.Length; i += 2) {
-                string s = hexString.Substring(i, 2);
-                bytes[i / 2] = byte.Parse(s, NumberStyles.HexNumber, null);
-            }
-            return bytes;
-        }
-
-        public static string ToHexString(this byte[] bytes)
-        {
-            StringBuilder builder = new StringBuilder(bytes.Length * 2);
-
-            foreach (byte b in bytes) {
-                builder.Append(b.ToString("X2"));
-            }
-            return builder.ToString();
-        }
-
+        /// <summary>
+        /// 截取byte[]
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
         public static byte[] SubBytes(this byte[] bytes, int startIndex, int length)
         {
             byte[] res = new byte[length];
@@ -75,7 +60,11 @@ namespace System
             return res;
         }
 
-
+        /// <summary>
+        /// 保存文件
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="filePath"></param>
         public static void SaveFile(this byte[] bytes, string filePath)
         {
             File.WriteAllBytes(filePath, bytes);

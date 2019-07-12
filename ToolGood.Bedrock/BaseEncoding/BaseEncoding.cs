@@ -11,6 +11,9 @@ namespace ToolGood.Bedrock
     /// </summary>
     public sealed class BaseEncoding
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public enum EndianFormat
         {
             /// <summary>Least Significant Bit order (lsb)</summary>
@@ -37,6 +40,10 @@ namespace ToolGood.Bedrock
         /// <summary>True if we want ending zero bytes to be encoded</summary>
         public bool IncludeProceedingZeros { get { return kIncludeProceedingZeros; } }
 
+        /// <summary>
+        /// ToString
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Format("Base-{0} {1}", Radix.ToString(), kDigits);

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
-namespace System.Data
+namespace System
 {
-    public static class DataTableExtension
+    /// <summary>
+    /// 
+    /// </summary>
+    public static partial class ObjectExtension
     {
-
         /// <summary>
         /// 判断是否包含某列名（不区分大小写）
         /// </summary>

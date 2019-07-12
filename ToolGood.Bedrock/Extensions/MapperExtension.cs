@@ -6,7 +6,7 @@ namespace System
     /// <summary>
     /// 对象映射
     /// </summary>
-    public static class MapperExtension
+    public static partial class ObjectExtension
     {
         /// <summary>
         /// 对象映射

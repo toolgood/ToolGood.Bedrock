@@ -5,8 +5,16 @@ using System.Text;
 
 namespace System
 {
-    public static partial class StreamExtensions
+    /// <summary>
+    /// 
+    /// </summary>
+    public static partial class ObjectExtension
     {
+        /// <summary>
+        /// 获取 byte[]
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
         public static byte[] GetAllBytes(this Stream stream)
         {
             byte[] streamBytes;

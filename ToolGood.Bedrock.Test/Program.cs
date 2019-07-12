@@ -13,13 +13,18 @@ namespace ToolGood.Bedrock.Test
             UserPassword password = new UserPassword();
             password.Data = new UserPassword.Dto() {
                 //UserName="111",
-                Ints=new List<int>() { 1,2},
-                Actions=new List<UserPassword.Action>() {
+                Ints = new List<int>() { 1, 2 },
+                Actions = new List<UserPassword.Action>() {
                     new UserPassword.Action()
                 }
             };
+            int a = 2;
+
 
             var msg = password.CheckDate();
+            var vvv = "".IsNotNull();
+
+
 
 
             //var t = 1.ToSafeEnum<aa>(aa.a);

@@ -5,7 +5,10 @@ using System.Linq;
 
 namespace System
 {
-    public static class ObjectExtension
+    /// <summary>
+    /// 
+    /// </summary>
+    public static partial class ObjectExtension
     {
         /// <summary>
         /// 对象是空
@@ -52,6 +55,12 @@ namespace System
 
 
         #region ToString
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="fmt"></param>
+        /// <returns></returns>
         public static string ToString(this DateTime? dt, string fmt)
         {
             if (dt != null) {
@@ -59,6 +68,13 @@ namespace System
             }
             return "";
         }
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="fmt"></param>
+        /// <param name="default"></param>
+        /// <returns></returns>
         public static string ToString(this DateTime? dt, string fmt, DateTime @default)
         {
             if (dt != null) {
@@ -66,10 +82,22 @@ namespace System
             }
             return @default.ToString(fmt);
         }
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="trueString"></param>
+        /// <param name="falseString"></param>
+        /// <returns></returns>
         public static string ToString(this bool b, string trueString, string falseString = "")
         {
             return b ? trueString : falseString;
         }
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static string ToString(this bool? b)
         {
             if (b.HasValue) {
@@ -77,6 +105,13 @@ namespace System
             }
             return "";
         }
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="TrueString"></param>
+        /// <param name="FalseString"></param>
+        /// <returns></returns>
         public static string ToString(this bool? b, string TrueString, string FalseString = "")
         {
             if (b.HasValue) {
@@ -87,6 +122,12 @@ namespace System
             }
             return "";
         }
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="fmt"></param>
+        /// <returns></returns>
         public static string ToString(this short? num, string fmt)
         {
             if (object.Equals(null, num)) {
@@ -97,6 +138,12 @@ namespace System
             }
             return "";
         }
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="fmt"></param>
+        /// <returns></returns>
         public static string ToString(this int? num, string fmt)
         {
             if (object.Equals(null, num)) {
@@ -107,6 +154,12 @@ namespace System
             }
             return "";
         }
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="fmt"></param>
+        /// <returns></returns>
         public static string ToString(this long? num, string fmt)
         {
             if (object.Equals(null, num)) {
@@ -117,6 +170,12 @@ namespace System
             }
             return "";
         }
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="fmt"></param>
+        /// <returns></returns>
         public static string ToString(this ushort? num, string fmt)
         {
             if (object.Equals(null, num)) {
@@ -127,6 +186,12 @@ namespace System
             }
             return "";
         }
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="fmt"></param>
+        /// <returns></returns>
         public static string ToString(this uint? num, string fmt)
         {
             if (object.Equals(null, num)) {
@@ -137,6 +202,12 @@ namespace System
             }
             return "";
         }
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="fmt"></param>
+        /// <returns></returns>
         public static string ToString(this ulong? num, string fmt)
         {
             if (object.Equals(null, num)) {
@@ -147,6 +218,12 @@ namespace System
             }
             return "";
         }
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="fmt"></param>
+        /// <returns></returns>
         public static string ToString(this float? num, string fmt)
         {
             if (object.Equals(null, num)) {
@@ -157,6 +234,12 @@ namespace System
             }
             return "";
         }
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="fmt"></param>
+        /// <returns></returns>
         public static string ToString(this double? num, string fmt)
         {
             if (object.Equals(null, num)) {
@@ -167,6 +250,12 @@ namespace System
             }
             return "";
         }
+        /// <summary>
+        /// ToString 扩展
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="fmt"></param>
+        /// <returns></returns>
         public static string ToString(this decimal? num, string fmt)
         {
             if (object.Equals(null, num)) {

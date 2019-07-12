@@ -5,7 +5,10 @@ using System.ComponentModel;
 
 namespace System
 {
-    public static class EnumExtension
+    /// <summary>
+    /// 
+    /// </summary>
+    public static partial class ObjectExtension
     {
         private static ConcurrentDictionary<RuntimeTypeHandle, Dictionary<int, string>> _descriptionCache = new ConcurrentDictionary<RuntimeTypeHandle, Dictionary<int, string>>();
 

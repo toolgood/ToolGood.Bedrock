@@ -3,7 +3,10 @@ using System.Web;
 
 namespace System
 {
-    public static class UrlEncodeExtension
+    /// <summary>
+    /// 
+    /// </summary>
+    public static partial class ObjectExtension
     {
         #region 对字符串进行Url编码
 

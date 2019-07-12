@@ -9,6 +9,10 @@ namespace ToolGood.Bedrock.Attributes
     /// </summary>
     public class CharLengthAttribute : System.ComponentModel.DataAnnotations.StringLengthAttribute
     {
+        /// <summary>
+        /// 字符长度验证特性
+        /// </summary>
+        /// <param name="maximumLength">最大长度</param>
         public CharLengthAttribute(int maximumLength) : base(maximumLength)
         {
         }

@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace System
 {
-    public static class DictionaryExtension
+    public static partial class ObjectExtension
     {
         /// <summary>
         /// 尝试更新

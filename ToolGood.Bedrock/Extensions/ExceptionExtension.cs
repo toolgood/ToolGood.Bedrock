@@ -3,7 +3,10 @@ using System.Text;
 
 namespace System
 {
-    public static class ExceptionExtension
+    /// <summary>
+    /// 
+    /// </summary>
+    public static partial class ObjectExtension
     {
         #region 获取最底层异常
         /// <summary>

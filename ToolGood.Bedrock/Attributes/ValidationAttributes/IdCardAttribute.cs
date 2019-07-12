@@ -8,6 +8,11 @@ namespace ToolGood.Bedrock.Attributes
     /// </summary>
     public class IdCardAttribute : ValidationAttribute
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public override bool IsValid(object value)
         {
             if (value == null)

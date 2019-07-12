@@ -3,7 +3,10 @@ using System.Text;
 
 namespace System
 {
-    public static class StringBuilderExtension
+    /// <summary>
+    /// 
+    /// </summary>
+    public static partial class ObjectExtension
     {
         /// <summary>
         /// 根据条件进行拼接

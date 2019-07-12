@@ -19,7 +19,9 @@ namespace ToolGood.Bedrock
         private string m_SolarWeekText = null, m_SolarConstellation = null, m_SolarBirthStone = null;
 
         #region 构造函数
-
+        /// <summary>
+        /// 中国日历信息实体类
+        /// </summary>
         public ChineseCalendarUtil()
             : this(DateTime.Now.Date)
         {

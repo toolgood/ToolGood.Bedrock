@@ -10,10 +10,17 @@ namespace ToolGood.Bedrock.Attributes
     /// </summary>
     public class IdNumAttribute : ValidationAttribute
     {
+        /// <summary>
+        /// 主键验证特性
+        /// </summary>
         public IdNumAttribute()
         {
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public override bool IsValid(object value)
         {
             if (value is null) {
@@ -28,7 +35,11 @@ namespace ToolGood.Bedrock.Attributes
             return false;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public override string FormatErrorMessage(string name)
         {
             return string.IsNullOrEmpty(ErrorMessage)

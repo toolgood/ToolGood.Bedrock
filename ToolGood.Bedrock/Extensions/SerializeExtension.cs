@@ -4,7 +4,7 @@ using ToolGood.Bedrock.Internals;
 
 namespace System
 {
-    public static class SerializeExtension
+    public static partial class ObjectExtension
     {
         /// <summary>
         /// 序列化

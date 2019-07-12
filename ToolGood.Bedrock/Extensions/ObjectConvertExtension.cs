@@ -5,7 +5,10 @@ using System.Text.RegularExpressions;
 
 namespace System
 {
-    public static class ObjectConvertExtension
+    /// <summary>
+    /// 
+    /// </summary>
+    public static partial class ObjectExtension
     {
         /// <summary>
         /// 将object安全的转为int类型
@@ -35,7 +38,12 @@ namespace System
             return defaultValue;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
         public static long ToSafeInt64(this string o, int defaultValue)
         {
             bool flag = o != null && !string.IsNullOrWhiteSpace(o.ToString());// && Regex.IsMatch(o.ToString().Trim(), "^([-]|[0-9])[0-9]*(\\.\\w*)?$");
@@ -57,7 +65,12 @@ namespace System
             return (long)defaultValue;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="defValue"></param>
+        /// <returns></returns>
         public static float ToSafeFloat(this string o, float defValue)
         {
             bool flag = o == null || string.IsNullOrWhiteSpace(o.ToString());
@@ -75,7 +88,12 @@ namespace System
             return result2;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="defValue"></param>
+        /// <returns></returns>
         public static double ToSafeDouble(this string o, double defValue)
         {
             bool flag = o == null || string.IsNullOrWhiteSpace(o.ToString());
@@ -93,7 +111,12 @@ namespace System
             return result2;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="defValue"></param>
+        /// <returns></returns>
         public static decimal ToSafeDecimal(this string o, decimal defValue)
         {
             bool flag = o == null || string.IsNullOrWhiteSpace(o.ToString());
@@ -141,7 +164,12 @@ namespace System
             return defaultValue;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
         public static long ToSafeInt64(this IComparable o, int defaultValue)
         {
             bool flag = o != null && !string.IsNullOrWhiteSpace(o.ToString());// && Regex.IsMatch(o.ToString().Trim(), "^([-]|[0-9])[0-9]*(\\.\\w*)?$");
@@ -163,7 +191,12 @@ namespace System
             return (long)defaultValue;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="defValue"></param>
+        /// <returns></returns>
         public static float ToSafeFloat(this IComparable o, float defValue)
         {
             bool flag = o == null || string.IsNullOrWhiteSpace(o.ToString());
@@ -181,7 +214,12 @@ namespace System
             return result2;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="defValue"></param>
+        /// <returns></returns>
         public static double ToSafeDouble(this IComparable o, double defValue)
         {
             bool flag = o == null || string.IsNullOrWhiteSpace(o.ToString());
@@ -199,7 +237,12 @@ namespace System
             return result2;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="defValue"></param>
+        /// <returns></returns>
         public static decimal ToSafeDecimal(this IComparable o, decimal defValue)
         {
             bool flag = o == null || string.IsNullOrWhiteSpace(o.ToString());
@@ -217,7 +260,12 @@ namespace System
             return result2;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="defValue"></param>
+        /// <returns></returns>
         public static bool ToSafeBool(this string o, bool defValue)
         {
             bool flag = o != null;
@@ -242,7 +290,12 @@ namespace System
             return defValue;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="defValue"></param>
+        /// <returns></returns>
         public static bool ToSafeBool(this IComparable o, bool defValue)
         {
             bool flag = o != null;
@@ -268,7 +321,12 @@ namespace System
         }
 
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
         public static DateTime ToSafeDateTime(this string obj, DateTime defaultValue)
         {
             bool flag = obj == null || string.IsNullOrWhiteSpace(obj.ToString());

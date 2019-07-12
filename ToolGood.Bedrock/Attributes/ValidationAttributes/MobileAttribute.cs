@@ -8,6 +8,9 @@ namespace ToolGood.Bedrock.Attributes
     /// </summary>
     public class MobileAttribute : RegularExpressionAttribute
     {
+        /// <summary>
+        /// 手机号码验证特性
+        /// </summary>
         public MobileAttribute() : base(ValidatorRegex.Mobile)
         {
             ErrorMessage = "手机号码不正确";
