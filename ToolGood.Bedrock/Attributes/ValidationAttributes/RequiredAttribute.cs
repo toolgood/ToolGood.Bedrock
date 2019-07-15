@@ -15,6 +15,19 @@ namespace ToolGood.Bedrock.Attributes
         {
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public override bool IsValid(object value)
+        {
+            if (value==null) {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// 必填验证特性
         /// </summary>
         /// <param name="errorMessageAccessor"></param>

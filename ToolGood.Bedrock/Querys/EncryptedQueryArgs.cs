@@ -20,42 +20,48 @@ namespace ToolGood.Bedrock
         /// 钥匙（RSA公匙加密过的）
         /// </summary>
         [JsonProperty("rsaKey")]
-        [Required(ErrorMessage = "rsaKey is null.")]
         public string RsaKey { get; set; }
 
         /// <summary>
         /// 密文
         /// </summary>
         [JsonProperty("ciphertext")]
-        [Required(ErrorMessage = "ciphertext is null.")]
         public string Ciphertext { get; set; }
 
         /// <summary>
         /// 时间截
         /// </summary>
         [JsonProperty("timestamp")]
-        [Required(ErrorMessage = "timestamp is null.")]
         public long Timestamp { get; set; }
 
         /// <summary>
         /// 签名
         /// </summary>
         [JsonProperty("sign")]
-        [Required(ErrorMessage = "sign is null.")]
         public string Sign { get; set; }
 
         /// <summary>
         /// 核对签名
         /// </summary>
         /// <returns></returns>
-        public bool CheckSign()
+        public bool CheckSign(out string errMsg)
         {
+            if (string.IsNullOrWhiteSpace(RsaKey)) { errMsg = "rsaKey is null."; return false; }
+            if (string.IsNullOrWhiteSpace(Ciphertext)) { errMsg = "ciphertext is null."; return false; }
+            if (Timestamp == 0) { errMsg = "timestamp is null."; return false; }
+            if (string.IsNullOrWhiteSpace(Sign)) { errMsg = "sign is null."; return false; }
+
             var st = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Timestamp);
-            if (Math.Abs(st.Seconds) > 15) { return false; }
+            if (Math.Abs(st.Seconds) > 15) { errMsg = "timestamp is error."; return false; }
 
             var txt = $"{Ciphertext.ToSafeString()}|{RsaKey.ToSafeString()}|{Timestamp.ToSafeString()}";
             var hash = HashUtil.GetMd5String(txt);
-            return Sign.ToUpper() == hash;
+            if (Sign.ToUpper() != hash) {
+                errMsg = "sign is error.";
+                return false;
+            }
+            errMsg = null;
+            return true;
         }
         /// <summary>
         /// 解密
