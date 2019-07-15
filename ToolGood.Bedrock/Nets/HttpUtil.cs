@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -216,6 +217,7 @@ namespace ToolGood.Bedrock
         }
         #endregion
 
+
         #region Delete
         /// <summary>
         /// HTTP Delete方式请求数据.
@@ -355,7 +357,7 @@ namespace ToolGood.Bedrock
                 wresp = wr.GetResponse();
                 return ReadResponse(wresp);
             } finally {
-                wresp = null;
+                wr = null;
                 wresp = null;
             }
         }

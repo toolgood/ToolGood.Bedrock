@@ -11,9 +11,9 @@
     <Copyright>Copyright 2016-2019 ToolGood</Copyright>
     <Authors>ToolGood</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.10</Version>
-    <FileVersion>1.0.0.10</FileVersion>
-    <AssemblyVersion>1.0.0.10</AssemblyVersion>
+    <Version>1.0.0.11</Version>
+    <FileVersion>1.0.0.11</FileVersion>
+    <AssemblyVersion>1.0.0.11</AssemblyVersion>
   </PropertyGroup>
 
 
@@ -27,7 +27,7 @@
     <PackageReference Include="ToolGood.Algorithm" Version="1.3.3.4" />
     <PackageReference Include="ToolGood.AntiDuplication" Version="2.0.0.1" />
     <PackageReference Include="ToolGood.RcxCrypto" Version="1.3.0" />
-    <PackageReference Include="ToolGood.ReadyGo3" Version="3.3.0.14" />
+    <PackageReference Include="ToolGood.ReadyGo3" Version="3.3.0.16" />
     <PackageReference Include="ToolGood.Words" Version="2.3.3.4" />
     <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.6" />
   </ItemGroup>
