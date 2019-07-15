@@ -38,13 +38,136 @@ namespace ToolGood.Bedrock.Web
     /// </summary>
     public abstract class StartupBase
     {
-        public IConfiguration Configuration { get; }
-        public IContainer AutofacContainer { get; private set; }
+        #region _appConfigFiles _appConfigFiles2
+        /// <summary>
+        /// 固定路径
+        /// </summary>
+        private static readonly string[] _appConfigFiles = new string[] {
+            "app.config",
+            "App_Data/app.config",
+            "App_Data/Config/app.config",
+            "App_Data/Configs/app.config",
+            "Config/app.config",
+            "Configs/app.config",
 
-        public StartupBase(IConfiguration configuration)
+            "appSettings.config",
+            "App_Data/appSettings.config",
+            "App_Data/Config/appSettings.config",
+            "App_Data/Configs/appSettings.config",
+            "Config/appSettings.config",
+            "Configs/appSettings.config",
+
+            "appSetting.config",
+            "App_Data/appSetting.config",
+            "App_Data/Config/appSetting.config",
+            "App_Data/Configs/appSetting.config",
+            "Config/appSetting.config",
+            "Configs/appSetting.config",
+        };
+        /// <summary>
+        /// 环境可变路径
+        /// </summary>
+        private static readonly string[] _appConfigFiles2 = new string[] {
+            "app.{0}.config",
+            "App_Data/app.{0}.config",
+            "App_Data/Config/app.{0}.config",
+            "App_Data/Configs/app.{0}.config",
+            "Config/app.{0}.config",
+            "Configs/app.{0}.config",
+
+            "app_{0}.config",
+            "App_Data/app_{0}.config",
+            "App_Data/Config/app_{0}.config",
+            "App_Data/Configs/app_{0}.config",
+            "Config/app_{0}.config",
+            "Configs/app_{0}.config",
+
+            "appSettings.{0}.config",
+            "App_Data/appSettings.{0}.config",
+            "App_Data/Config/appSettings.{0}.config",
+            "App_Data/Configs/appSettings.{0}.config",
+            "Config/appSettings.{0}.config",
+            "Configs/appSettings.{0}.config",
+
+            "appSettings_{0}.config",
+            "App_Data/appSettings_{0}.config",
+            "App_Data/Config/appSettings_{0}.config",
+            "App_Data/Configs/appSettings_{0}.config",
+            "Config/appSettings_{0}.config",
+            "Configs/appSettings_{0}.config",
+
+            "appSetting.{0}.config",
+            "App_Data/appSetting.{0}.config",
+            "App_Data/Config/appSetting.{0}.config",
+            "App_Data/Configs/appSetting.{0}.config",
+            "Config/appSetting.{0}.config",
+            "Configs/appSetting.{0}.config",
+
+            "appSetting_{0}.config",
+            "App_Data/appSetting_{0}.config",
+            "App_Data/Config/appSetting_{0}.config",
+            "App_Data/Configs/appSetting_{0}.config",
+            "Config/appSetting_{0}.config",
+            "Configs/appSetting_{0}.config",
+        };
+
+        private string GetAppConfigPath()
         {
-            Configuration = configuration;
+            foreach (var file in _appConfigFiles) {
+                var f = MyHostingEnvironment.MapPath(file);
+                if (File.Exists(f)) { return f; }
+            }
+
+            string[] appEnvironments;
+            if (System.Diagnostics.Debugger.IsAttached) { //调试时 先采用 开发文件
+                appEnvironments = new string[] { MyHostingEnvironment.EnvironmentName, "dev", "test", "prod" };
+            } else {
+                appEnvironments = new string[] { MyHostingEnvironment.EnvironmentName, "prod", "test", "dev" };
+            }
+            foreach (var item in appEnvironments) {
+                foreach (var file in _appConfigFiles2) {
+                    var f = MyHostingEnvironment.MapPath(string.Format(file, item));
+                    if (File.Exists(f)) { return f; }
+                }
+            }
+            return null;
         }
+
+        #endregion
+
+        public virtual IConfiguration Configuration { get; }
+        public virtual IContainer AutofacContainer { get; private set; }
+
+        public StartupBase(IHostingEnvironment env)
+        {
+            MyHostingEnvironment.ApplicationName = env.ApplicationName;
+            MyHostingEnvironment.ContentRootPath = env.ContentRootPath;
+            MyHostingEnvironment.EnvironmentName = env.EnvironmentName;
+            MyHostingEnvironment.WebRootPath = env.WebRootPath;
+            MyHostingEnvironment.IsDevelopment = env.IsDevelopment();
+
+
+            var builder = new ConfigurationBuilder()
+
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
+            var path = GetAppConfigPath();
+            if (string.IsNullOrEmpty(path)==false) {
+                builder.AddXmlFile(path, true, false);
+            }
+            Configuration = builder.Build();
+            //var builder = new ConfigurationBuilder()
+            //   .SetBasePath(env.ContentRootPath)
+            //   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            //   .AddEnvironmentVariables();
+            //Configuration = builder.Build();
+            //services.AddSingleton<IConfiguration>(Configuration);
+
+            //Configuration = configuration;
+        }
+
+
 
 
         /// <summary>
@@ -54,6 +177,7 @@ namespace ToolGood.Bedrock.Web
         /// <returns></returns>
         public virtual IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            //services.AddSingleton<IConfiguration>(Configuration);
             var hostingEnvironment = services.BuildServiceProvider().GetService<IHostingEnvironment>();
 
             var config = GetMyConfig();
@@ -156,11 +280,7 @@ namespace ToolGood.Bedrock.Web
         /// <param name="env"></param>
         public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            MyHostingEnvironment.ApplicationName = env.ApplicationName;
-            MyHostingEnvironment.ContentRootPath = env.ContentRootPath;
-            MyHostingEnvironment.EnvironmentName = env.EnvironmentName;
-            MyHostingEnvironment.WebRootPath = env.WebRootPath;
-            MyHostingEnvironment.IsDevelopment = env.IsDevelopment();
+
             var config = GetMyConfig();
 
             if (env.IsDevelopment()) {
