@@ -36,7 +36,7 @@ namespace ToolGood.Bedrock.Web
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        protected override IActionResult Error(string msg)
+        protected IActionResult Error(string msg)
         {
             return Json(new { code = ErrorCode, success = false, msg = msg });
         }

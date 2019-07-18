@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Text;
 using ToolGood.Bedrock.Internals;
+using ToolGood.RcxCrypto;
 using ToolGood.ReadyGo3;
 
 namespace ToolGood.Bedrock
@@ -13,7 +15,7 @@ namespace ToolGood.Bedrock
         /// <summary>
         /// code码
         /// </summary>
-        [JsonProperty("code",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("code", NullValueHandling = NullValueHandling.Ignore)]
         public int Code { get; set; }
         /// <summary>
         /// code描术
@@ -25,8 +27,9 @@ namespace ToolGood.Bedrock
         /// </summary>
         [JsonProperty("message", NullValueHandling = NullValueHandling.Ignore)]
         public string Message { get; set; }
+
         /// <summary>
-        /// 
+        /// 数据
         /// </summary>
         [JsonProperty("data", NullValueHandling = NullValueHandling.Ignore)]
         public object Data { get; set; }
@@ -36,11 +39,7 @@ namespace ToolGood.Bedrock
         /// </summary>
         [JsonProperty("ciphertext", NullValueHandling = NullValueHandling.Ignore)]
         public string Ciphertext { get; set; }
-        /// <summary>
-        /// 扩展数据
-        /// </summary>
-        [JsonProperty("extendData", NullValueHandling = NullValueHandling.Ignore)]
-        public object ExtendData { get; set; }
+
         /// <summary>
         /// sql执行日志
         /// </summary>
@@ -51,11 +50,22 @@ namespace ToolGood.Bedrock
         /// </summary>
         [JsonProperty("logs", NullValueHandling = NullValueHandling.Ignore)]
         public List<DebugLog> Logs { get; set; }
+
         /// <summary>
-        /// 页面
+        /// 加密数据
         /// </summary>
-        [JsonProperty("page", NullValueHandling = NullValueHandling.Ignore)]
-        public Page Page { get; set; }
+        /// <param name="password"></param>
+        public void EncryptData(byte[] password)
+        {
+            if (password!= null && password.Length>0) {
+                var json = JsonConvert.SerializeObject(this.Data);
+                var bytes = Encoding.UTF8.GetBytes(json);
+
+                var bs = ThreeRCX.Encrypt(bytes, password);//解密
+                Ciphertext = Base64.ToBase64String(bs);
+                Data = null;
+            }
+        }
 
     }
 }

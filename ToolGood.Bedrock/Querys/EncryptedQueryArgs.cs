@@ -17,6 +17,12 @@ namespace ToolGood.Bedrock
     public abstract class EncryptedQueryArgs : QueryArgs
     {
         /// <summary>
+        /// 密码
+        /// </summary>
+        [JsonIgnore]
+        public byte[] Password { get; set; }
+
+        /// <summary>
         /// 钥匙（RSA公匙加密过的）
         /// </summary>
         [JsonProperty("rsaKey")]
@@ -109,11 +115,11 @@ namespace ToolGood.Bedrock
         {
             try {
                 var bytes = Base64.FromBase64ForUrlString(RsaKey);
-                var key = RsaUtil.PrivateDecrypt(xmlKey, bytes);//解密
+                Password = RsaUtil.PrivateDecrypt(xmlKey, bytes);//解密
 
-                var bs = ThreeRCX.Encrypt(Base64.FromBase64ForUrlString(Ciphertext), key);//解密
+                var bs = ThreeRCX.Encrypt(Base64.FromBase64ForUrlString(Ciphertext), Password);//解密
                 var json = Encoding.UTF8.GetString(bs);
-                //Data = JsonConvert.DeserializeObject<T>(json);
+
                 JData = JObject.Parse(json);
                 Data = JData.ToObject<T>();
                 return true;

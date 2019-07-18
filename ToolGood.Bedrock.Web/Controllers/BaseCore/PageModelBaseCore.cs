@@ -34,7 +34,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
             ViewData["SuccessCode"] = SuccessCode;
             ViewData["ErrorCode"] = ErrorCode;
 
-            QueryArgs= HttpContextHelper.BuildQueryArgs(context.HttpContext, context.HandlerArguments);
+            QueryArgs = HttpContextHelper.BuildQueryArgs(context.HttpContext, context.HandlerArguments);
             ViewData["QueryArgs"] = QueryArgs;
 
 
@@ -58,14 +58,14 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// 返回成功
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="usePassword"></param>
         /// <param name="extendData"></param>
         /// <returns></returns>
-        protected IActionResult Success(object obj, object extendData = null)
+        protected IActionResult Success(object obj, bool usePassword = false)
         {
             QueryResult result = new QueryResult() {
                 Code = SuccessCode,
                 Data = obj,
-                ExtendData = extendData,
                 State = "SUCCESS",
             };
             if (QueryArgs != null) {
@@ -75,6 +75,9 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
                 if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
                     result.Logs = QueryArgs.Logs;
                 }
+                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
+                    result.EncryptData(args.Password);
+                }
             }
             return CamelCaseJson(result);
         }
@@ -83,8 +86,9 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="objs"></param>
+        /// <param name="usePassword"></param>
         /// <returns></returns>
-        protected IActionResult Success<T>(List<T> objs)
+        protected IActionResult Success<T>(List<T> objs, bool usePassword = false)
         {
             QueryResult result = new QueryResult() {
                 Code = SuccessCode,
@@ -98,6 +102,9 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
                 if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
                     result.Logs = QueryArgs.Logs;
                 }
+                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
+                    result.EncryptData(args.Password);
+                }
             }
             return CamelCaseJson(result);
         }
@@ -106,12 +113,13 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="page"></param>
+        /// <param name="usePassword"></param>
         /// <returns></returns>
-        protected IActionResult Success<T>(Page<T> page)
+        protected IActionResult Success<T>(Page<T> page, bool usePassword = false)
         {
             QueryResult result = new QueryResult() {
                 Code = SuccessCode,
-                Page = page,
+                Data = page,
                 State = "SUCCESS",
             };
             if (QueryArgs != null) {
@@ -121,6 +129,9 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
                 if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
                     result.Logs = QueryArgs.Logs;
                 }
+                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
+                    result.EncryptData(args.Password);
+                }
             }
             return CamelCaseJson(result);
         }
@@ -128,8 +139,9 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// 返回成功
         /// </summary>
         /// <param name="msg"></param>
+        /// <param name="usePassword"></param>
         /// <returns></returns>
-        protected IActionResult Success(string msg = "SUCCESS")
+        protected IActionResult Success(string msg = "SUCCESS", bool usePassword = false)
         {
             QueryResult result = new QueryResult() {
                 Code = SuccessCode,
@@ -142,6 +154,9 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
                 }
                 if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
                     result.Logs = QueryArgs.Logs;
+                }
+                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
+                    result.EncryptData(args.Password);
                 }
             }
             return CamelCaseJson(result);
@@ -179,6 +194,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
                 if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
                     result.Logs = QueryArgs.Logs;
                 }
+  
             }
             return CamelCaseJson(result);
         }
@@ -186,8 +202,9 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// 返回错误
         /// </summary>
         /// <param name="msg"></param>
+        /// <param name="usePassword"></param>
         /// <returns></returns>
-        protected IActionResult Error(string msg = "ERROR")
+        protected IActionResult Error(string msg = "ERROR", bool usePassword = false)
         {
             QueryResult result = new QueryResult() {
                 Code = ErrorCode,
@@ -201,6 +218,9 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
                 if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
                     result.Logs = QueryArgs.Logs;
                 }
+                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
+                    result.EncryptData(args.Password);
+                }
             }
             return CamelCaseJson(result);
         }
@@ -209,8 +229,9 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// </summary>
         /// <param name="code"></param>
         /// <param name="msg"></param>
+        /// <param name="usePassword"></param>
         /// <returns></returns>
-        protected IActionResult Error(int code, string msg)
+        protected IActionResult Error(int code, string msg, bool usePassword = false)
         {
             QueryResult result = new QueryResult() {
                 Code = code,
@@ -224,6 +245,9 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
                 if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
                     result.Logs = QueryArgs.Logs;
                 }
+                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
+                    result.EncryptData(args.Password);
+                }
             }
             return CamelCaseJson(result);
         }
@@ -231,8 +255,9 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// 返回错误
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="usePassword"></param>
         /// <returns></returns>
-        protected IActionResult Error(object obj)
+        protected IActionResult Error(object obj, bool usePassword = false)
         {
             QueryResult result = new QueryResult() {
                 Code = ErrorCode,
@@ -245,6 +270,9 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
                 }
                 if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
                     result.Logs = QueryArgs.Logs;
+                }
+                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
+                    result.EncryptData(args.Password);
                 }
             }
             return CamelCaseJson(result);
