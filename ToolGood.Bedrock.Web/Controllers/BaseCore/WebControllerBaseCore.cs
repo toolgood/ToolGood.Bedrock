@@ -56,7 +56,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <param name="obj"></param>
         /// <param name="extendData"></param>
         /// <returns></returns>
-        protected IActionResult Success(object obj, object extendData = null)
+        protected virtual IActionResult Success(object obj, object extendData = null)
         {
             QueryResult result = new QueryResult() {
                 Code = SuccessCode,
@@ -80,7 +80,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <typeparam name="T"></typeparam>
         /// <param name="objs"></param>
         /// <returns></returns>
-        protected IActionResult Success<T>(List<T> objs)
+        protected virtual IActionResult Success<T>(List<T> objs)
         {
             QueryResult result = new QueryResult() {
                 Code = SuccessCode,
@@ -103,7 +103,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <typeparam name="T"></typeparam>
         /// <param name="page"></param>
         /// <returns></returns>
-        protected IActionResult Success<T>(Page<T> page)
+        protected virtual IActionResult Success<T>(Page<T> page)
         {
             QueryResult result = new QueryResult() {
                 Code = SuccessCode,
@@ -125,7 +125,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        protected IActionResult Success(string msg = "SUCCESS")
+        protected virtual IActionResult Success(string msg = "SUCCESS")
         {
             QueryResult result = new QueryResult() {
                 Code = SuccessCode,
@@ -183,7 +183,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        protected IActionResult Error(string msg = "ERROR")
+        protected virtual IActionResult Error(string msg = "ERROR")
         {
             QueryResult result = new QueryResult() {
                 Code = ErrorCode,
@@ -206,7 +206,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <param name="code"></param>
         /// <param name="msg"></param>
         /// <returns></returns>
-        protected IActionResult Error(int code, string msg)
+        protected virtual IActionResult Error(int code, string msg)
         {
             QueryResult result = new QueryResult() {
                 Code = code,
@@ -228,7 +228,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        protected IActionResult Error(object obj)
+        protected virtual IActionResult Error(object obj)
         {
             QueryResult result = new QueryResult() {
                 Code = ErrorCode,
