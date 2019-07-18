@@ -13,6 +13,7 @@ namespace ToolGood.Bedrock.Web
     /// </summary>
     public abstract class UploadControllerBase : WebControllerBaseCore
     {
+        #region Url
         protected virtual string GetFileUrl(DateTime time, string md5, string fileExt)
         {
             return FileConstants.FilePath + time.ToString("yyyyMMdd") + "/" + md5 + fileExt;
@@ -27,13 +28,24 @@ namespace ToolGood.Bedrock.Web
         {
             return FileConstants.VideoPath + time.ToString("yyyyMMdd") + "/" + md5 + fileExt;
         }
+        #endregion
 
         #region Error
-
+        /// <summary>
+        /// 失败
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         protected override IActionResult Error(string msg)
         {
             return Json(new { code = ErrorCode, success = false, msg = msg });
         }
+        /// <summary>
+        /// 成功
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         protected virtual IActionResult Success(string url, string fileName)
         {
             return Json(new { code = SuccessCode, success = true, file_path = url, file_Name = fileName, msg = url });
@@ -48,8 +60,9 @@ namespace ToolGood.Bedrock.Web
         /// <param name="file"></param>
         /// <param name="md5"></param>
         /// <param name="fileExt"></param>
+        /// <param name="virtDir"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UploadImage(IFormFile file, string md5, string fileExt)
+        public async Task<IActionResult> UploadImage(IFormFile file, string md5, string fileExt, string virtDir = null)
         {
             if (file == null) return Error("请上传文件!");
 
@@ -66,7 +79,7 @@ namespace ToolGood.Bedrock.Web
 
             var url = GetImageUrl(DateTime.Now, md5, fileExt);
             var path = MapWebRootPath(url);
-            if (CheckUploadImage(path, url, md5, fileExt, out string errMsg) == false) { return Error(errMsg); }
+            if (CheckUploadImage(file.FileName, path, url, md5, fileExt, virtDir, out string errMsg) == false) { return Error(errMsg); }
 
             if (!Directory.Exists(Path.GetDirectoryName(path))) {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
@@ -75,7 +88,7 @@ namespace ToolGood.Bedrock.Web
                 if (System.IO.File.Exists(path) == false) {
                     using (var fileStream = new FileStream(path, FileMode.Create)) {
                         await file.CopyToAsync(fileStream);
-                        AfterUploadImage(path, url, md5, fileExt);
+                        AfterUploadImage(file.FileName, path, url, md5, fileExt, virtDir);
                     }
                 }
             } catch (Exception) {
@@ -86,12 +99,15 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// 核对上传图片
         /// </summary>
+        /// <param name="srcName"></param>
         /// <param name="filePath"></param>
         /// <param name="fileUrl"></param>
         /// <param name="md5"></param>
         /// <param name="fileExt"></param>
+        /// <param name="virtDir"></param>
+        /// <param name="errMsg"></param>
         /// <returns></returns>
-        protected virtual bool CheckUploadImage(string filePath, string fileUrl, string md5, string fileExt, out string errMsg)
+        protected virtual bool CheckUploadImage(string srcName, string filePath, string fileUrl, string md5, string fileExt, string virtDir, out string errMsg)
         {
             errMsg = null;
             return true;
@@ -99,11 +115,13 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// 上传图片后操作
         /// </summary>
+        /// <param name="srcName"></param>
         /// <param name="filePath"></param>
         /// <param name="fileUrl"></param>
         /// <param name="md5"></param>
         /// <param name="fileExt"></param>
-        protected virtual void AfterUploadImage(string filePath, string fileUrl, string md5, string fileExt) { }
+        /// <param name="virtDir"></param>
+        protected virtual void AfterUploadImage(string srcName, string filePath, string fileUrl, string md5, string fileExt, string virtDir) { }
 
         #endregion
 
@@ -114,8 +132,9 @@ namespace ToolGood.Bedrock.Web
         /// <param name="file"></param>
         /// <param name="md5"></param>
         /// <param name="fileExt"></param>
+        /// <param name="virtDir"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UploadVideo(IFormFile file, string md5, string fileExt)
+        public async Task<IActionResult> UploadVideo(IFormFile file, string md5, string fileExt, string virtDir = null)
         {
             if (file == null) return Error("请上传文件!");
 
@@ -131,7 +150,7 @@ namespace ToolGood.Bedrock.Web
 
             var url = GetVideoUrl(DateTime.Now, md5, fileExt);
             var path = MapWebRootPath(url);
-            if (CheckUploadVideo(path, url, md5, fileExt, out string errMsg) == false) { return Error(errMsg); }
+            if (CheckUploadVideo(file.FileName, path, url, md5, fileExt, virtDir, out string errMsg) == false) { return Error(errMsg); }
 
 
             if (!Directory.Exists(Path.GetDirectoryName(path))) {
@@ -141,7 +160,7 @@ namespace ToolGood.Bedrock.Web
                 if (System.IO.File.Exists(path) == false) {
                     using (var fileStream = new FileStream(path, FileMode.Create)) {
                         await file.CopyToAsync(fileStream);
-                        AfterUploadVideo(path, url, md5, fileExt);
+                        AfterUploadVideo(file.FileName, path, url, md5, fileExt, virtDir);
                     }
                 }
             } catch (Exception) {
@@ -152,12 +171,15 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// 核对上传视频
         /// </summary>
+        /// <param name="srcName"></param>
         /// <param name="filePath"></param>
         /// <param name="fileUrl"></param>
         /// <param name="md5"></param>
         /// <param name="fileExt"></param>
+        /// <param name="virtDir"></param>
+        /// <param name="errMsg"></param>
         /// <returns></returns>
-        protected virtual bool CheckUploadVideo(string filePath, string fileUrl, string md5, string fileExt, out string errMsg)
+        protected virtual bool CheckUploadVideo(string srcName, string filePath, string fileUrl, string md5, string fileExt, string virtDir, out string errMsg)
         {
             errMsg = null;
             return true;
@@ -165,11 +187,13 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// 上传视频后操作
         /// </summary>
+        /// <param name="srcName"></param>
         /// <param name="filePath"></param>
         /// <param name="fileUrl"></param>
         /// <param name="md5"></param>
         /// <param name="fileExt"></param>
-        protected virtual void AfterUploadVideo(string filePath, string fileUrl, string md5, string fileExt) { }
+        /// <param name="virtDir"></param>
+        protected virtual void AfterUploadVideo(string srcName, string filePath, string fileUrl, string md5, string fileExt, string virtDir) { }
 
         #endregion
 
@@ -180,8 +204,9 @@ namespace ToolGood.Bedrock.Web
         /// <param name="file"></param>
         /// <param name="md5"></param>
         /// <param name="fileExt"></param>
+        /// <param name="virtDir"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UploadFile(IFormFile file, string md5, string fileExt)
+        public async Task<IActionResult> UploadFile(IFormFile file, string md5, string fileExt, string virtDir = null)
         {
             if (file == null) return Error("请上传文件!");
 
@@ -196,7 +221,7 @@ namespace ToolGood.Bedrock.Web
             }
             var url = GetFileUrl(DateTime.Now, md5, fileExt);
             var path = MapWebRootPath(url);
-            if (CheckUploadFile(path, url, md5, fileExt, out string errMsg) == false) { return Error("网络错误!"); }
+            if (CheckUploadFile(file.FileName, path, url, md5, fileExt, virtDir, out string errMsg) == false) { return Error("网络错误!"); }
 
 
             if (!Directory.Exists(Path.GetDirectoryName(path))) {
@@ -206,7 +231,7 @@ namespace ToolGood.Bedrock.Web
                 if (System.IO.File.Exists(path) == false) {
                     using (var fileStream = new FileStream(path, FileMode.Create)) {
                         await file.CopyToAsync(fileStream);
-                        AfterUploadFile(path, url, md5, fileExt);
+                        AfterUploadFile(file.FileName, path, url, md5, fileExt, virtDir);
                     }
                 }
             } catch (Exception) {
@@ -217,12 +242,15 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// 核对上传文件
         /// </summary>
+        /// <param name="srcName"></param>
         /// <param name="filePath"></param>
         /// <param name="fileUrl"></param>
         /// <param name="md5"></param>
         /// <param name="fileExt"></param>
+        /// <param name="virtDir"></param>
+        /// <param name="errMsg"></param>
         /// <returns></returns>
-        protected virtual bool CheckUploadFile(string filePath, string fileUrl, string md5, string fileExt, out string errMsg)
+        protected virtual bool CheckUploadFile(string srcName, string filePath, string fileUrl, string md5, string fileExt, string virtDir, out string errMsg)
         {
             errMsg = null;
             return true;
@@ -230,11 +258,13 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// 上传文件后操作
         /// </summary>
+        /// <param name="srcName"></param>
         /// <param name="filePath"></param>
         /// <param name="fileUrl"></param>
         /// <param name="md5"></param>
         /// <param name="fileExt"></param>
-        protected virtual void AfterUploadFile(string filePath, string fileUrl, string md5, string fileExt) { }
+        /// <param name="virtDir"></param>
+        protected virtual void AfterUploadFile(string srcName, string filePath, string fileUrl, string md5, string fileExt, string virtDir) { }
 
         #endregion
 
@@ -248,8 +278,9 @@ namespace ToolGood.Bedrock.Web
         /// <param name="fileExt"></param>
         /// <param name="start"></param>
         /// <param name="end"></param>
+        /// <param name="virtDir"></param>
         /// <returns></returns>
-        public IActionResult UploadBigFile(IFormFile file, string status, string md5, string fileExt, long start, long end)
+        public IActionResult UploadBigFile(IFormFile file, string status, string md5, string fileExt, long start, long end, string virtDir = null)
         {
             if (file == null) return Error("请上传文件!");
 
@@ -264,7 +295,7 @@ namespace ToolGood.Bedrock.Web
 
             var url = GetFileUrl(DateTime.Now, md5, fileExt);
             var path = MapWebRootPath(url);
-            if (CheckUploadBigFile(path, url, md5, fileExt, out string errMsg) == false) { return Error(errMsg); }
+            if (CheckUploadBigFile(file.FileName, path, url, md5, fileExt, virtDir, out string errMsg) == false) { return Error(errMsg); }
 
 
             if (status == "chunkCheck") {
@@ -295,7 +326,7 @@ namespace ToolGood.Bedrock.Web
 
                 var fi = new FileInfo(path);
                 if (fi.Length <= end) {
-                    AfterUploadBigFile(path, url, md5, fileExt);
+                    AfterUploadBigFile(file.FileName, path, url, md5, fileExt, virtDir);
                 }
             }
             return Success(url, file.FileName);
@@ -303,12 +334,15 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// 核对大文件
         /// </summary>
+        /// <param name="srcName"></param>
         /// <param name="filePath"></param>
         /// <param name="fileUrl"></param>
         /// <param name="md5"></param>
         /// <param name="fileExt"></param>
+        /// <param name="virtDir"></param>
+        /// <param name="errMsg"></param>
         /// <returns></returns>
-        protected virtual bool CheckUploadBigFile(string filePath, string fileUrl, string md5, string fileExt, out string errMsg)
+        protected virtual bool CheckUploadBigFile(string srcName, string filePath, string fileUrl, string md5, string fileExt, string virtDir, out string errMsg)
         {
             errMsg = null;
             return true;
@@ -316,11 +350,13 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// 大文件后操作
         /// </summary>
+        /// <param name="srcName"></param>
         /// <param name="filePath"></param>
         /// <param name="fileUrl"></param>
         /// <param name="md5"></param>
         /// <param name="fileExt"></param>
-        protected virtual void AfterUploadBigFile(string filePath, string fileUrl, string md5, string fileExt) { }
+        /// <param name="virtDir"></param>
+        protected virtual void AfterUploadBigFile(string srcName, string filePath, string fileUrl, string md5, string fileExt, string virtDir) { }
 
         #endregion
 
