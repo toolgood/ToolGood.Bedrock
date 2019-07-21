@@ -292,11 +292,14 @@ namespace ToolGood.Bedrock.Web
                     app.UseHsts();
                 }
             }
+            if (config.UseResponseCompression) { app.UseResponseCompression(); }//使用压缩
+            if (config.UseResponseCaching) { app.UseResponseCaching(); }//使用缓存
+
             #region UseStaticFiles
             var provider = new FileExtensionContentTypeProvider();
             provider.Mappings.Add(".properties", "application/octet-stream");
             provider.Mappings.Add(".bcmap", "application/octet-stream");
-
+            MineRegister(provider);//注册Mine
             app.UseStaticFiles(new StaticFileOptions { ContentTypeProvider = provider });
             if (config.UselLetsEncrypt) {
                 var path = Path.Combine(env.ContentRootPath, ".well-known");
@@ -313,10 +316,8 @@ namespace ToolGood.Bedrock.Web
             #endregion
 
             if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(env).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.Configure(app); } }
-
-            if (config.UseSession) { app.UseCookiePolicy(); app.UseSession(); } else if (config.UseCookie) { app.UseCookiePolicy(); }
-            if (config.UseResponseCaching) { app.UseResponseCaching(); }
-            if (config.UseResponseCompression) { app.UseResponseCompression(); }
+            if (config.UseSession) { app.UseCookiePolicy(); app.UseSession(); } //使用session
+            else if (config.UseCookie) { app.UseCookiePolicy(); }//使用cookie
             if (config.UseCors) { app.UseCors(); }
 
             app.UseEnableRequestRewind();
@@ -370,25 +371,34 @@ namespace ToolGood.Bedrock.Web
         protected abstract MyConfig GetMyConfig();
 
         /// <summary>
+        /// Mine 注册
+        /// </summary>
+        /// <param name="provider"></param>
+        protected virtual void MineRegister(FileExtensionContentTypeProvider provider) { }
+
+        /// <summary>
         /// 服务注册
         /// </summary>
         /// <param name="services"></param>
-        public virtual void ServiceRegister(IServiceCollection services) { }
+        protected virtual void ServiceRegister(IServiceCollection services) { }
+
 
         /// <summary>
         /// IOC注册
         /// </summary>
         /// <param name="containerManager"></param>
-        public virtual void IocManagerRegister(ContainerManager containerManager) { }
+        protected virtual void IocManagerRegister(ContainerManager containerManager) { }
+
         /// <summary>
         /// 注册路由
         /// </summary>
         /// <param name="routes"></param>
-        public virtual void RouteRegister(IRouteBuilder routes) { }
+        protected virtual void RouteRegister(IRouteBuilder routes) { }
+
         /// <summary>
         /// app注册 
         /// </summary>
         /// <param name="app"></param>
-        public virtual void ApplicationRegister(IApplicationBuilder app) { }
+        protected virtual void ApplicationRegister(IApplicationBuilder app) { }
     }
 }
