@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -292,7 +293,11 @@ namespace ToolGood.Bedrock.Web
                 }
             }
             #region UseStaticFiles
-            app.UseStaticFiles();
+            var provider = new FileExtensionContentTypeProvider();
+            provider.Mappings.Add(".properties", "application/octet-stream");
+            provider.Mappings.Add(".bcmap", "application/octet-stream");
+
+            app.UseStaticFiles(new StaticFileOptions { ContentTypeProvider = provider });
             if (config.UselLetsEncrypt) {
                 var path = Path.Combine(env.ContentRootPath, ".well-known");
                 if (Directory.Exists(path) == false) {

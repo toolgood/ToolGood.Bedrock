@@ -6,6 +6,9 @@ using ToolGood.Bedrock.Web.Controllers.BaseCore;
 
 namespace ToolGood.Bedrock.Web
 {
+    /// <summary>
+    /// POST报400错误时，可能因为没有加 [IgnoreAntiforgeryToken] 或在页面没有加 @Html.AntiForgeryToken()
+    /// </summary>
     public abstract class WebPageModelBase : PageModelBaseCore
     {
         [IgnoreLog]
