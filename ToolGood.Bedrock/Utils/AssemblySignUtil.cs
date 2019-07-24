@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace ToolGood.Bedrock.Utils
+namespace ToolGood.Bedrock
 {
     /// <summary>
     /// 程序集签名
