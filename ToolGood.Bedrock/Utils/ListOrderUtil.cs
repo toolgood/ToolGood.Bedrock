@@ -89,7 +89,6 @@ namespace ToolGood.Bedrock
                 var id = idFunc(item);
                 TreeList<T1, T2> tree = new TreeList<T1, T2>() {
                     Value = item,
-                    Nodes = new Dictionary<T2, TreeList<T1, T2>>()
                 };
                 treeList.Nodes[id] = tree;
                 BuildTree(tree, list, id, pidFunc, idFunc);
@@ -105,7 +104,6 @@ namespace ToolGood.Bedrock
                 TreeList<T1, T2, T3> tree = new TreeList<T1, T2, T3>() {
                     Value = item,
                     OrderNum = orderFunc(item),
-                    Nodes = new Dictionary<T2, TreeList<T1, T2, T3>>()
                 };
                 treeList.Nodes[id] = tree;
                 BuildTree(tree, list, id, pidFunc, idFunc, orderFunc);
@@ -115,7 +113,7 @@ namespace ToolGood.Bedrock
         class TreeList<T1, T2>
         {
             public T1 Value;
-            public Dictionary<T2, TreeList<T1, T2>> Nodes { get; set; }
+            public Dictionary<T2, TreeList<T1, T2>> Nodes = new Dictionary<T2, TreeList<T1, T2>>();
 
             public List<T1> ToList()
             {
@@ -151,7 +149,7 @@ namespace ToolGood.Bedrock
         {
             public T1 Value;
             public T3 OrderNum;
-            public Dictionary<T2, TreeList<T1, T2, T3>> Nodes { get; set; }
+            public Dictionary<T2, TreeList<T1, T2, T3>> Nodes = new Dictionary<T2, TreeList<T1, T2, T3>>();
 
             public List<T1> ToList()
             {
