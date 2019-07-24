@@ -53,6 +53,35 @@ namespace System
             return list.Contains(item);
         }
 
+        /// <summary>
+        /// Linq's Select  
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="t1"></param>
+        /// <param name="valueFunc"></param>
+        /// <returns></returns>
+        public static T2 SelectNull<T1, T2>(this T1 t1, Func<T1, T2> valueFunc)
+        {
+            if (object.Equals(null, t1)) { return default(T2); }
+            return valueFunc(t1);
+        }
+
+        /// <summary>
+        /// Linq's Select  
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="t1"></param>
+        /// <param name="valueFunc"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static T2 SelectNull<T1, T2>(this T1 t1, Func<T1, T2> valueFunc,T2 defaultValue)
+        {
+            if (object.Equals(null, t1)) { return defaultValue; }
+            return valueFunc(t1);
+        }
+
 
         #region ToString
         /// <summary>
@@ -323,4 +352,6 @@ namespace System
 
         #endregion
     }
+
 }
+ 

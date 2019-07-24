@@ -14,6 +14,16 @@
         /// </summary>
         public static int ErrorCode = 0;
 
+
+
+
+        public static string SuccessStr = "SUCCESS";
+
+
+        public static string ErrorStr = "ERROR";
+
+
+
     }
 
 }

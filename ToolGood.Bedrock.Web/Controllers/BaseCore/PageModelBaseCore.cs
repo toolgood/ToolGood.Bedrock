@@ -10,34 +10,37 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using ToolGood.Bedrock.Web.Constants;
 using ToolGood.Bedrock.Web.Internals;
 using ToolGood.Bedrock.Web.Mime;
 using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
-using ToolGood.Bedrock.Web.Theme;
 using ToolGood.ReadyGo3;
 
 namespace ToolGood.Bedrock.Web.Controllers.BaseCore
 {
     public abstract class PageModelBaseCore : PageModel
     {
-        protected int SuccessCode { get { return CommonConstants.SuccessCode; } }
-        protected int ErrorCode { get { return CommonConstants.ErrorCode; } }
-        protected QueryArgs QueryArgs { get; set; }
+        [BindProperty]
+        public int SuccessCode { get { return CommonConstants.SuccessCode; } }
+
+        [BindProperty]
+        public string SuccessStr { get { return CommonConstants.SuccessStr; } }
+
+        [BindProperty]
+        public int ErrorCode { get { return CommonConstants.ErrorCode; } }
+
+        [BindProperty]
+        public string ErrorStr { get { return CommonConstants.ErrorStr; } }
+
+
+        [BindProperty]
+        public QueryArgs QueryArgs { get; set; }
 
 
 
         public override void OnPageHandlerExecuting(PageHandlerExecutingContext context)
         {
-            ViewData["SuccessCode"] = SuccessCode;
-            ViewData["ErrorCode"] = ErrorCode;
-
             QueryArgs = HttpContextHelper.BuildQueryArgs(context.HttpContext, context.HandlerArguments);
-            ViewData["QueryArgs"] = QueryArgs;
-
-
             base.OnPageHandlerExecuting(context);
         }
 

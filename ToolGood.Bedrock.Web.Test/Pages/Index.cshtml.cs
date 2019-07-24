@@ -9,7 +9,7 @@ using ToolGood.Bedrock.Web.Controllers;
 namespace ToolGood.Bedrock.Web.Test.Pages
 {
     [ApiLogFilter]
-    public class IndexModel : WebPageModelBase
+    public class IndexModel : WebPageModelCore
     {
         public void OnGet(int id)
         {

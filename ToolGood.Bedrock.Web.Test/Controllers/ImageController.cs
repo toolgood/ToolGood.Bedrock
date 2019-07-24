@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ToolGood.Bedrock.Web.Test.Controllers
 {
-    public class ImageController : ImageControllerBase
+    public class ImageController : ImageControllerCore
     {
         public IActionResult Index()
         {

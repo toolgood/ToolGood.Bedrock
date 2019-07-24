@@ -5,11 +5,11 @@ using System.IO;
 
 namespace ToolGood.Bedrock.Web
 {
-    public abstract class ImageSelectControllerBase : FileManagerControllerBase
+    public abstract class ImageSelectControllerCore : FileManagerControllerCore
     {
 
 
-        protected ImageSelectControllerBase() : base()
+        protected ImageSelectControllerCore() : base()
         {
             // FileManager Content Folder Path
             _webPath = "";

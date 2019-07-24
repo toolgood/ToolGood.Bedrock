@@ -11,7 +11,7 @@ namespace ToolGood.Bedrock.Web.Extensions
     /// <summary>
     /// 
     /// </summary>
-     public static partial class ObjectExtensions
+    public static partial class ObjectExtensions
     {
         #region ToHtml
         /// <summary>
@@ -2144,8 +2144,6 @@ namespace ToolGood.Bedrock.Web.Extensions
             return obj.ToJson().ToHtml();
         }
         #endregion
-
-
 
     }
 }

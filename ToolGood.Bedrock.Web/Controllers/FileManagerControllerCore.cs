@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace ToolGood.Bedrock.Web
 {
-    public abstract class FileManagerControllerBase : WebControllerBase
+    public abstract class FileManagerControllerCore : WebControllerCore
     {
         protected string _webRootPath;
         protected string _webPath;
         protected List<string> _allowedExtensions;
 
-        protected FileManagerControllerBase()
+        protected FileManagerControllerCore()
         {
             // FileManager Content Folder Path
             _webPath = "/";

@@ -11,7 +11,7 @@ namespace ToolGood.Bedrock.Web
     /// <summary>
     /// 图片操作
     /// </summary>
-    public abstract class ImageControllerBase : WebControllerBaseCore
+    public abstract class ImageControllerCore : WebControllerBaseCore
     {
         /// <summary>
         /// 剪切

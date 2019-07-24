@@ -9,7 +9,7 @@ using ToolGood.Bedrock.Web.Controllers.BaseCore;
 
 namespace ToolGood.Bedrock.Web
 {
-    public abstract class WebControllerBase : WebControllerBaseCore
+    public abstract class WebControllerCore : WebControllerBaseCore
     {
 
         [IgnoreLog]

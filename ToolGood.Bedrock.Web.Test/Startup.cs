@@ -14,7 +14,7 @@ using ToolGood.Bedrock.Dependency;
 
 namespace ToolGood.Bedrock.Web.Test
 {
-    public class Startup : StartupBase
+    public class Startup : StartupCore
     {
         public Startup(IConfiguration configuration) : base(configuration)
         {

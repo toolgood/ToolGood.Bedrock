@@ -9,7 +9,7 @@ using ToolGood.Bedrock.Web.Theme;
 namespace ToolGood.Bedrock.Web.Test.Controllers
 {
     [ApiLogFilter]
-    public class ApiController : ApiControllerBase
+    public class ApiController : ApiControllerCore
     {
         //[IgnoreLogFilter]
         public IActionResult Index()

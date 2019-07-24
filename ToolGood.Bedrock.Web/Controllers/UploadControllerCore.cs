@@ -11,7 +11,7 @@ namespace ToolGood.Bedrock.Web
     /// <summary>
     /// 上传控制器基类
     /// </summary>
-    public abstract class UploadControllerBase : WebControllerBaseCore
+    public abstract class UploadControllerCore : WebControllerBaseCore
     {
         #region Url
         protected virtual string GetFileUrl(DateTime time, string md5, string fileExt)

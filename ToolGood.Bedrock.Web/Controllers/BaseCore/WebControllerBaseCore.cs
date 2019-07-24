@@ -9,12 +9,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using ToolGood.Bedrock.Web.Constants;
 using ToolGood.Bedrock.Web.Internals;
 using ToolGood.Bedrock.Web.Mime;
 using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
-using ToolGood.Bedrock.Web.Theme;
 using ToolGood.ReadyGo3;
 
 namespace ToolGood.Bedrock.Web.Controllers.BaseCore
@@ -22,7 +20,11 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
     public abstract class WebControllerBaseCore : Controller
     {
         protected int SuccessCode { get { return CommonConstants.SuccessCode; } }
+        protected string SuccessStr { get { return CommonConstants.SuccessStr; } }
         protected int ErrorCode { get { return CommonConstants.ErrorCode; } }
+        protected string ErrorStr { get { return CommonConstants.ErrorStr; } }
+
+
         protected QueryArgs QueryArgs { get; set; }
 
 
@@ -30,6 +32,8 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         {
             ViewData["SuccessCode"] = SuccessCode;
             ViewData["ErrorCode"] = ErrorCode;
+            ViewData["SuccessStr"] = SuccessStr;
+            ViewData["ErrorStr"] = ErrorStr;
 
             QueryArgs = HttpContextHelper.BuildQueryArgs(context.HttpContext, context.ActionArguments);
             ViewData["QueryArgs"] = QueryArgs;

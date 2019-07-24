@@ -37,7 +37,7 @@ namespace ToolGood.Bedrock.Web
     /// <summary>
     /// 
     /// </summary>
-    public abstract class StartupBase
+    public abstract class StartupCore
     {
         #region _appConfigFiles _appConfigFiles2
         /// <summary>
@@ -139,7 +139,7 @@ namespace ToolGood.Bedrock.Web
         public virtual IConfiguration Configuration { get; }
         public virtual IContainer AutofacContainer { get; private set; }
 
-        public StartupBase(IHostingEnvironment env)
+        public StartupCore(IHostingEnvironment env)
         {
             MyHostingEnvironment.ApplicationName = env.ApplicationName;
             MyHostingEnvironment.ContentRootPath = env.ContentRootPath;

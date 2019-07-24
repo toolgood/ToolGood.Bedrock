@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Threading.Tasks;
 using ToolGood.Bedrock.Attributes;
@@ -7,19 +6,11 @@ using ToolGood.Bedrock.Web.Controllers.BaseCore;
 
 namespace ToolGood.Bedrock.Web
 {
-    public abstract class ApiControllerBase : WebControllerBaseCore
+    /// <summary>
+    /// POST报400错误时，可能因为没有加 [IgnoreAntiforgeryToken] 或在页面没有加 @Html.AntiForgeryToken()
+    /// </summary>
+    public abstract class WebPageModelCore : PageModelBaseCore
     {
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            if (!this.ModelState.IsValid) {
-                context.Result = Error(ModelState);
-                return;
-            }
-            base.OnActionExecuting(context);
-        }
-
-
-
         [IgnoreLog]
         protected IActionResult Execute(Func<IActionResult> action)
         {
@@ -43,7 +34,7 @@ namespace ToolGood.Bedrock.Web
             } catch (Exception ex) {
                 LogUtil.Error(ex);
             }
-            return Error("500 Server Error.");
+            return Content("500 Server Error.");
         }
 
         [IgnoreLog]
@@ -57,7 +48,7 @@ namespace ToolGood.Bedrock.Web
             } catch (Exception ex) {
                 LogUtil.Error(ex);
             }
-            return Error("500 Server Error.");
+            return Content("500 Server Error.");
         }
 
         [IgnoreLog]
@@ -83,7 +74,7 @@ namespace ToolGood.Bedrock.Web
             } catch (Exception ex) {
                 LogUtil.Error(ex);
             }
-            return Error("500 Server Error.");
+            return Content("500 Server Error.");
         }
 
         [IgnoreLog]
@@ -97,9 +88,8 @@ namespace ToolGood.Bedrock.Web
             } catch (Exception ex) {
                 LogUtil.Error(ex);
             }
-            return Error("500 Server Error.");
+            return Content("500 Server Error.");
         }
-
 
     }
 }
