@@ -8,7 +8,7 @@ namespace ToolGood.Bedrock
     /// <summary>
     /// 列排列
     /// </summary>
-    public class ListOrderUtil
+    public static class ListOrderUtil
     {
         /// <summary>
         /// 依据父ID 倒序排列
@@ -20,7 +20,7 @@ namespace ToolGood.Bedrock
         /// <param name="pidFunc"></param>
         /// <param name="idFunc"></param>
         /// <returns></returns>
-        public List<T1> OrderByDescOnPid<T1, T2>(List<T1> list, T2 pid, Func<T1, T2> pidFunc, Func<T1, T2> idFunc)
+        public static List<T1> OrderByDescOnPid<T1, T2>(List<T1> list, T2 pid, Func<T1, T2> pidFunc, Func<T1, T2> idFunc)
         {
             TreeList<T1, T2> treeList = new TreeList<T1, T2>();
             BuildTree(treeList, list, pid, pidFunc, idFunc);
@@ -36,7 +36,7 @@ namespace ToolGood.Bedrock
         /// <param name="pidFunc"></param>
         /// <param name="idFunc"></param>
         /// <returns></returns>
-        public List<T1> OrderByAscOnPid<T1, T2>(List<T1> list, T2 pid, Func<T1, T2> pidFunc, Func<T1, T2> idFunc)
+        public static List<T1> OrderByAscOnPid<T1, T2>(List<T1> list, T2 pid, Func<T1, T2> pidFunc, Func<T1, T2> idFunc)
         {
             TreeList<T1, T2> treeList = new TreeList<T1, T2>();
             BuildTree(treeList, list, pid, pidFunc, idFunc);
@@ -55,7 +55,7 @@ namespace ToolGood.Bedrock
         /// <param name="idFunc"></param>
         /// <param name="orderFunc"></param>
         /// <returns></returns>
-        public List<T1> OrderByDescOnPidAndOrderNum<T1, T2, T3>(List<T1> list, T2 pid, Func<T1, T2> pidFunc, Func<T1, T2> idFunc, Func<T1, T3> orderFunc)
+        public static List<T1> OrderByDescOnPidAndOrderNum<T1, T2, T3>(List<T1> list, T2 pid, Func<T1, T2> pidFunc, Func<T1, T2> idFunc, Func<T1, T3> orderFunc)
         {
             TreeList<T1, T2, T3> treeList = new TreeList<T1, T2, T3>();
             BuildTree(treeList, list, pid, pidFunc, idFunc, orderFunc);
@@ -74,14 +74,14 @@ namespace ToolGood.Bedrock
         /// <param name="idFunc"></param>
         /// <param name="orderFunc"></param>
         /// <returns></returns>
-        public List<T1> OrderByAscOnPidAndOrderNum<T1, T2, T3>(List<T1> list, T2 pid, Func<T1, T2> pidFunc, Func<T1, T2> idFunc, Func<T1, T3> orderFunc)
+        public static List<T1> OrderByAscOnPidAndOrderNum<T1, T2, T3>(List<T1> list, T2 pid, Func<T1, T2> pidFunc, Func<T1, T2> idFunc, Func<T1, T3> orderFunc)
         {
             TreeList<T1, T2, T3> treeList = new TreeList<T1, T2, T3>();
             BuildTree(treeList, list, pid, pidFunc, idFunc, orderFunc);
             return treeList.ToList();
         }
 
-        private void BuildTree<T1, T2>(TreeList<T1, T2> treeList, List<T1> list, T2 pid, Func<T1, T2> pidFunc, Func<T1, T2> idFunc)
+        private static void BuildTree<T1, T2>(TreeList<T1, T2> treeList, List<T1> list, T2 pid, Func<T1, T2> pidFunc, Func<T1, T2> idFunc)
         {
             var ls = list.Where(q => object.Equals(pidFunc(q), pid)).ToList();
 
@@ -96,7 +96,7 @@ namespace ToolGood.Bedrock
             };
         }
 
-        private void BuildTree<T1, T2, T3>(TreeList<T1, T2, T3> treeList, List<T1> list, T2 pid, Func<T1, T2> pidFunc, Func<T1, T2> idFunc, Func<T1, T3> orderFunc)
+        private static void BuildTree<T1, T2, T3>(TreeList<T1, T2, T3> treeList, List<T1> list, T2 pid, Func<T1, T2> pidFunc, Func<T1, T2> idFunc, Func<T1, T3> orderFunc)
         {
             var ls = list.Where(q => object.Equals(pidFunc(q), pid)).ToList();
 
