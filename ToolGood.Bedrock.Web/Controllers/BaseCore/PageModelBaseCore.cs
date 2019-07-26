@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using ToolGood.Bedrock.Web.Constants;
+using ToolGood.Bedrock.Web.Extensions;
 using ToolGood.Bedrock.Web.Internals;
 using ToolGood.Bedrock.Web.Mime;
 using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
@@ -41,20 +42,10 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         public override void OnPageHandlerExecuting(PageHandlerExecutingContext context)
         {
             QueryArgs = HttpContextHelper.BuildQueryArgs(context.HttpContext, context.HandlerArguments);
+            ActionResultUtil.QueryArgs = QueryArgs;
             base.OnPageHandlerExecuting(context);
         }
 
-
-        /// <summary>
-        /// 首字母小写json
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        protected IActionResult CamelCaseJson(object data)
-        {
-            var json = data.ToJson();
-            return Content(json, "application/json");
-        }
 
         #region Success
         /// <summary>
@@ -66,23 +57,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected IActionResult Success(object obj, bool usePassword = false)
         {
-            QueryResult result = new QueryResult() {
-                Code = SuccessCode,
-                Data = obj,
-                State = "SUCCESS",
-            };
-            if (QueryArgs != null) {
-                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
-                    result.SqlTimes = QueryArgs.SqlTimes;
-                }
-                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
-                    result.Logs = QueryArgs.Logs;
-                }
-                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
-                    result.EncryptData(args.Password);
-                }
-            }
-            return CamelCaseJson(result);
+            return ActionResultUtil.Success(obj, usePassword);
         }
         /// <summary>
         /// 返回成功
@@ -93,23 +68,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected IActionResult Success<T>(List<T> objs, bool usePassword = false)
         {
-            QueryResult result = new QueryResult() {
-                Code = SuccessCode,
-                Data = objs,
-                State = "SUCCESS",
-            };
-            if (QueryArgs != null) {
-                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
-                    result.SqlTimes = QueryArgs.SqlTimes;
-                }
-                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
-                    result.Logs = QueryArgs.Logs;
-                }
-                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
-                    result.EncryptData(args.Password);
-                }
-            }
-            return CamelCaseJson(result);
+            return ActionResultUtil.Success(objs, usePassword);
         }
         /// <summary>
         /// 返回成功
@@ -120,23 +79,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected IActionResult Success<T>(Page<T> page, bool usePassword = false)
         {
-            QueryResult result = new QueryResult() {
-                Code = SuccessCode,
-                Data = page,
-                State = "SUCCESS",
-            };
-            if (QueryArgs != null) {
-                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
-                    result.SqlTimes = QueryArgs.SqlTimes;
-                }
-                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
-                    result.Logs = QueryArgs.Logs;
-                }
-                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
-                    result.EncryptData(args.Password);
-                }
-            }
-            return CamelCaseJson(result);
+            return ActionResultUtil.Success(page, usePassword);
         }
         /// <summary>
         /// 返回成功
@@ -146,23 +89,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected IActionResult Success(string msg = "SUCCESS", bool usePassword = false)
         {
-            QueryResult result = new QueryResult() {
-                Code = SuccessCode,
-                State = "SUCCESS",
-                Message = msg
-            };
-            if (QueryArgs != null) {
-                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
-                    result.SqlTimes = QueryArgs.SqlTimes;
-                }
-                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
-                    result.Logs = QueryArgs.Logs;
-                }
-                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
-                    result.EncryptData(args.Password);
-                }
-            }
-            return CamelCaseJson(result);
+            return ActionResultUtil.Success(msg, usePassword);
         }
         #endregion
 
@@ -174,32 +101,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected IActionResult Error(ModelStateDictionary ms)
         {
-            List<string> sb = new List<string>();
-            //获取所有错误的Key
-            List<string> Keys = ModelState.Keys.ToList();
-            //获取每一个key对应的ModelStateDictionary
-            foreach (var key in Keys) {
-                var errors = ModelState[key].Errors.ToList();
-                //将错误描述添加到sb中
-                foreach (var error in errors) {
-                    sb.Add(error.ErrorMessage);
-                }
-            }
-            QueryResult result = new QueryResult() {
-                Code = ErrorCode,
-                Message = string.Join(",", sb),
-                State = "ERROR",
-            };
-            if (QueryArgs != null) {
-                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
-                    result.SqlTimes = QueryArgs.SqlTimes;
-                }
-                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
-                    result.Logs = QueryArgs.Logs;
-                }
-  
-            }
-            return CamelCaseJson(result);
+            return ActionResultUtil.Error(ms);
         }
         /// <summary>
         /// 返回错误
@@ -209,23 +111,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected IActionResult Error(string msg = "ERROR", bool usePassword = false)
         {
-            QueryResult result = new QueryResult() {
-                Code = ErrorCode,
-                Message = msg,
-                State = "ERROR",
-            };
-            if (QueryArgs != null) {
-                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
-                    result.SqlTimes = QueryArgs.SqlTimes;
-                }
-                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
-                    result.Logs = QueryArgs.Logs;
-                }
-                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
-                    result.EncryptData(args.Password);
-                }
-            }
-            return CamelCaseJson(result);
+            return ActionResultUtil.Error(msg, usePassword);
         }
         /// <summary>
         /// 返回错误
@@ -236,23 +122,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected IActionResult Error(int code, string msg, bool usePassword = false)
         {
-            QueryResult result = new QueryResult() {
-                Code = code,
-                Message = msg,
-                State = "ERROR",
-            };
-            if (QueryArgs != null) {
-                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
-                    result.SqlTimes = QueryArgs.SqlTimes;
-                }
-                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
-                    result.Logs = QueryArgs.Logs;
-                }
-                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
-                    result.EncryptData(args.Password);
-                }
-            }
-            return CamelCaseJson(result);
+            return ActionResultUtil.Error(code, msg, usePassword);
         }
         /// <summary>
         /// 返回错误
@@ -262,23 +132,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected IActionResult Error(object obj, bool usePassword = false)
         {
-            QueryResult result = new QueryResult() {
-                Code = ErrorCode,
-                Data = obj,
-                State = "ERROR",
-            };
-            if (QueryArgs != null) {
-                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
-                    result.SqlTimes = QueryArgs.SqlTimes;
-                }
-                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
-                    result.Logs = QueryArgs.Logs;
-                }
-                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
-                    result.EncryptData(args.Password);
-                }
-            }
-            return CamelCaseJson(result);
+            return ActionResultUtil.Error(obj, usePassword);
         }
 
         #endregion
@@ -320,7 +174,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected string GetSessionId()
         {
-            return HttpContext.Session.Id;
+            return HttpContext.GetSessionId();
         }
         /// <summary>
         /// 设置Session
@@ -329,7 +183,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <param name="val"></param>
         protected void SetSession(string key, string val)
         {
-            HttpContext.Session.Set(key, Encoding.UTF8.GetBytes(val));
+            HttpContext.SetSession(key, val);
         }
         /// <summary>
         /// 设置Session
@@ -338,7 +192,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <param name="value"></param>
         protected void SetSession(string key, object value)
         {
-            HttpContext.Session.SetString(key, JsonConvert.SerializeObject(value));
+            HttpContext.SetSession(key, value);
         }
         /// <summary>
         /// 获取Session
@@ -347,7 +201,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected string GetSession(string key)
         {
-            return HttpContext.Session.GetString(key);
+            return HttpContext.GetSession(key);
         }
         /// <summary>
         /// 判断session是否存在key
@@ -356,7 +210,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected bool HasSession(string key)
         {
-            return HttpContext.Session.Keys.Any(q => q == key);
+            return HttpContext.HasSession(key);
         }
         /// <summary>
         /// 获取Session
@@ -366,8 +220,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected T GetSession<T>(string key)
         {
-            var value = HttpContext.Session.GetString(key);
-            return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
+            return HttpContext.GetSession<T>(key);
         }
         /// <summary>
         /// 依据key删除Session
@@ -375,7 +228,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <param name="key"></param>
         protected void DeleteSession(string key)
         {
-            HttpContext.Session.Remove(key);
+            HttpContext.DeleteSession(key);
         }
 
         /// <summary>
@@ -386,11 +239,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected bool CheckSession(string key, string val)
         {
-            var sessionCode = HttpContext.Session.GetString(key);
-            if (string.IsNullOrEmpty(sessionCode) || sessionCode != val) {
-                return false;
-            }
-            return true;
+            return HttpContext.CheckSession(key, val);
         }
         #endregion
 
@@ -402,7 +251,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected string GetCookie(string key)
         {
-            return HttpContext.Request.Cookies[key];
+            return HttpContext.GetCookie(key);
         }
         /// <summary>
         /// 设置 Cookie
@@ -411,13 +260,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <param name="val"></param>
         protected void SetCookie(string key, string val)
         {
-            HttpContext.Response.Cookies.Append(key, val, new CookieOptions() {
-                Path = "/",
-                IsEssential = true,
-                HttpOnly = true,
-                //Secure = true, //非https会无效
-                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
-            });
+            HttpContext.SetCookie(key, val);
         }
         /// <summary>
         /// 设置 Cookie
@@ -427,14 +270,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <param name="minutes"></param>
         protected void SetCookie(string key, string val, int minutes)
         {
-            HttpContext.Response.Cookies.Append(key, val, new Microsoft.AspNetCore.Http.CookieOptions() {
-                Path = "/",
-                Expires = DateTime.Now.AddMinutes(minutes),
-                IsEssential = true,
-                HttpOnly = true,
-                //Secure = true, //非https会无效
-                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
-            });
+            HttpContext.SetCookie(key, val, minutes);
         }
         /// <summary>
         /// 设置 Cookie
@@ -444,14 +280,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <param name="dateTime"></param>
         protected void SetCookie(string key, string val, DateTime dateTime)
         {
-            HttpContext.Response.Cookies.Append(key, val, new Microsoft.AspNetCore.Http.CookieOptions() {
-                Path = "/",
-                Expires = dateTime,
-                IsEssential = true,
-                HttpOnly = true,
-                //Secure = true,  //非https会无效
-                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
-            });
+            HttpContext.SetCookie(key, val, dateTime);
         }
         /// <summary>
         /// 依据cookieName 删除 cookie
@@ -459,10 +288,8 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <param name="cookieName"></param>
         protected void DeleteCookie(string cookieName)
         {
-            var val = Request.Cookies[cookieName];
-            if (val != null) {
-                SetCookie(cookieName, "", DateTime.Now.AddYears(-1));
-            }
+            HttpContext.DeleteCookie(cookieName);
+
         }
         /// <summary>
         /// 判断  Cookie是否包含cookieName 
@@ -471,7 +298,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected bool HasCookie(string cookieName)
         {
-            return Request.Cookies.ContainsKey(cookieName);
+            return HttpContext.HasCookie(cookieName);
         }
         #endregion
 
@@ -483,10 +310,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected IActionResult JumpTopUrl(string url)
         {
-            var content = new ContentResult();
-            content.Content = $"<script>top.location.href='{url}'</script>";
-            content.ContentType = "text/html";
-            return content;
+            return ActionResultUtil.JumpTopUrl(url);
         }
         /// <summary>
         /// 跳转Url
@@ -495,10 +319,7 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         /// <returns></returns>
         protected IActionResult JumpUrl(string url)
         {
-            var content = new ContentResult();
-            content.Content = $"<script>location.href='{url}'</script>";
-            content.ContentType = "text/html";
-            return content;
+            return ActionResultUtil.JumpUrl(url);
         }
         #endregion
 
