@@ -27,7 +27,7 @@ namespace ToolGood.Bedrock
         /// </summary>
         /// <param name="hexString"></param>
         /// <returns></returns>
-        public static byte[] FromBase16String(this string hexString)
+        public static byte[] FromBase16String(string hexString)
         {
             byte[] bytes = new byte[hexString.Length / 2];
 
