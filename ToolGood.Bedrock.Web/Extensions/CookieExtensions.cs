@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ToolGood.Bedrock.Web.Extensions
+namespace ToolGood.Bedrock.Web
 {
     public static partial class HttpContextExtensions
     {
+        #region HttpContext Extensions
 
         /// <summary>
         /// 获取 Cookie
@@ -92,5 +94,71 @@ namespace ToolGood.Bedrock.Web.Extensions
         {
             return HttpContext.Request.Cookies.ContainsKey(cookieName);
         }
+        #endregion
+
+        #region ActionContext Extensions
+        /// <summary>
+        /// 获取 Cookie
+        /// </summary>
+        /// <param name="actionContext"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static string GetCookie(this ActionContext actionContext, string key)
+        {
+            return actionContext.HttpContext.GetCookie(key);
+        }
+        /// <summary>
+        /// 设置 Cookie
+        /// </summary>
+        /// <param name="actionContext"></param>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        public static void SetCookie(this ActionContext actionContext, string key, string val)
+        {
+            actionContext.HttpContext.SetCookie(key, val);
+        }
+        /// <summary>
+        /// 设置 Cookie
+        /// </summary>
+        /// <param name="actionContext"></param>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <param name="minutes"></param>
+        public static void SetCookie(this ActionContext actionContext, string key, string val, int minutes)
+        {
+            actionContext.HttpContext.SetCookie(key, val, minutes);
+        }
+        /// <summary>
+        /// 设置 Cookie
+        /// </summary>
+        /// <param name="actionContext"></param>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <param name="dateTime"></param>
+        public static void SetCookie(this ActionContext actionContext, string key, string val, DateTime dateTime)
+        {
+            actionContext.HttpContext.SetCookie(key, val, dateTime);
+        }
+        /// <summary>
+        /// 依据cookieName 删除 cookie
+        /// </summary>
+        /// <param name="actionContext"></param>
+        /// <param name="cookieName"></param>
+        public static void DeleteCookie(this ActionContext actionContext, string cookieName)
+        {
+            actionContext.HttpContext.DeleteCookie(cookieName);
+
+        }
+        /// <summary>
+        /// 判断  Cookie是否包含cookieName 
+        /// </summary>
+        /// <param name="actionContext"></param>
+        /// <param name="cookieName"></param>
+        /// <returns></returns>
+        public static bool HasCookie(this ActionContext actionContext, string cookieName)
+        {
+            return actionContext.HttpContext.HasCookie(cookieName);
+        }
+        #endregion
     }
 }

@@ -70,15 +70,6 @@ namespace System
         }
 
         /// <summary>
-        /// 获取 SessionId
-        /// </summary>
-        /// <returns></returns>
-        public static string GetSessionId(this HttpContext context)
-        {
-            return context.Session.Id;
-        }
-
-        /// <summary>
         /// 获取 UserAgent
         /// </summary>
         /// <returns></returns>
@@ -86,6 +77,7 @@ namespace System
         {
             return context.Request.Headers["User-Agent"].ToSafeString();
         }
+
 
     }
 }

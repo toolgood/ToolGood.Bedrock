@@ -14,6 +14,67 @@ namespace ToolGood.Bedrock
         /// 依据父ID 倒序排列
         /// </summary>
         /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="pidFunc"></param>
+        /// <param name="idFunc"></param>
+        /// <returns></returns>
+        public static List<T1> OrderByDescOnPid<T1>(List<T1> list, Func<T1, long> pidFunc, Func<T1, long> idFunc)
+        {
+            TreeList<T1, long> treeList = new TreeList<T1, long>();
+            BuildTree(treeList, list, 0, pidFunc, idFunc);
+            return treeList.ToList2();
+        }
+        /// <summary>
+        /// 依据父ID 正序排列
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="pidFunc"></param>
+        /// <param name="idFunc"></param>
+        /// <returns></returns>
+        public static List<T1> OrderByAscOnPid<T1>(List<T1> list, Func<T1, long> pidFunc, Func<T1, long> idFunc)
+        {
+            TreeList<T1, long> treeList = new TreeList<T1, long>();
+            BuildTree(treeList, list, 0, pidFunc, idFunc);
+            return treeList.ToList();
+        }
+
+
+        /// <summary>
+        /// 依据父ID 倒序排列
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="pidFunc"></param>
+        /// <param name="idFunc"></param>
+        /// <returns></returns>
+        public static List<T1> OrderByDescOnPid<T1>(List<T1> list, Func<T1, int> pidFunc, Func<T1, int> idFunc)
+        {
+            TreeList<T1, int> treeList = new TreeList<T1, int>();
+            BuildTree(treeList, list, 0, pidFunc, idFunc);
+            return treeList.ToList2();
+        }
+        /// <summary>
+        /// 依据父ID 正序排列
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="pidFunc"></param>
+        /// <param name="idFunc"></param>
+        /// <returns></returns>
+        public static List<T1> OrderByAscOnPid<T1>(List<T1> list, Func<T1, int> pidFunc, Func<T1, int> idFunc)
+        {
+            TreeList<T1, int> treeList = new TreeList<T1, int>();
+            BuildTree(treeList, list, 0, pidFunc, idFunc);
+            return treeList.ToList();
+        }
+
+
+
+        /// <summary>
+        /// 依据父ID 倒序排列
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
         /// <param name="list"></param>
         /// <param name="pid"></param>
