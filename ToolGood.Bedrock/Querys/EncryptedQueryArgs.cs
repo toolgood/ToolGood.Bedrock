@@ -120,7 +120,14 @@ namespace ToolGood.Bedrock
                 var bs = ThreeRCX.Encrypt(Base64.FromBase64ForUrlString(Ciphertext), Password);//解密
                 var json = Encoding.UTF8.GetString(bs);
 
-                JData = JObject.Parse(json);
+
+                Data = JsonConvert.DeserializeObject<T>(json);
+
+                JData = JObject.Parse(json, new JsonLoadSettings() {
+                    CommentHandling = CommentHandling.Ignore,
+                    LineInfoHandling = LineInfoHandling.Ignore,
+                    DuplicatePropertyNameHandling = DuplicatePropertyNameHandling.Replace
+                });
                 Data = JData.ToObject<T>();
                 return true;
             } catch { }
@@ -133,7 +140,7 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public override string CheckDate()
         {
-            CheckDate(typeof(T), Data, JData, null, out string errMsg);
+            CheckDate(typeof(T), Data, /*JData,*/ null, out string errMsg);
             return errMsg;
         }
 
@@ -144,12 +151,19 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public override bool CheckDate(out string errMsg)
         {
-            return CheckDate(typeof(T), Data, JData, null, out errMsg);
+            try {
+                return CheckDate(typeof(T), Data,/* JData,*/ null, out errMsg);
+            } catch (Exception ex) {
+                errMsg = ex.ToErrMsg();
+                return false;
+            }
         }
 
-        private bool CheckDate(Type type, object value, JToken jObject, string baseName, out string errMsg)
+        private bool CheckDate(Type type, object value, /*JToken jObject, */string baseName, out string errMsg)
         {
-            if (type.IsClass == false && SimpleTypes.Contains(type) == false) { errMsg = null; return true; }
+            if (type.IsClass == false) { errMsg = null; return true; }
+            if (SimpleTypes.Contains(type)) { errMsg = null; return true; }
+            //if (type.IsClass == false && SimpleTypes.Contains(type) == false) { errMsg = null; return true; }
 
             var pis = type.GetProperties();
             foreach (var pi in pis) {
@@ -163,7 +177,7 @@ namespace ToolGood.Bedrock
                 var atts = pi.GetCustomAttributes<System.ComponentModel.DataAnnotations.ValidationAttribute>(true).ToList();
                 if (atts.Count > 0) {
                     foreach (var att in atts) {
-                        if ((att is System.ComponentModel.DataAnnotations.RequiredAttribute || att is RequiredAttribute) && jObject[pi.Name] == null) {
+                        if ((att is System.ComponentModel.DataAnnotations.RequiredAttribute || att is RequiredAttribute)/* && jObject[pi.Name] == null*/) {
                             errMsg = att.FormatErrorMessage(GetPropertyName(baseName, pi.Name));
                             return false;
                         } else if (att.IsValid(obj) == false) {
@@ -175,21 +189,32 @@ namespace ToolGood.Bedrock
 
                 if (pi.PropertyType.IsClass && obj != null && SimpleTypes.Contains(pi.PropertyType) == false) {
                     if (obj is IList list) {
-                        var jArray = jObject[pi.Name] as JArray;
+                        //JArray jArray = null;
+                        //foreach (var item in jObject.Children()) {
+                        //    if (item.Path.ToLower() == pi.Name.ToLower()) {
+                        //        jArray = item.Values() as JArray;
+                        //        break;
+                        //    }
+                        //}
 
+                        //var jArray = jObject.FirstOrDefault(q => ((JToken)q).Path.ToLower() == pi.Name.ToLower()) as JArray;
+
+                        //var jArray = jObject[pi.Name] as JArray;
                         for (int i = 0; i < list.Count; i++) {
                             var item = list[i];
                             if (object.Equals(null, item) == false) {
-                                var jitem = jArray[i];
+                                //var jitem = jArray[i];
                                 var itemType = item.GetType();
-                                if (itemType.IsClass == false && SimpleTypes.Contains(itemType) == false) { continue; }
-                                if (CheckDate(itemType, item, jitem, GetPropertyName(baseName, pi.Name, i), out errMsg) == false) {
+                                if (itemType.IsClass == false) { continue; }
+                                if (SimpleTypes.Contains(itemType)) { continue; }
+
+                                if (CheckDate(itemType, item,/* jitem,*/ GetPropertyName(baseName, pi.Name, i), out errMsg) == false) {
                                     return false;
                                 }
                             }
                         }
                     } else {
-                        if (CheckDate(pi.PropertyType, obj, jObject[pi.Name], GetPropertyName(baseName, pi.Name), out errMsg) == false) {
+                        if (CheckDate(pi.PropertyType, obj, /*jObject[pi.Name],*/ GetPropertyName(baseName, pi.Name), out errMsg) == false) {
                             return false;
                         }
                     }

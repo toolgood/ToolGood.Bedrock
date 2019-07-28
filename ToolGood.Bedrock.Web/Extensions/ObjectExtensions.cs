@@ -1142,7 +1142,7 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// <param name="b"></param>
         /// <param name="checkValue"></param>
         /// <returns></returns>
-        public static HtmlString ToChecked<T>(this T b, T checkValue)
+        public static HtmlString ToCheckedWhenIs<T>(this T b, T checkValue)
         {
             if (object.Equals(null, b)) {
                 return new HtmlString("");
@@ -1152,6 +1152,150 @@ namespace ToolGood.Bedrock.Web.Extensions
             }
             return new HtmlString("");
         }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="objs"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToCheckedWhenIs(this List<string> objs, string checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                if (object.Equals(item, checkValue)) {
+                    return new HtmlString("checked");
+                }
+            }
+            return new HtmlString("");
+        }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="objs"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToCheckedWhenIs(this string[] objs, string checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                if (object.Equals(item, checkValue)) {
+                    return new HtmlString("checked");
+                }
+            }
+            return new HtmlString("");
+        }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="objs"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToCheckedWhenIs(this List<int> objs, int checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                if (object.Equals(item, checkValue)) {
+                    return new HtmlString("checked");
+                }
+            }
+            return new HtmlString("");
+        }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="objs"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToCheckedWhenIs(this int[] objs, int checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                if (object.Equals(item, checkValue)) {
+                    return new HtmlString("checked");
+                }
+            }
+            return new HtmlString("");
+        }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="objs"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToCheckedWhenIs(this List<long> objs, long checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                if (object.Equals(item, checkValue)) {
+                    return new HtmlString("checked");
+                }
+            }
+            return new HtmlString("");
+        }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="objs"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToCheckedWhenIs(this long[] objs, long checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                if (object.Equals(item, checkValue)) {
+                    return new HtmlString("checked");
+                }
+            }
+            return new HtmlString("");
+        }
+
+
+
+
+
+
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="objs"></param>
+        /// <param name="value"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToCheckedWhenIs<T, T2>(this List<T> objs, Func<T, T2> value, T2 checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                var val = value(item);
+                if (object.Equals(val, checkValue)) {
+                    return new HtmlString("checked");
+                }
+            }
+            return new HtmlString("");
+        }
+
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="objs"></param>
+        /// <param name="value"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToCheckedWhenIs<T, T2>(this T[] objs, Func<T, T2> value, T2 checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                var val = value(item);
+                if (object.Equals(val, checkValue)) {
+                    return new HtmlString("checked");
+                }
+            }
+            return new HtmlString("");
+        }
+
 
 
         /// <summary>
@@ -1644,13 +1788,153 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// <param name="b"></param>
         /// <param name="checkValue"></param>
         /// <returns></returns>
-        public static HtmlString ToSelected<T>(this T b, T checkValue)
+        public static HtmlString ToSelectedWhenIs<T>(this T b, T checkValue)
         {
             if (object.Equals(null, b)) {
                 return new HtmlString("");
             }
             if (object.Equals(b, checkValue)) {
                 return new HtmlString("selected");
+            }
+            return new HtmlString("");
+        }
+
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="objs"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToSelectedWhenIs(this List<string> objs, string checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                if (object.Equals(item, checkValue)) {
+                    return new HtmlString("selected");
+                }
+            }
+            return new HtmlString("");
+        }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="objs"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToSelectedWhenIs(this string[] objs, string checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                if (object.Equals(item, checkValue)) {
+                    return new HtmlString("selected");
+                }
+            }
+            return new HtmlString("");
+        }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="objs"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToSelectedWhenIs(this List<int> objs, int checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                if (object.Equals(item, checkValue)) {
+                    return new HtmlString("selected");
+                }
+            }
+            return new HtmlString("");
+        }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="objs"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToSelectedWhenIs(this int[] objs, int checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                if (object.Equals(item, checkValue)) {
+                    return new HtmlString("selected");
+                }
+            }
+            return new HtmlString("");
+        }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="objs"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToSelectedWhenIs(this List<long> objs, long checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                if (object.Equals(item, checkValue)) {
+                    return new HtmlString("selected");
+                }
+            }
+            return new HtmlString("");
+        }
+        /// <summary>
+        /// 转成 checked 的 HtmlString 类型
+        /// </summary>
+        /// <param name="objs"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToSelectedWhenIs(this long[] objs, long checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                if (object.Equals(item, checkValue)) {
+                    return new HtmlString("selected");
+                }
+            }
+            return new HtmlString("");
+        }
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="objs"></param>
+        /// <param name="value"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToSelectedWhenIs<T, T2>(this List<T> objs, Func<T, T2> value, T2 checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                var val = value(item);
+                if (object.Equals(val, checkValue)) {
+                    return new HtmlString("selected");
+                }
+            }
+            return new HtmlString("");
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="objs"></param>
+        /// <param name="value"></param>
+        /// <param name="checkValue"></param>
+        /// <returns></returns>
+        public static HtmlString ToSelectedWhenIs<T, T2>(this T[] objs, Func<T, T2> value, T2 checkValue)
+        {
+            foreach (var item in objs) {
+                if (object.Equals(null, item)) { continue; }
+                var val = value(item);
+                if (object.Equals(val, checkValue)) {
+                    return new HtmlString("selected");
+                }
             }
             return new HtmlString("");
         }
