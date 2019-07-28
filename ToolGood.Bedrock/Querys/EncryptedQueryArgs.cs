@@ -177,10 +177,11 @@ namespace ToolGood.Bedrock
                 var atts = pi.GetCustomAttributes<System.ComponentModel.DataAnnotations.ValidationAttribute>(true).ToList();
                 if (atts.Count > 0) {
                     foreach (var att in atts) {
-                        if ((att is System.ComponentModel.DataAnnotations.RequiredAttribute || att is RequiredAttribute)/* && jObject[pi.Name] == null*/) {
-                            errMsg = att.FormatErrorMessage(GetPropertyName(baseName, pi.Name));
-                            return false;
-                        } else if (att.IsValid(obj) == false) {
+                        //if ((att is System.ComponentModel.DataAnnotations.RequiredAttribute || att is RequiredAttribute)/* && jObject[pi.Name] == null*/) {
+                        //    errMsg = att.FormatErrorMessage(GetPropertyName(baseName, pi.Name));
+                        //    return false;
+                        //} else 
+                        if (att.IsValid(obj) == false) {
                             errMsg = att.FormatErrorMessage(GetPropertyName(baseName, pi.Name));
                             return false;
                         }
