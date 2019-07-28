@@ -18,12 +18,19 @@ namespace ToolGood.Bedrock.Web.Extensions
         /// 转成 HtmlString 类型
         /// </summary>
         /// <param name="txt"></param>
+        /// <param name="replaceEnter"></param>
+        /// <param name="useHtml"></param>
         /// <returns></returns>
-        public static HtmlString ToHtml(this string txt)
+        public static HtmlString ToHtml(this string txt, bool replaceEnter = false, bool useHtml = false)
         {
             if (object.Equals(null, txt)) { return new HtmlString(""); }
 
-            txt = txt.Replace("\r\n", "<br />").Replace("\n", "<br />").Replace("\r", "<br />");
+            if (useHtml) {
+                txt = System.Web.HttpUtility.HtmlEncode(txt);
+            }
+            if (replaceEnter) {
+                txt = txt.Replace("\r\n", "<br />").Replace("\n", "<br />").Replace("\r", "<br />");
+            }
             return new HtmlString(txt);
         }
         /// <summary>
@@ -798,6 +805,14 @@ namespace ToolGood.Bedrock.Web.Extensions
         #endregion
 
         #region ToOption
+        private static string HtmlEncode(this string txt)
+        {
+            if (string.IsNullOrEmpty(txt)) {
+                return "";
+            }
+            return System.Web.HttpUtility.HtmlEncode(txt);
+        }
+
         /// <summary>
         /// 转成 Option 的 HtmlString 类型
         /// </summary>
@@ -838,7 +853,7 @@ namespace ToolGood.Bedrock.Web.Extensions
             string html = "<option value=\"{0}\">{1}</option>";
             StringBuilder sb = new StringBuilder();
             foreach (var item in list) {
-                sb.AppendFormat(html, item, item);
+                sb.AppendFormat(html, item.HtmlEncode(), item);
             }
             return new HtmlString(sb.ToString());
         }
@@ -854,7 +869,7 @@ namespace ToolGood.Bedrock.Web.Extensions
             StringBuilder sb = new StringBuilder();
             foreach (var item in list) {
                 var selected = item == value ? "selected" : "";
-                sb.AppendFormat(html, item, item, selected);
+                sb.AppendFormat(html, item.HtmlEncode(), item, selected);
             }
             return new HtmlString(sb.ToString());
         }
@@ -869,7 +884,7 @@ namespace ToolGood.Bedrock.Web.Extensions
             string html = "<option value=\"{0}\">{1}</option>";
             StringBuilder sb = new StringBuilder();
             foreach (KeyValuePair<TKey, TValue> item in dict) {
-                sb.AppendFormat(html, item.Key, item.Value);
+                sb.AppendFormat(html, item.Key, item.Value.ToSafeString().HtmlEncode());
             }
             return new HtmlString(sb.ToString());
         }
@@ -885,7 +900,7 @@ namespace ToolGood.Bedrock.Web.Extensions
             StringBuilder sb = new StringBuilder();
             foreach (KeyValuePair<TKey, TValue> item in dict) {
                 var selected = object.Equals(item.Key, value) ? "selected" : "";
-                sb.AppendFormat(html, item.Key, item.Value, selected);
+                sb.AppendFormat(html, item.Key, item.Value.ToSafeString().HtmlEncode(), selected);
             }
             return new HtmlString(sb.ToString());
         }
@@ -1108,10 +1123,10 @@ namespace ToolGood.Bedrock.Web.Extensions
             if (values.Length > 0) html = "<option value=\"{1}\" {2}>{0}</option>";
 
             foreach (var g in gs) {
-                if (g != "") sb.AppendFormat("<optgroup label=\"{0}\">", g);
+                if (g != "") sb.AppendFormat("<optgroup label=\"{0}\">", g.HtmlEncode());
                 foreach (var item in list.Where(q => q.Item1 == g)) {
                     var selected = values.Contains(item.Item3) ? "selected" : "";
-                    sb.AppendFormat(html, item.Item2, item.Item3, selected);
+                    sb.AppendFormat(html, item.Item2.HtmlEncode(), item.Item3, selected);
                 }
                 if (g != "") sb.Append("</optgroup>");
             }

@@ -353,7 +353,7 @@ namespace System
             bool flag = obj == null;
             string result;
             if (flag) {
-                result = string.Empty;
+                result = "";
             } else {
                 result = obj.ToString();
             }
