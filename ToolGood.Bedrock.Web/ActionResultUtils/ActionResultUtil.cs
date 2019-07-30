@@ -27,6 +27,7 @@ namespace ToolGood.Bedrock.Web
             var json = data.ToJson();
             return new ContentResult() {
                 Content = json,
+                StatusCode = 200,
                 ContentType = "application/json"
             };
         }
