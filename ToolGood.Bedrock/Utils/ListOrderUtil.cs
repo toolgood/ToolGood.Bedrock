@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ToolGood.Bedrock
 {
@@ -10,6 +11,48 @@ namespace ToolGood.Bedrock
     /// </summary>
     public static class ListOrderUtil
     {
+        /// <summary>
+        /// 依据 数字 排序 倒序
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="numFunc"></param>
+        /// <returns></returns>
+        public static List<T1> OrderByDescOnNumber<T1>(List<T1> list, Func<T1, string> numFunc)
+        {
+            SortedDictionary<string, T1> dict = new SortedDictionary<string, T1>();
+            foreach (var item in list) {
+                var num = numFunc(item);
+                var key = Regex.Replace(num, @"\d+", (m) => {
+                    return m.Value.PadLeft(20, '0');
+                });
+                dict[key] = item;
+            }
+            return dict.Values.Reverse().ToList();
+        }
+        /// <summary>
+        /// 依据 数字 排序 升序
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="numFunc"></param>
+        /// <returns></returns>
+        public static List<T1> OrderByOnNumber<T1>(List<T1> list, Func<T1, string> numFunc)
+        {
+            SortedDictionary<string, T1> dict = new SortedDictionary<string, T1>();
+            foreach (var item in list) {
+                var num = numFunc(item);
+                var key = Regex.Replace(num, @"\d+", (m) => {
+                    return m.Value.PadLeft(20, '0');
+                });
+                dict[key] = item;
+            }
+            return dict.Values.ToList();
+        }
+
+
+
+
         /// <summary>
         /// 依据父ID 倒序排列
         /// </summary>
