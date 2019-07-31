@@ -23,6 +23,36 @@
         public const string MemberToken = "mtk";
 
         public const string Theme = "theme";
+
+        /// <summary>
+        /// 登录地址
+        /// </summary>
+        public static string AdminLoginUrl = "/admin/login";
+
+        /// <summary>
+        /// 登录密码
+        /// </summary>
+        public static string AdminLoginPassword = "a123456";
+
+        /// <summary>
+        /// 使用管理密码
+        /// </summary>
+        public static bool UsedManagerPassword = true;
+
+        /// <summary>
+        /// 管理密码
+        /// </summary>
+        public static string AdminManagerPassword = "a12346789";
+
+        /// <summary>
+        /// 强制密码过期
+        /// </summary>
+        public static bool ForcedPasswordExpiration = false;
+
+        /// <summary>
+        /// 强制密码过期 天数
+        /// </summary>
+        public static int ForcedPasswordExpirationDays = 7;
     }
 
 }
