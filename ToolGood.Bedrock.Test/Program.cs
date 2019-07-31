@@ -4,6 +4,7 @@ using ToolGood.Bedrock;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using ToolGood.Bedrock.Tools;
+using System.Text.RegularExpressions;
 
 namespace ToolGood.Bedrock.Test
 {
@@ -11,7 +12,10 @@ namespace ToolGood.Bedrock.Test
     {
         static void Main(string[] args)
         {
- 
+            var key = Regex.Replace("a1", @"\d+", (m) => {
+                return m.Value.PadLeft(10, '0');
+            });
+
 
             UserPassword password = new UserPassword();
             password.Data = new UserPassword.Dto() {
