@@ -1,11 +1,13 @@
 ﻿using System;
 using Newtonsoft.Json;
+using ToolGood.Bedrock.Attributes;
 
 namespace ToolGood.Bedrock.Internals
 {
     /// <summary>
     /// 调试日志
     /// </summary>
+    [JsonRequireAttribute]
     public class DebugLog
     {
         /// <summary>

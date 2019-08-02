@@ -124,5 +124,34 @@ namespace ToolGood.Bedrock.Web
             return CamelCaseJson(result);
         }
 
+        /// <summary>
+        /// 返回错误
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="ignoreNames"></param>
+        /// <param name="usePassword"></param>
+        /// <returns></returns>
+        public static IActionResult Error(object obj, IEnumerable<string> ignoreNames, bool usePassword = false)
+        {
+            QueryResult result = new QueryResult() {
+                Code = ErrorCode,
+                Data = obj,
+                State = "ERROR",
+            };
+            if (QueryArgs != null) {
+                if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
+                    result.SqlTimes = QueryArgs.SqlTimes;
+                }
+                if (QueryArgs.Logs != null && QueryArgs.Logs.Count > 0) {
+                    result.Logs = QueryArgs.Logs;
+                }
+                if (usePassword && QueryArgs is EncryptedQueryArgs args) {
+                    result.EncryptData(args.Password, ignoreNames);
+                }
+            }
+            return CamelCaseJson(result, ignoreNames);
+        }
+
+
     }
 }

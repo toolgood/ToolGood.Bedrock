@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using ToolGood.Bedrock.Attributes;
 using ToolGood.Bedrock.Internals;
 using ToolGood.RcxCrypto;
 using ToolGood.ReadyGo3;
@@ -10,6 +12,7 @@ namespace ToolGood.Bedrock
     /// <summary>
     /// 查询结果
     /// </summary>
+    [JsonRequireAttribute]
     public class QueryResult
     {
         /// <summary>
@@ -59,6 +62,23 @@ namespace ToolGood.Bedrock
         {
             if (password!= null && password.Length>0) {
                 var json = JsonConvert.SerializeObject(this.Data);
+                var bytes = Encoding.UTF8.GetBytes(json);
+
+                var bs = ThreeRCX.Encrypt(bytes, password);//解密
+                Ciphertext = Base64.ToBase64String(bs);
+                Data = null;
+            }
+        }
+
+        /// <summary>
+        /// 加密数据
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="ignoreNames"></param>
+        public void EncryptData(byte[] password, IEnumerable<string> ignoreNames)
+        {
+            if (password != null && password.Length > 0) {
+                var json = this.Data.ToJson(ignoreNames);
                 var bytes = Encoding.UTF8.GetBytes(json);
 
                 var bs = ThreeRCX.Encrypt(bytes, password);//解密

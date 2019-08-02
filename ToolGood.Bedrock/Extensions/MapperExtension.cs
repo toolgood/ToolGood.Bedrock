@@ -1,5 +1,7 @@
 ﻿using Mapster;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace System
 {
@@ -36,6 +38,21 @@ namespace System
         /// <summary>
         /// 对象映射
         /// </summary>
+        /// <typeparam name="TDestination"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="ignoreNames">忽略字段</param>
+        /// <returns></returns>
+        public static TDestination MapTo<TDestination>(this object source, IEnumerable<string> ignoreNames)
+        {
+            if (source == null) { return default(TDestination); }
+            var setting = new TypeAdapterConfig().NewConfig(source.GetType(), typeof(TDestination)).Ignore(ignoreNames.ToArray());
+            return source.Adapt<TDestination>(setting.Config);
+        }
+
+
+        /// <summary>
+        /// 对象映射
+        /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <typeparam name="TDestination"></typeparam>
         /// <param name="source"></param>
@@ -56,6 +73,21 @@ namespace System
         public static TDestination MapTo<TSource, TDestination>(this TSource source, params string[] ignoreNames)
         {
             var setting = TypeAdapterConfig<TSource, TDestination>.NewConfig().Ignore(ignoreNames);
+            //var setting = new TypeAdapterConfig().NewConfig<TSource, TDestination>();
+            //setting.Ignore(args);
+            return source.Adapt<TDestination>(setting.Config);
+        }
+        /// <summary>
+        /// 对象映射
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TDestination"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="ignoreNames">忽略字段</param>
+        /// <returns></returns>
+        public static TDestination MapTo<TSource, TDestination>(this TSource source, IEnumerable<string> ignoreNames)
+        {
+            var setting = TypeAdapterConfig<TSource, TDestination>.NewConfig().Ignore(ignoreNames.ToArray());
             //var setting = new TypeAdapterConfig().NewConfig<TSource, TDestination>();
             //setting.Ignore(args);
             return source.Adapt<TDestination>(setting.Config);
@@ -89,6 +121,22 @@ namespace System
 
             return source.Adapt<TSource, TDestination>(destination, setting.Config);
         }
+        /// <summary>
+        /// 对象映射
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TDestination"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        /// <param name="ignoreNames">忽略字段</param>
+        /// <returns></returns>
+        public static TDestination MapTo<TSource, TDestination>(this TSource source, TDestination destination, IEnumerable<string> ignoreNames)
+        {
+            var setting = TypeAdapterConfig<TSource, TDestination>.NewConfig().Ignore(ignoreNames.ToArray());
+
+            return source.Adapt<TSource, TDestination>(destination, setting.Config);
+        }
+
 
         /// <summary>
         /// 对象映射
@@ -117,5 +165,20 @@ namespace System
             var setting = new TypeAdapterConfig().NewConfig(sourceType, destinationType).Ignore(ignoreNames);
             return source.Adapt(destination, sourceType, destinationType, setting.Config);
         }
+        /// <summary>
+        /// 对象映射
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        /// <param name="sourceType"></param>
+        /// <param name="destinationType"></param>
+        /// <param name="ignoreNames">忽略字段</param>
+        /// <returns></returns>
+        public static object MapTo(this object source, object destination, Type sourceType, Type destinationType, IEnumerable<string> ignoreNames)
+        {
+            var setting = new TypeAdapterConfig().NewConfig(sourceType, destinationType).Ignore(ignoreNames.ToArray());
+            return source.Adapt(destination, sourceType, destinationType, setting.Config);
+        }
+
     }
 }

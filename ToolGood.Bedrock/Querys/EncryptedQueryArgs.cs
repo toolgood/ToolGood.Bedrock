@@ -92,6 +92,7 @@ namespace ToolGood.Bedrock
     /// 加密过的查询参数
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [JsonRequireAttribute]
     public abstract class EncryptedQueryArgs<T> : EncryptedQueryArgs
     {
         /// <summary>

@@ -1,11 +1,13 @@
 ﻿using System;
 using Newtonsoft.Json;
+using ToolGood.Bedrock.Attributes;
 
 namespace ToolGood.Bedrock.Internals
 {
     /// <summary>
     /// sql调试时间
     /// </summary>
+    [JsonRequireAttribute]
     public class DebugSqlTime
     {
         /// <summary>

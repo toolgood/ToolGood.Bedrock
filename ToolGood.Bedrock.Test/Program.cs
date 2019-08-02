@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using ToolGood.Bedrock.Tools;
 using System.Text.RegularExpressions;
+using ToolGood.Bedrock.Attributes;
+using ToolGood.ReadyGo3;
 
 namespace ToolGood.Bedrock.Test
 {
@@ -12,6 +14,15 @@ namespace ToolGood.Bedrock.Test
     {
         static void Main(string[] args)
         {
+            pp p = new pp();
+            p.bbb = new Page<bbb>();
+            p.bbb.Items = new List<bbb>();
+            p.bbb.Items.Add(new bbb());
+
+            var tjson = p.ToJson("a1");
+            var tjson2 = p.ToJson(false);
+
+
             var key = Regex.Replace("a1", @"\d+", (m) => {
                 return m.Value.PadLeft(10, '0');
             });
@@ -26,7 +37,7 @@ namespace ToolGood.Bedrock.Test
                 }
             };
             int a = 2;
-           
+
 
             var msg = password.CheckDate();
             var vvv = "".IsNotNull();
@@ -54,12 +65,33 @@ namespace ToolGood.Bedrock.Test
             Console.WriteLine("Hello World!");
         }
     }
+    public class pp
+    {
+        public int A { get; set; }
+        public int a1 { get; set; }
+        public int a2 { get; set; }
+        public int a3 { get; set; }
+        public int a4 { get; set; }
+
+        public Page<bbb> bbb { get; set; }
+
+    }
+    public class bbb
+    {
+        public int A { get; set; }
+        public int a1 { get; set; }
+        public int a2 { get; set; }
+        public int a3 { get; set; }
+        public int a4 { get; set; }
+    }
+
+
     public class UserPassword : EncryptedQueryArgs<UserPassword.Dto>
     {
         public class Dto
         {
             //[Required]
-            [StringLength(20)]
+            //[StringLength(20)]
             public string UserName { get; set; }
 
             public string Password { get; set; }
@@ -72,7 +104,7 @@ namespace ToolGood.Bedrock.Test
         }
         public class Action
         {
-            [Required]
+            //[Required]
 
             public string Name { get; set; }
         }

@@ -16,20 +16,21 @@ namespace ToolGood.Bedrock.Web
         internal static QueryArgs QueryArgs;
 
 
-
         /// <summary>
         /// 首字母小写json
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="data">原数据</param>
+        /// <param name="ignoreNames">忽略的字段名</param>
         /// <returns></returns>
-        private static IActionResult CamelCaseJson(object data)
+        private static IActionResult CamelCaseJson(object data, IEnumerable<string> ignoreNames = null)
         {
-            var json = data.ToJson();
+            var json = data.ToJson(ignoreNames);
             return new ContentResult() {
                 Content = json,
                 StatusCode = 200,
                 ContentType = "application/json"
             };
         }
+
     }
 }
