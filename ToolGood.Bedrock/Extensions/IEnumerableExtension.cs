@@ -185,6 +185,51 @@ namespace System
                 ? source.Where(predicate)
                 : source;
         }
+
+        /// <summary>
+        /// 忽略大小写的字符串相等比较，判断是否以任意一个待比较字符串相等
+        /// </summary>
+        /// <param name="value">字符串</param>
+        /// <param name="strs">待比较字符串数组</param>
+        /// <returns></returns>
+        public static bool ContainsIgnoreCase(this IEnumerable<string> strs, string value)
+        {
+            foreach (var item in strs) {
+                if (String.Equals(value, item, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+            return false;
+        }
+ 
+
+        /// <summary>忽略大小写的字符串开始比较，判断是否以任意一个待比较字符串开始</summary>
+        /// <param name="value">字符串</param>
+        /// <param name="strs">待比较字符串数组</param>
+        /// <returns></returns>
+        public static Boolean StartsWithIgnoreCase(this IEnumerable<string> strs, string value)
+        {
+            if (String.IsNullOrEmpty(value)) return false;
+
+            foreach (var item in strs) {
+                if (value.StartsWith(item, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+            return false;
+        }
+
+        /// <summary>忽略大小写的字符串结束比较，判断是否以任意一个待比较字符串结束</summary>
+        /// <param name="value">字符串</param>
+        /// <param name="strs">待比较字符串数组</param>
+        /// <returns></returns>
+        public static Boolean EndsWithIgnoreCase(this IEnumerable<string> strs, string value)
+        {
+            if (String.IsNullOrEmpty(value)) return false;
+
+            foreach (var item in strs) {
+                if (value.EndsWith(item, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+            return false;
+        }
+
+
     }
 
 }

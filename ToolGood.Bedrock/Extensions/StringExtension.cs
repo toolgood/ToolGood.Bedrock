@@ -69,6 +69,66 @@ namespace System
             return false;
         }
 
+
+        /// <summary>忽略大小写的字符串相等比较，判断是否以任意一个待比较字符串相等</summary>
+        /// <param name="value">字符串</param>
+        /// <param name="strs">待比较字符串数组</param>
+        /// <returns></returns>
+        public static Boolean EqualIgnoreCase(this String value, IEnumerable<string> strs)
+        {
+            foreach (var item in strs) {
+                if (String.Equals(value, item, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+            return false;
+        }
+
+        /// <summary>忽略大小写的字符串开始比较，判断是否以任意一个待比较字符串开始</summary>
+        /// <param name="value">字符串</param>
+        /// <param name="strs">待比较字符串数组</param>
+        /// <returns></returns>
+        public static Boolean StartsWithIgnoreCase(this String value, IEnumerable<string> strs)
+        {
+            if (String.IsNullOrEmpty(value)) return false;
+
+            foreach (var item in strs) {
+                if (value.StartsWith(item, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+            return false;
+        }
+
+        /// <summary>忽略大小写的字符串结束比较，判断是否以任意一个待比较字符串结束</summary>
+        /// <param name="value">字符串</param>
+        /// <param name="strs">待比较字符串数组</param>
+        /// <returns></returns>
+        public static Boolean EndsWithIgnoreCase(this String value, IEnumerable<string> strs)
+        {
+            if (String.IsNullOrEmpty(value)) return false;
+
+            foreach (var item in strs) {
+                if (value.EndsWith(item, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 忽略大小写的字符串结束比较，判断是否包含任意一个待比较字符串
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="strs"></param>
+        /// <returns></returns>
+        public static bool ContainsIgnoreCase(this string value, IEnumerable<string> strs)
+        {
+            if (String.IsNullOrEmpty(value)) return false;
+            var lowStr = value.ToLowerInvariant();
+            foreach (var item in strs) {
+                if (value.Contains(item.ToLowerInvariant())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
         /// <summary>
         ///     忽略大小写比较
         /// </summary>
@@ -104,25 +164,6 @@ namespace System
         #endregion
 
         #region 空判断
-        ///// <summary>
-        ///// 对象是空
-        ///// </summary>
-        ///// <param name="obj"></param>
-        ///// <returns></returns>
-        //public static bool IsNull(this string obj)
-        //{
-        //    return obj == null;
-        //}
-
-        ///// <summary>
-        ///// 对象不为空
-        ///// </summary>
-        ///// <param name="obj"></param>
-        ///// <returns></returns>
-        //public static bool IsNotNull(this string obj)
-        //{
-        //    return obj != null;
-        //}
 
         /// <summary>
         /// 对家是否为空
