@@ -25,6 +25,13 @@
         public const string Theme = "theme";
 
         /// <summary>
+        /// cookie 密码
+        /// </summary>
+        public static string CookiePassword = "abc123456789";
+
+        public static string AdminNoAccessUrl = "/admin/NoAccess";
+
+        /// <summary>
         /// 登录地址
         /// </summary>
         public static string AdminLoginUrl = "/admin/login";
