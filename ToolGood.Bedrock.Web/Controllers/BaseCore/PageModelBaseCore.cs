@@ -21,20 +21,14 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
 {
     public abstract class PageModelBaseCore : PageModel
     {
-        [BindProperty]
         public int SuccessCode { get { return CommonConstants.SuccessCode; } }
 
-        [BindProperty]
         public string SuccessStr { get { return CommonConstants.SuccessStr; } }
 
-        [BindProperty]
         public int ErrorCode { get { return CommonConstants.ErrorCode; } }
 
-        [BindProperty]
         public string ErrorStr { get { return CommonConstants.ErrorStr; } }
 
-
-        [BindProperty]
         public QueryArgs QueryArgs { get; set; }
 
 
