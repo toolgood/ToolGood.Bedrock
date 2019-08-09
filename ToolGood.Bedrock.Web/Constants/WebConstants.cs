@@ -24,11 +24,15 @@
 
         public const string Theme = "theme";
 
+
         /// <summary>
         /// cookie 密码
         /// </summary>
         public static string CookiePassword = "abc123456789";
 
+        /// <summary>
+        /// 无权展示页面
+        /// </summary>
         public static string AdminNoAccessUrl = "/admin/NoAccess";
 
         /// <summary>
@@ -40,6 +44,11 @@
         /// 登录密码
         /// </summary>
         public static string AdminLoginPassword = "a123456";
+
+        /// <summary>
+        /// 使用管理模式 TryAdminMode
+        /// </summary>
+        public const string AdminModeKeyword = "TryAdminMode";
 
         /// <summary>
         /// 使用管理密码
