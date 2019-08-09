@@ -57,8 +57,8 @@ namespace ToolGood.Bedrock
             if (Timestamp == 0) { errMsg = "timestamp is null."; return false; }
             if (string.IsNullOrWhiteSpace(Sign)) { errMsg = "sign is null."; return false; }
 
-            var st = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Timestamp);
-            if (Math.Abs(st.Seconds) > 15) { errMsg = "timestamp is error."; return false; }
+            //var st = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Timestamp);
+            //if (Math.Abs(st.Days) >= 1) { errMsg = "timestamp is error."; return false; }
 
             var txt = $"{Ciphertext.ToSafeString()}|{RsaKey.ToSafeString()}|{Timestamp.ToSafeString()}";
             var hash = HashUtil.GetMd5String(txt);
@@ -69,6 +69,16 @@ namespace ToolGood.Bedrock
             errMsg = null;
             return true;
         }
+
+        /// <summary>
+        /// 获取时间截差值
+        /// </summary>
+        /// <returns></returns>
+        public TimeSpan GetTimestampDiff()
+        {
+            return DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Timestamp);
+        }
+
         /// <summary>
         /// 解密
         /// </summary>
