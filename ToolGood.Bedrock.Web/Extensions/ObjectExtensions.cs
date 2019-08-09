@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace ToolGood.Bedrock.Web.Extensions
@@ -2443,6 +2446,39 @@ namespace ToolGood.Bedrock.Web.Extensions
             return obj.ToJson().ToHtml();
         }
         #endregion
+
+
+        #region AntiForgeryToken 扩展
+        /// <summary>
+        /// 获取AntiForgeryToken
+        /// </summary>
+        /// <param name="helper"></param>
+        /// <returns></returns>
+        public static string GetAntiForgeryToken(this IHtmlHelper helper)
+        {
+            StringBuilder sb = new StringBuilder();
+            TextWriter writer = new StringWriter(sb);
+            helper.AntiForgeryToken().WriteTo(writer, System.Text.Encodings.Web.HtmlEncoder.Default);
+            writer.Dispose();
+            Match value = Regex.Match(sb.ToString(), "(?:value=\")(.*)(?:\")");
+            if (value.Success) {
+                return value.Groups[1].Value;
+            }
+            return "";
+        }
+
+        /// <summary>
+        /// 获取 AntiForgeryToken 名称
+        /// </summary>
+        /// <param name="helper"></param>
+        /// <returns></returns>
+        public static string GetAntiForgeryTokenName(this IHtmlHelper helper)
+        {
+            return "__RequestVerificationToken";
+        }
+
+        #endregion
+
 
     }
 }

@@ -16,19 +16,7 @@ namespace ToolGood.Bedrock.Web.Test
 {
     public class Startup : StartupCore
     {
-        public Startup(IConfiguration configuration) : base(configuration)
-        {
-        }
-
-        public override void IocManagerRegister(ContainerManager containerManager)
-        {
-        }
-
-        public override void RouteRegister(IRouteBuilder routes)
-        {
-        }
-
-        public override void ServiceRegister(IServiceCollection services)
+        public Startup(IHostingEnvironment env) : base(env)
         {
         }
 

@@ -7,13 +7,13 @@ using ToolGood.Bedrock.Web.Controllers;
 
 namespace ToolGood.Bedrock.Web.Test.Components
 {
-    [ApiLogFilter]
-    public class UserInfoViewComponent : ViewComponentBase
-    {
-        protected override async Task<IViewComponentResult> InvokeView()
-        {
+    //[ApiLogFilter]
+    //public class UserInfoViewComponent : ViewComponentBase
+    //{
+    //    protected override async Task<IViewComponentResult> InvokeView()
+    //    {
            
-            return View();
-        }
-    }
+    //        return View();
+    //    }
+    //}
 }
