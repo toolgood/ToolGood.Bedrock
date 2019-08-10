@@ -62,7 +62,7 @@ namespace ToolGood.Bedrock.Web
         /// <param name="fileExt"></param>
         /// <param name="virtDir"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UploadImage(IFormFile file, string md5, string fileExt, string virtDir = null)
+        public virtual async Task<IActionResult> UploadImage(IFormFile file, string md5, string fileExt, string virtDir = null)
         {
             if (file == null) return Error("请上传文件!");
 
@@ -134,7 +134,7 @@ namespace ToolGood.Bedrock.Web
         /// <param name="fileExt"></param>
         /// <param name="virtDir"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UploadVideo(IFormFile file, string md5, string fileExt, string virtDir = null)
+        public virtual async Task<IActionResult> UploadVideo(IFormFile file, string md5, string fileExt, string virtDir = null)
         {
             if (file == null) return Error("请上传文件!");
 
@@ -206,7 +206,7 @@ namespace ToolGood.Bedrock.Web
         /// <param name="fileExt"></param>
         /// <param name="virtDir"></param>
         /// <returns></returns>
-        public async Task<IActionResult> UploadFile(IFormFile file, string md5, string fileExt, string virtDir = null)
+        public virtual async Task<IActionResult> UploadFile(IFormFile file, string md5, string fileExt, string virtDir = null)
         {
             if (file == null) return Error("请上传文件!");
 
@@ -280,7 +280,7 @@ namespace ToolGood.Bedrock.Web
         /// <param name="end"></param>
         /// <param name="virtDir"></param>
         /// <returns></returns>
-        public IActionResult UploadBigFile(IFormFile file, string status, string md5, string fileExt, long start, long end, string virtDir = null)
+        public virtual IActionResult UploadBigFile(IFormFile file, string status, string md5, string fileExt, long start, long end, string virtDir = null)
         {
             if (file == null) return Error("请上传文件!");
 

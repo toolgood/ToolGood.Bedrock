@@ -124,15 +124,13 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public override bool DecryptData(string xmlKey)
         {
+            string json = null;
             try {
                 var bytes = Base64.FromBase64ForUrlString(RsaKey);
                 Password = RsaUtil.PrivateDecrypt(xmlKey, bytes);//解密
 
                 var bs = ThreeRCX.Encrypt(Base64.FromBase64ForUrlString(Ciphertext), Password);//解密
-                var json = Encoding.UTF8.GetString(bs);
-
-
-                Data = JsonConvert.DeserializeObject<T>(json);
+                json = Encoding.UTF8.GetString(bs);
 
                 JData = JObject.Parse(json, new JsonLoadSettings() {
                     CommentHandling = CommentHandling.Ignore,
@@ -141,7 +139,11 @@ namespace ToolGood.Bedrock
                 });
                 Data = JData.ToObject<T>();
                 return true;
-            } catch { }
+            } catch (Exception ex) {
+
+
+                LogUtil.Error(ex, json);
+            }
             return false;
         }
 
