@@ -74,19 +74,33 @@ namespace ToolGood.Bedrock.Files
             return DetectInternal(data);
         }
 
+        static bool RegisterProvider = false;
         static Encoding DetectInternal(Byte[] data)
         {
+            if (RegisterProvider==false) {
+                RegisterProvider = true;
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            }
             Encoding encoding = null;
             // 最笨的办法尝试
-            var encs = new Encoding[] {
-                // 常用
-                Encoding.UTF8,
-                // 用户界面选择语言编码
-                Encoding.GetEncoding(CultureInfo.CurrentUICulture.TextInfo.ANSICodePage),
-                // 本地默认编码
-                Encoding.UTF8
-            };
-            encs = encs.Where(s => s != null).GroupBy(s => s.CodePage).Select(s => s.First()).ToArray();
+            List<Encoding> encs = new List<Encoding>();
+            encs.Add(Encoding.UTF8);
+            encs.Add(Encoding.Default);
+            try {
+                encs.Add(Encoding.GetEncoding("GB2312"));
+            } catch { }
+            try {
+                encs.Add(Encoding.GetEncoding("GBK"));
+            } catch { }
+            try {
+                encs.Add(Encoding.GetEncoding("GB18030"));
+            } catch { }
+            try {
+                encs.Add(Encoding.GetEncoding(CultureInfo.CurrentUICulture.TextInfo.ANSICodePage));
+            } catch { }
+            encs.Add(Encoding.UTF8);
+ 
+            encs = encs.Where(s => s != null).GroupBy(s => s.CodePage).Select(s => s.First()).ToList();
 
             // 如果有单字节编码，优先第一个非单字节的编码
             foreach (var enc in encs) {
