@@ -123,10 +123,8 @@ namespace ToolGood.AnyDiff
         {
             var ignorePropertiesList = new List<string>();
             var expressionManager = new ExpressionManager();
-            if (propertyList != null)
-            {
-                foreach (var expression in propertyList)
-                {
+            if (propertyList != null) {
+                foreach (var expression in propertyList) {
                     var name = expressionManager.GetPropertyPath(expression.Body);
                     ignorePropertiesList.Add(name);
                 }
@@ -170,8 +168,7 @@ namespace ToolGood.AnyDiff
             if (typeSupport.IsDelegate)
                 return differences;
 
-            if (options.BitwiseHasFlag(ComparisonOptions.AllowEqualsOverride))
-            {
+            if (options.BitwiseHasFlag(ComparisonOptions.AllowEqualsOverride)) {
                 var objectEquality = CompareForObjectEquality(typeSupport, left, right);
                 if (objectEquality)
                     return differences; // no differences found, no need to continue
@@ -182,8 +179,7 @@ namespace ToolGood.AnyDiff
 
             // construct a hashtable of objects we have already inspected (simple recursion loop preventer)
             // we use this hashcode method as it does not use any custom hashcode handlers the object might implement
-            if (left != null)
-            {
+            if (left != null) {
                 if (objectTree.Contains(left))
                     return differences;
                 objectTree.Add(left);
@@ -191,48 +187,67 @@ namespace ToolGood.AnyDiff
 
             // get list of properties
             var properties = new List<ExtendedProperty>();
-            if (options.BitwiseHasFlag(ComparisonOptions.CompareProperties))
-                properties.AddRange(left.GetProperties(PropertyOptions.All));
+            if (options.BitwiseHasFlag(ComparisonOptions.CompareProperties)) {
+                var pis = left.GetProperties(PropertyOptions.All);
+                foreach (var pi in pis) {
+                    if (pi.PropertyInfo.CanWrite == false || pi.PropertyInfo.CanRead == false) { continue; }
+
+                    var atts = pi.PropertyInfo.GetCustomAttributes(true);
+                    var canAdd = true;
+                    foreach (var att in atts) {
+                        var name = att.GetType().Name.ToLower();
+                        if (name.Contains("ignore") || name.Contains("result")) {
+                            canAdd = false;
+                            break;
+                        }
+                    }
+                    if (canAdd) { properties.Add(pi); }
+                }
+            }
 
             // get all fields, except for backed auto-property fields
             var fields = new List<ExtendedField>();
-            if (options.BitwiseHasFlag(ComparisonOptions.CompareFields))
-            {
-                fields.AddRange(left.GetFields(FieldOptions.All));
-                fields = fields.Where(x => !x.IsBackingField).ToList();
+            if (options.BitwiseHasFlag(ComparisonOptions.CompareFields)) {
+                var fis = left.GetFields(FieldOptions.All);
+                foreach (var fi in fis) {
+                    if (fi.IsBackingField) { continue; }
+
+                    var atts = fi.FieldInfo.GetCustomAttributes(true);
+                    var canAdd = true;
+                    foreach (var att in atts) {
+                        var name = att.GetType().Name.ToLower();
+                        if (name.Contains("ignore") || name.Contains("result") || name.Contains("nonserialized")) {
+                            canAdd = false;
+                            break;
+                        }
+                    }
+                    if (canAdd) { fields.Add(fi); }
+                }
             }
 
             var rootPath = path;
             var localPath = string.Empty;
-            foreach (var property in properties)
-            {
+            foreach (var property in properties) {
                 localPath = $"{rootPath}.{property.Name}";
                 if (GetPropertyInclusionState(property.Name, localPath, options, propertyList, property.CustomAttributes) == FilterResult.Exclude)
                     continue;
                 object leftValue = null;
-                try
-                {
+                try {
                     if (left != null)
                         leftValue = left.GetPropertyValue(property);
-                }
-                catch (Exception)
-                {
+                } catch (Exception) {
                     // catch any exceptions accessing the property
                 }
                 object rightValue = null;
-                try
-                {
+                try {
                     if (right != null)
                         rightValue = right.GetPropertyValue(property);
-                }
-                catch (Exception)
-                {
+                } catch (Exception) {
                     // catch any exceptions accessing the property
                 }
                 differences = GetDifferences(property.Name, property.Type, GetTypeConverter(property), leftValue, rightValue, parent, differences, currentDepth, maxDepth, objectTree, localPath, options, propertyList);
             }
-            foreach (var field in fields)
-            {
+            foreach (var field in fields) {
                 localPath = $"{rootPath}.{field.Name}";
                 if (GetPropertyInclusionState(field.Name, localPath, options, propertyList, field.CustomAttributes) == FilterResult.Exclude)
                     continue;
@@ -278,8 +293,7 @@ namespace ToolGood.AnyDiff
             else
                 rightValue = right;
 
-            if (rightValue == null && leftValue != null || leftValue == null && rightValue != null)
-            {
+            if (rightValue == null && leftValue != null || leftValue == null && rightValue != null) {
                 differences.Add(new Difference((leftValue ?? rightValue).GetType(), propertyName, path, leftValue, rightValue, typeConverter));
                 return differences;
             }
@@ -289,8 +303,7 @@ namespace ToolGood.AnyDiff
 
             var propertyTypeSupport = propertyType.GetExtendedType(DefaultTypeSupportOptions);
             var isCollection = propertyType != typeof(string) && propertyType.GetInterface(nameof(IEnumerable)) != null;
-            if (isCollection && options.BitwiseHasFlag(ComparisonOptions.CompareCollections))
-            {
+            if (isCollection && options.BitwiseHasFlag(ComparisonOptions.CompareCollections)) {
                 var genericArguments = propertyType.GetGenericArguments();
                 var isArray = propertyTypeSupport.IsArray;
                 var elementType = propertyTypeSupport.ElementType;
@@ -299,30 +312,23 @@ namespace ToolGood.AnyDiff
                 var bValueCollection = (rightValue as IEnumerable);
                 var bValueCollectionCount = GetCountFromEnumerable(bValueCollection);
                 var bValueEnumerator = bValueCollection?.GetEnumerator();
-                if (aValueCollection != null)
-                {
-                    if (!options.BitwiseHasFlag(ComparisonOptions.AllowCollectionsToBeOutOfOrder))
-                    {
+                if (aValueCollection != null) {
+                    if (!options.BitwiseHasFlag(ComparisonOptions.AllowCollectionsToBeOutOfOrder)) {
                         var arrayIndex = 0;
                         // compare elements must be the same order
-                        foreach (var collectionItem in aValueCollection)
-                        {
+                        foreach (var collectionItem in aValueCollection) {
                             var hasValue = bValueEnumerator?.MoveNext() ?? false;
                             leftValue = collectionItem;
-                            if (hasValue)
-                            {
+                            if (hasValue) {
                                 rightValue = bValueEnumerator?.Current;
                                 if (leftValue == null && rightValue == null)
                                     continue;
                                 if (leftValue == null && rightValue != null)
                                     differences.Add(new Difference(rightValue?.GetType() ?? elementType, propertyName, path, arrayIndex, leftValue, rightValue, typeConverter));
                                 // check array element for difference
-                                if (leftValue != null && !leftValue.GetType().IsValueType && leftValue.GetType() != typeof(string))
-                                {
+                                if (leftValue != null && !leftValue.GetType().IsValueType && leftValue.GetType() != typeof(string)) {
                                     differences = RecurseProperties(leftValue, rightValue, parent, differences, currentDepth, maxDepth, objectTree, path, options, propertyList);
-                                }
-                                else if (leftValue != null && leftValue.GetType().IsGenericType && leftValue.GetType().GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
-                                {
+                                } else if (leftValue != null && leftValue.GetType().IsGenericType && leftValue.GetType().GetGenericTypeDefinition() == typeof(KeyValuePair<,>)) {
                                     // compare keys and values of a KVP
                                     var leftKvpKey = GetValueForProperty(leftValue, "Key");
                                     var leftKvpValue = GetValueForProperty(leftValue, "Value");
@@ -335,8 +341,7 @@ namespace ToolGood.AnyDiff
                                     // compare the key
                                     if (leftKvpKey != null && !leftKeyType.IsValueType && leftKeyType != typeof(string))
                                         differences = RecurseProperties(leftKvpKey, rightKvpKey, leftValue, differences, currentDepth, maxDepth, objectTree, path, options, propertyList);
-                                    else
-                                    {
+                                    else {
                                         if (!IsMatch(leftKvpKey, rightKvpKey))
                                             differences.Add(new Difference(leftKeyType, propertyName, path, arrayIndex, leftKvpKey, rightKvpKey, typeConverter));
                                     }
@@ -344,89 +349,68 @@ namespace ToolGood.AnyDiff
                                     // compare the value
                                     if (leftKvpValue != null && !leftValueType.IsValueType && leftValueType != typeof(string))
                                         differences = RecurseProperties(leftKvpValue, rightKvpValue, leftValue, differences, currentDepth, maxDepth, objectTree, path, options, propertyList);
-                                    else
-                                    {
+                                    else {
                                         if (!IsMatch(leftValue, rightValue))
                                             differences.Add(new Difference(leftValueType, propertyName, path, arrayIndex, leftKvpValue, rightKvpValue, typeConverter));
                                     }
-                                }
-                                else
-                                {
+                                } else {
                                     if (!IsMatch(leftValue, rightValue))
                                         differences.Add(new Difference(leftValue?.GetType() ?? elementType, propertyName, path, arrayIndex, leftValue, rightValue, typeConverter));
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 // left has a value in collection, right does not. That's a difference
                                 rightValue = null;
                                 differences.Add(new Difference(leftValue?.GetType() ?? elementType, propertyName, path, arrayIndex, leftValue, rightValue, typeConverter));
                             }
                             arrayIndex++;
                         }
-                        if (bValueCollectionCount > arrayIndex)
-                        {
+                        if (bValueCollectionCount > arrayIndex) {
                             // right side has extra elements
                             var rightSideExtraElements = bValueCollectionCount - arrayIndex;
-                            if (bValueEnumerator != null)
-                            {
-                                for (var i = 0; i < rightSideExtraElements; i++)
-                                {
+                            if (bValueEnumerator != null) {
+                                for (var i = 0; i < rightSideExtraElements; i++) {
                                     var hasValue = bValueEnumerator?.MoveNext() ?? false;
-                                    if (hasValue)
-                                    {
+                                    if (hasValue) {
                                         differences.Add(new Difference(aValueCollection.GetType(), propertyName, path, arrayIndex, null, bValueEnumerator.Current, typeConverter));
                                         arrayIndex++;
                                     }
                                 }
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         // compare elements can be of different order (use the hashcode for this)
                         var leftHashCodeEntryList = new Dictionary<int, CollectionKey>(); // hashcode, value/count
                         var rightHashCodeEntryList = new Dictionary<int, CollectionKey>(); // hashcode, value/count
                         var arrayIndex = 0;
-                        foreach (var collectionItem in aValueCollection)
-                        {
+                        foreach (var collectionItem in aValueCollection) {
                             var hashCode = collectionItem.GetHashCode();
-                            if (leftHashCodeEntryList.ContainsKey(hashCode))
-                            {
+                            if (leftHashCodeEntryList.ContainsKey(hashCode)) {
                                 var val = leftHashCodeEntryList[hashCode];
                                 val.Matches++;
                                 val.OriginalIndex = arrayIndex; // populate the highest value
-                            }
-                            else
+                            } else
                                 leftHashCodeEntryList.Add(hashCode, new CollectionKey(arrayIndex, collectionItem, 1));
                             arrayIndex++;
                         }
                         arrayIndex = 0;
-                        foreach (var collectionItem in bValueCollection)
-                        {
+                        foreach (var collectionItem in bValueCollection) {
                             var hashCode = collectionItem.GetHashCode();
-                            if (rightHashCodeEntryList.ContainsKey(hashCode))
-                            {
+                            if (rightHashCodeEntryList.ContainsKey(hashCode)) {
                                 var val = rightHashCodeEntryList[hashCode];
                                 val.Matches++;
                                 val.OriginalIndex = arrayIndex; // populate the highest value
-                            }
-                            else
+                            } else
                                 rightHashCodeEntryList.Add(hashCode, new CollectionKey(arrayIndex, collectionItem, 1));
                             arrayIndex++;
                         }
                         var orderedLeft = leftHashCodeEntryList.OrderBy(x => x.Key);
                         var orderedRight = rightHashCodeEntryList.OrderBy(x => x.Key);
                         // compare the left collection
-                        foreach (var item in orderedLeft)
-                        {
+                        foreach (var item in orderedLeft) {
                             var matchFound = orderedRight.Where(x => x.Key == item.Key).Select(x => x.Value).FirstOrDefault();
-                            if (matchFound == null)
-                            {
+                            if (matchFound == null) {
                                 differences.Add(new Difference((leftValue ?? rightValue).GetType(), propertyName, path, item.Value.OriginalIndex, item.Value.Value, null, typeConverter));
-                            }
-                            else
-                            {
+                            } else {
                                 var isEqual = CompareForObjectEquality(item.Value.Value.GetExtendedType(DefaultTypeSupportOptions), item.Value.Value, matchFound.Value);
                                 if (!isEqual)
                                     differences.Add(new Difference((leftValue ?? rightValue).GetType(), propertyName, path, item.Value.OriginalIndex, item.Value.Value, null, typeConverter));
@@ -436,15 +420,11 @@ namespace ToolGood.AnyDiff
                             }
                         }
                         // compare the right collection
-                        foreach (var item in orderedRight)
-                        {
+                        foreach (var item in orderedRight) {
                             var matchFound = orderedLeft.Where(x => x.Key == item.Key).Select(x => x.Value).FirstOrDefault();
-                            if (matchFound == null)
-                            {
+                            if (matchFound == null) {
                                 differences.Add(new Difference((leftValue ?? rightValue).GetType(), propertyName, path, item.Value.OriginalIndex, null, item.Value.Value, typeConverter));
-                            }
-                            else
-                            {
+                            } else {
                                 var isEqual = CompareForObjectEquality(item.Value.Value.GetExtendedType(DefaultTypeSupportOptions), item.Value.Value, matchFound.Value);
                                 if (!isEqual)
                                     differences.Add(new Difference((leftValue ?? rightValue).GetType(), propertyName, path, item.Value.OriginalIndex, null, item.Value.Value, typeConverter));
@@ -456,13 +436,9 @@ namespace ToolGood.AnyDiff
                     }
 
                 }
-            }
-            else if (!propertyType.IsValueType && propertyType != typeof(string))
-            {
+            } else if (!propertyType.IsValueType && propertyType != typeof(string)) {
                 differences = RecurseProperties(leftValue, rightValue, leftValue, differences, currentDepth, maxDepth, objectTree, path, options, propertyList);
-            }
-            else
-            {
+            } else {
                 if (!IsMatch(leftValue, rightValue))
                     differences.Add(new Difference(propertyType, propertyName, path, leftValue, rightValue, typeConverter));
             }
@@ -477,7 +453,7 @@ namespace ToolGood.AnyDiff
             var count = 0L;
             var enumerableType = enumerable.GetType().GetExtendedType(DefaultTypeSupportOptions);
             if (enumerableType.IsCollection)
-                return ((IList)enumerable).Count;
+                return ((ICollection)enumerable).Count;
             if (enumerableType.IsArray)
                 return ((Array)enumerable).LongLength;
 
@@ -487,11 +463,9 @@ namespace ToolGood.AnyDiff
 
             // try to reset the enumerable, if IEnumerable implements it
             var enumerator = enumerable.GetEnumerator();
-            try
-            {
+            try {
                 enumerator.Reset();
-            }
-            catch (NotImplementedException) { }
+            } catch (NotImplementedException) { }
             return count;
         }
 
@@ -507,8 +481,7 @@ namespace ToolGood.AnyDiff
 
         private static TypeConverter GetTypeConverter(TypeConverterAttribute attribute)
         {
-            if (attribute != null)
-            {
+            if (attribute != null) {
                 var typeConverter = Activator.CreateInstance(Type.GetType(attribute.ConverterTypeName)) as TypeConverter;
                 return typeConverter;
             }
@@ -527,28 +500,21 @@ namespace ToolGood.AnyDiff
             // order of precedence: IEquatable => Equals => (==)
             // if the object implements IEquatable, use it
             var hasIEquatable = typeSupport.Implements(typeof(IEquatable<>));
-            if (hasIEquatable)
-            {
+            if (hasIEquatable) {
                 var equatableMethod = typeSupport.Methods?.FirstOrDefault(x => x.Name == "Equals" && x.Parameters.Any(y => y.ParameterType == typeSupport.Type));
                 var isEquatable = (bool)equatableMethod?.MethodInfo.Invoke(left, new object[] { right }) == true;
                 if (isEquatable)
                     return true; // no differences found
-            }
-            else
-            {
+            } else {
                 // if the object overrides Equals(), use it
                 var hasEqualsOverride = typeSupport.Methods?.Any(x => x.Name == "Equals" && x.IsOverride) == true;
-                if (hasEqualsOverride)
-                {
+                if (hasEqualsOverride) {
                     if (left.Equals(right))
                         return true; // no differences found
-                }
-                else
-                {
+                } else {
                     // if the object overrides the equality operator (==), use it
                     var hasEqualityOperator = typeSupport.Methods?.Any(x => x.Name == "op_Equality" && x.IsOperatorOverload) == true;
-                    if (hasEqualityOperator)
-                    {
+                    if (hasEqualityOperator) {
                         var operatorMethod = typeSupport.Methods?.FirstOrDefault(x => x.Name == "op_Equality" && x.Parameters.All(y => y.ParameterType == typeSupport.Type));
                         var isEqual = (bool)operatorMethod?.MethodInfo.Invoke(left, new object[] { left, right }) == true;
                         if (isEqual)
@@ -576,17 +542,14 @@ namespace ToolGood.AnyDiff
             if (excludeByNameOrPath)
                 return FilterResult.Exclude; // exclude the property (by being in the exclusion list)
 
-            if (isIncludeList)
-            {
+            if (isIncludeList) {
                 var noInheritance = options.BitwiseHasFlag(ComparisonOptions.IncludeListNoInheritance);
                 var includeByNameOrPath = (propertyList?.Contains(name) == true || propertyList?.Contains(path) == true);
-                if (!includeByNameOrPath && !noInheritance)
-                {
+                if (!includeByNameOrPath && !noInheritance) {
                     // for inclusion lists, if the parent path is allowed then allow its children
                     var pathParts = path.Split('.');
                     var parentPaths = pathParts.Skip(1).Take(pathParts.Length - 2).Select(x => $".{x}").ToList();
-                    foreach(var parentPath in parentPaths)
-                    {
+                    foreach (var parentPath in parentPaths) {
                         includeByNameOrPath = propertyList.Contains(parentPath);
                         if (includeByNameOrPath)
                             break;
@@ -622,18 +585,15 @@ namespace ToolGood.AnyDiff
         {
             var isMatch = false;
             // both values being null are a match
-            if (ReferenceEquals(leftValue, null) && ReferenceEquals(rightValue, null))
-            {
+            if (ReferenceEquals(leftValue, null) && ReferenceEquals(rightValue, null)) {
                 isMatch = true;
             }
             // only one value being null is not a match
-            else if (ReferenceEquals(leftValue, null) || ReferenceEquals(rightValue, null))
-            {
+            else if (ReferenceEquals(leftValue, null) || ReferenceEquals(rightValue, null)) {
                 isMatch = false;
             }
             // use equality check
-            else if (leftValue.Equals(rightValue))
-            {
+            else if (leftValue.Equals(rightValue)) {
                 isMatch = true;
             }
             return isMatch;

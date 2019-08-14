@@ -86,20 +86,23 @@ namespace ToolGood.Bedrock.Internals
                     log.Append($"{ip}|{request.Method}|{request.Scheme}://{request.Host}{request.Path}{request.QueryString}\r\n");
                     if (request.Method == "POST") {
                         if (request.ContentType.ToLower().StartsWith("multipart/form-data;") == false || request.ContentType.ToLower().Contains("json") == false) {
-                            using (var buffer = new MemoryStream()) {
-                                //request.EnableRewind();
-                                request.Body.Position = 0;
-                                request.Body.CopyTo(buffer);
-                                request.Body.Position = 0;
-                                var bs = buffer.ToArray();
-                                var post = Encoding.UTF8.GetString(bs);
-                                log.Append("Body:" + post + "\r\n");
-                            }
+                            try {
+                                using (var buffer = new MemoryStream()) {
+                                    //request.EnableRewind();
+                                    request.Body.Position = 0;
+                                    request.Body.CopyTo(buffer);
+                                    request.Body.Position = 0;
+                                    var bs = buffer.ToArray();
+                                    var post = Encoding.UTF8.GetString(bs);
+                                    log.Append("Body:" + post + "\r\n");
+                                }
+                            } catch { }
+
                         }
                     }
                 }
             }
-            if (string.IsNullOrEmpty(content)==false) {
+            if (string.IsNullOrEmpty(content) == false) {
                 log.Append(content);
             }
             log.Append("\r\n\r\n");
