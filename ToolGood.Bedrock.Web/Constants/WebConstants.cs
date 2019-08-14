@@ -1,4 +1,6 @@
-﻿namespace ToolGood.Bedrock.Web.Constants
+﻿using System;
+
+namespace ToolGood.Bedrock.Web.Constants
 {
     /// <summary>
     /// WEB 常量
@@ -69,6 +71,11 @@
         /// 强制密码过期 天数
         /// </summary>
         public static int ForcedPasswordExpirationDays = 7;
+
+        /// <summary>
+        /// 文件版本号 用于更新js css
+        /// </summary>
+        public static string FileVerison = DateTime.Now.ToString("yyyyMMddHHmmss");
     }
 
 }

@@ -35,6 +35,8 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
             ViewData["ErrorCode"] = ErrorCode;
             ViewData["SuccessStr"] = SuccessStr;
             ViewData["ErrorStr"] = ErrorStr;
+            ViewData["FileVerison"] = WebConstants.FileVerison;
+
 
             QueryArgs = HttpContextHelper.BuildQueryArgs(context.HttpContext, context.ActionArguments);
             ActionResultUtil.QueryArgs = QueryArgs;

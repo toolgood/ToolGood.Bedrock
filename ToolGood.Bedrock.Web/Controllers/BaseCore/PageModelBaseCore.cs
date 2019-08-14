@@ -28,13 +28,17 @@ namespace ToolGood.Bedrock.Web.Controllers.BaseCore
         public int ErrorCode { get { return CommonConstants.ErrorCode; } }
 
         public string ErrorStr { get { return CommonConstants.ErrorStr; } }
-
+        
         public QueryArgs QueryArgs { get; set; }
-
 
 
         public override void OnPageHandlerExecuting(PageHandlerExecutingContext context)
         {
+            ViewData["SuccessCode"] = SuccessCode;
+            ViewData["ErrorCode"] = ErrorCode;
+            ViewData["SuccessStr"] = SuccessStr;
+            ViewData["ErrorStr"] = ErrorStr;
+            ViewData["FileVerison"] = WebConstants.FileVerison;
             QueryArgs = HttpContextHelper.BuildQueryArgs(context.HttpContext, context.HandlerArguments);
             ActionResultUtil.QueryArgs = QueryArgs;
             base.OnPageHandlerExecuting(context);
