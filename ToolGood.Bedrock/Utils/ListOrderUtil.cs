@@ -12,6 +12,19 @@ namespace ToolGood.Bedrock
     public static class ListOrderUtil
     {
         /// <summary>
+        /// 生成排序字符串
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
+        public static string BuildOrderString(string txt)
+        {
+            return Regex.Replace(txt, @"\d+", (m) => {
+                return m.Value.PadLeft(20, '0');
+            });
+        }
+
+
+        /// <summary>
         /// 依据 数字 排序 倒序
         /// </summary>
         /// <typeparam name="T1"></typeparam>
@@ -111,8 +124,6 @@ namespace ToolGood.Bedrock
             BuildTree(treeList, list, 0, pidFunc, idFunc);
             return treeList.ToList();
         }
-
-
 
         /// <summary>
         /// 依据父ID 倒序排列
