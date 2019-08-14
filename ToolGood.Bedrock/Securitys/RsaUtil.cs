@@ -350,10 +350,26 @@ namespace ToolGood.Bedrock
         /// <param name="privateKey">私钥</param>
         /// <param name="input_charset">编码格式</param>
         /// <returns>签名后字符串</returns>
+        /// 各种签名 填充值
+        /// md2:"3020300c06082a864886f70d020205000410",
+        /// md5:"3020300c06082a864886f70d020505000410",
+        /// sha1:"3021300906052b0e03021a05000414",
+        /// sha224:"302d300d06096086480165030402040500041c",
+        /// sha256:"3031300d060960864801650304020105000420",
+        /// sha384:"3041300d060960864801650304020205000430",
+        /// sha512:"3051300d060960864801650304020305000440",
+        /// ripemd160: "3021300906052b2403020105000414"
         public static string Sign(string content, string privateKey, string input_charset = "UTF-8")
         {
             byte[] Data = Encoding.GetEncoding(input_charset).GetBytes(content);
-            RSACryptoServiceProvider rsa = DecodePemPrivateKey(privateKey);
+            RSACryptoServiceProvider rsa;
+            try {
+                rsa = DecodePemPrivateKey(privateKey);
+            } catch (Exception) {
+                rsa = new RSACryptoServiceProvider();
+                FromXmlString(rsa, privateKey);
+            }
+
             SHA256 sh = new SHA256CryptoServiceProvider();
             byte[] signData = rsa.SignData(Data, sh);
             return Convert.ToBase64String(signData);
