@@ -45,6 +45,7 @@ namespace ToolGood.AnyDiff
 
         public string Path { get; }
         public string Property { get; }
+        public string ShowName { get; }
         public int? ArrayIndex { get; }
         public Type PropertyType { get; }
         public TypeConverter TypeConverter { get; }
@@ -57,18 +58,20 @@ namespace ToolGood.AnyDiff
         /// </summary>
         /// <param name="propertyType"></param>
         /// <param name="property"></param>
+        /// <param name="showName"></param>
+        /// <param name="path"></param>
         /// <param name="leftValue"></param>
         /// <param name="rightValue"></param>
         /// <param name="converter"></param>
-        public Difference(Type propertyType, string property, string path, object leftValue, object rightValue, TypeConverter converter)
+        public Difference(Type propertyType, string property, string showName, string path, object leftValue, object rightValue, TypeConverter converter)
         {
             PropertyType = propertyType;
-            if (Nullable.GetUnderlyingType(propertyType) == null && (leftValue == null || rightValue == null))
-            {
+            if (Nullable.GetUnderlyingType(propertyType) == null && (leftValue == null || rightValue == null)) {
                 // type is not nullable, but we've been passed a nullable type. Convert the type to nullable
                 // so we can perform diff checks on it properly
                 PropertyType = GetNullableType(propertyType);
             }
+            ShowName = showName;
             Path = path;
             Property = property;
             LeftValue = leftValue;
@@ -78,23 +81,34 @@ namespace ToolGood.AnyDiff
             var rightValueLocal = rightValue;
 
             // if a type converter is specified, convert the type before performing a Diff evaluation
-            if (TypeConverter != null)
-            {
-                if (TypeConverter.CanConvertFrom(PropertyType))
-                {
-                    if (leftValueLocal != null)
-                    {
+            if (TypeConverter != null) {
+                if (TypeConverter.CanConvertFrom(PropertyType)) {
+                    if (leftValueLocal != null) {
                         leftValueLocal = TypeConverter.ConvertFrom(leftValueLocal);
                         PropertyType = leftValueLocal.GetType();
                     }
-                    if (rightValueLocal != null)
-                    {
+                    if (rightValueLocal != null) {
                         rightValueLocal = TypeConverter.ConvertFrom(rightValueLocal);
                         PropertyType = rightValueLocal.GetType();
                     }
                 }
             }
             Delta = CreateDelta(leftValueLocal, rightValueLocal);
+        }
+
+
+        /// <summary>
+        /// Calculate the difference between two objects
+        /// </summary>
+        /// <param name="propertyType"></param>
+        /// <param name="property"></param>
+        /// <param name="path"></param>
+        /// <param name="leftValue"></param>
+        /// <param name="rightValue"></param>
+        /// <param name="converter"></param>
+        public Difference(Type propertyType, string property, string path, object leftValue, object rightValue, TypeConverter converter)
+            : this(propertyType, property, property, path, leftValue, rightValue, converter)
+        {
         }
 
         /// <summary>
@@ -106,8 +120,7 @@ namespace ToolGood.AnyDiff
         /// <param name="arrayIndex"></param>
         /// <param name="leftValue"></param>
         /// <param name="rightValue"></param>
-        /// <param name="converter"></param>
-        public Difference(Type propertyType, string property, string path, int arrayIndex, object leftValue, object rightValue) : this(propertyType, property, path, leftValue, rightValue, null)
+        public Difference(Type propertyType, string property, string showName, string path, int arrayIndex, object leftValue, object rightValue) : this(propertyType, property, showName, path, leftValue, rightValue, null)
         {
             ArrayIndex = arrayIndex;
         }
@@ -122,7 +135,7 @@ namespace ToolGood.AnyDiff
         /// <param name="leftValue"></param>
         /// <param name="rightValue"></param>
         /// <param name="converter"></param>
-        public Difference(Type propertyType, string property, string path, int arrayIndex, object leftValue, object rightValue, TypeConverter converter) : this(propertyType, property, path, leftValue, rightValue, converter)
+        public Difference(Type propertyType, string property, string showName, string path, int arrayIndex, object leftValue, object rightValue, TypeConverter converter) : this(propertyType, property, showName, path, leftValue, rightValue, converter)
         {
             ArrayIndex = arrayIndex;
         }
