@@ -12,12 +12,12 @@
     <PackageProjectUrl>https://github.com/toolgood/ToolGood.Bedrock</PackageProjectUrl>
     <RepositoryUrl>https://github.com/toolgood/ToolGood.Bedrock</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>1.0.0.1</Version>
-    <FileVersion>1.0.0.1</FileVersion>
+    <Version>1.0.0.2</Version>
+    <FileVersion>1.0.0.2</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.9.3" />
+    <PackageReference Include="Autofac" Version="4.9.4" />
     <PackageReference Include="Castle.Core" Version="4.4.0" />
   </ItemGroup>
 
