@@ -62,6 +62,8 @@ namespace ToolGood.Bedrock.Web.ThirdPartys.Ztree
         [JsonProperty("iconSkin", NullValueHandling = NullValueHandling.Ignore)]
         public string iconSkin { get; set; }
 
+        [JsonProperty("extend", NullValueHandling = NullValueHandling.Ignore)]
+        public object extend { get; set; }
 
     }
 
