@@ -28,7 +28,7 @@
     <PackageReference Include="ToolGood.Algorithm" Version="1.3.3.4" />
     <PackageReference Include="ToolGood.AntiDuplication" Version="2.0.0.1" />
     <PackageReference Include="ToolGood.RcxCrypto" Version="1.3.0" />
-    <PackageReference Include="ToolGood.ReadyGo3" Version="3.3.0.20" />
+    <PackageReference Include="ToolGood.ReadyGo3" Version="3.3.0.22" />
     <PackageReference Include="ToolGood.Words" Version="2.3.3.4" />
     <PackageReference Include="TypeSupport" Version="1.0.92" />
     <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.6" />
