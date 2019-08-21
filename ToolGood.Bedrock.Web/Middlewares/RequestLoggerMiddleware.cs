@@ -21,7 +21,7 @@ namespace ToolGood.Bedrock.Web.Middlewares
             var request = context.Request;
             var msg = "";
             if (request.Method == "POST") {
-                if (request.ContentType.ToLower().StartsWith("multipart/form-data;") == false || request.ContentType.ToLower().Contains("json") == false) {
+                if (request.ContentType.ToLower().Contains("form-data") == false || request.ContentType.ToLower().Contains("json") == false) {
                     using (var buffer = new MemoryStream()) {
                         //request.EnableRewind();
                         request.Body.Position = 0;
