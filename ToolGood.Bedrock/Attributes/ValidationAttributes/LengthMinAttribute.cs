@@ -3,13 +3,13 @@
     /// <summary>
     /// 最小长度验证特性
     /// </summary>
-    public class MinLengthAttribute : System.ComponentModel.DataAnnotations.MinLengthAttribute
+    public class LengthMinAttribute : System.ComponentModel.DataAnnotations.MinLengthAttribute
     {
         /// <summary>
         /// 最小长度验证特性
         /// </summary>
         /// <param name="length"></param>
-        public MinLengthAttribute(int length) : base(length)
+        public LengthMinAttribute(int length) : base(length)
         {
         }
     }

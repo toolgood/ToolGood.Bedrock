@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ToolGood.Bedrock
 {
@@ -176,9 +179,45 @@ namespace ToolGood.Bedrock
         public static byte[] FromBase26String(string baseArray)
         {
             var baseEncoding = new BaseEncoding(ALPHABET, BaseEncoding.EndianFormat.Little);
-            var bytes = baseEncoding.Decode(baseArray);
+            var bytes = baseEncoding.Decode(baseArray.ToLower());
             return bytes.Reverse().ToArray();
         }
+        /// <summary>
+        /// Excel中的列字母转换为数字,从0开始
+        /// </summary>
+        /// <param name="columnName"></param>
+        /// <returns></returns>
+        public static int ColumnToIndex(string columnName)
+        {
+            if (!Regex.IsMatch(columnName.ToUpper(), @"[A-Z]+")) { throw new Exception("invalid parameter"); }
+
+            int index = 0;
+            char[] chars = columnName.ToUpper().ToCharArray();
+            for (int i = 0; i < chars.Length; i++) {
+                index += ((int)chars[i] - (int)'A' + 1) * (int)Math.Pow(26, chars.Length - i - 1);
+            }
+            return index - 1;
+        }
+
+        /// <summary>
+        ///  数字转换为Excel中的列字母,从0开始
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static string IndexToColumn(int index)
+        {
+            if (index < 0) { throw new Exception("invalid parameter"); }
+
+            List<string> chars = new List<string>();
+            do {
+                if (chars.Count > 0) index--;
+                chars.Insert(0, ((char)(index % 26 + (int)'A')).ToString());
+                index = (int)((index - index % 26) / 26);
+            } while (index > 0);
+
+            return String.Join(string.Empty, chars.ToArray());
+        }
+
     }
 
 }
