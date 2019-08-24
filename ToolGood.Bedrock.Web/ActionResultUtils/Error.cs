@@ -33,7 +33,7 @@ namespace ToolGood.Bedrock.Web
                 Message = string.Join(",", sb),
                 State = "ERROR",
             };
-            if (QueryArgs != null) {
+            if (QueryArgs != null && QueryArgs.UseLog != null && QueryArgs.UseLog.Value) {
                 if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
                     result.SqlTimes = QueryArgs.SqlTimes;
                 }
@@ -57,7 +57,7 @@ namespace ToolGood.Bedrock.Web
                 Message = msg,
                 State = "ERROR",
             };
-            if (QueryArgs != null) {
+            if (QueryArgs != null && QueryArgs.UseLog != null && QueryArgs.UseLog.Value) {
                 if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
                     result.SqlTimes = QueryArgs.SqlTimes;
                 }
@@ -84,7 +84,7 @@ namespace ToolGood.Bedrock.Web
                 Message = msg,
                 State = "ERROR",
             };
-            if (QueryArgs != null) {
+            if (QueryArgs != null && QueryArgs.UseLog != null && QueryArgs.UseLog.Value) {
                 if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
                     result.SqlTimes = QueryArgs.SqlTimes;
                 }
@@ -110,7 +110,7 @@ namespace ToolGood.Bedrock.Web
                 Data = obj,
                 State = "ERROR",
             };
-            if (QueryArgs != null) {
+            if (QueryArgs != null && QueryArgs.UseLog != null && QueryArgs.UseLog.Value) {
                 if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
                     result.SqlTimes = QueryArgs.SqlTimes;
                 }
@@ -138,7 +138,7 @@ namespace ToolGood.Bedrock.Web
                 Data = obj,
                 State = "ERROR",
             };
-            if (QueryArgs != null) {
+            if (QueryArgs != null && QueryArgs.UseLog != null && QueryArgs.UseLog.Value) {
                 if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
                     result.SqlTimes = QueryArgs.SqlTimes;
                 }

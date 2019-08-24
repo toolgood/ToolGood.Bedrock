@@ -33,7 +33,7 @@ namespace ToolGood.Bedrock.Web
                 Data = obj,
                 State = "SUCCESS",
             };
-            if (QueryArgs != null) {
+            if (QueryArgs != null && QueryArgs.UseLog!=null && QueryArgs.UseLog.Value) {
                 if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
                     result.SqlTimes = QueryArgs.SqlTimes;
                 }
@@ -72,7 +72,7 @@ namespace ToolGood.Bedrock.Web
                 Data = objs,
                 State = "SUCCESS",
             };
-            if (QueryArgs != null) {
+            if (QueryArgs != null && QueryArgs.UseLog != null && QueryArgs.UseLog.Value) {
                 if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
                     result.SqlTimes = QueryArgs.SqlTimes;
                 }
@@ -112,7 +112,7 @@ namespace ToolGood.Bedrock.Web
                 Data = page,
                 State = "SUCCESS",
             };
-            if (QueryArgs != null) {
+            if (QueryArgs != null && QueryArgs.UseLog != null && QueryArgs.UseLog.Value) {
                 if (QueryArgs.SqlTimes != null && QueryArgs.SqlTimes.Count > 0) {
                     result.SqlTimes = QueryArgs.SqlTimes;
                 }
