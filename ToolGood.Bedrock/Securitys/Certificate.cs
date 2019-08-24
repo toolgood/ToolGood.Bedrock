@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using RuntimeHelpers = System.Runtime.CompilerServices.RuntimeHelpers;

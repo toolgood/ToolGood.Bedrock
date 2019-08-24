@@ -22,6 +22,7 @@ namespace ToolGood.Bedrock
                 return m.Value.PadLeft(6, '0');
             });
         }
+
         /// <summary>
         /// 生成排序字符串
         /// </summary>
