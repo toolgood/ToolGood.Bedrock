@@ -19,7 +19,19 @@ namespace ToolGood.Bedrock
         public static string BuildOrderString(string txt)
         {
             return Regex.Replace(txt, @"\d+", (m) => {
-                return m.Value.PadLeft(20, '0');
+                return m.Value.PadLeft(6, '0');
+            });
+        }
+        /// <summary>
+        /// 生成排序字符串
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public static string BuildOrderString(string txt,int num)
+        {
+            return Regex.Replace(txt, @"\d+", (m) => {
+                return m.Value.PadLeft(num, '0');
             });
         }
 
