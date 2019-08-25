@@ -5,16 +5,14 @@ using System.Text;
 
 namespace ToolGood.Bedrock.Web.ThirdPartys.Ztree
 {
-    /// <summary>
-    /// ztree.js 节点
-    /// </summary>
-    public class ZTreeNode
+    class ZTreeNode2
     {
         [JsonProperty("id")]
-        public int id { get; set; }
+        public string id { get; set; }
 
         [JsonProperty("pId")]
-        public int pId { get; set; }
+        public string pId { get; set; }
+
         /// <summary>
         /// <para>节点名称。</para> 
         /// <para>1、如果不使用 name 属性保存节点名称，请修改 setting.data.key.name</para> 
@@ -132,10 +130,11 @@ namespace ToolGood.Bedrock.Web.ThirdPartys.Ztree
 
         [JsonProperty("extend", NullValueHandling = NullValueHandling.Ignore)]
         public object extend { get; set; }
-
+        /// <summary>
+        /// 字体
+        /// </summary>
         [JsonProperty("font", NullValueHandling = NullValueHandling.Ignore)]
         public object font { get; set; }
 
     }
-
 }
