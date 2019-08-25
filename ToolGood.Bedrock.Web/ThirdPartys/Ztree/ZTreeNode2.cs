@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ToolGood.Bedrock.Web.ThirdPartys.Ztree
 {
-    class ZTreeNode2
+    public class ZTreeNode2
     {
         [JsonProperty("id")]
         public string id { get; set; }

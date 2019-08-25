@@ -132,7 +132,9 @@ namespace ToolGood.Bedrock.Web.ThirdPartys.Ztree
 
         [JsonProperty("extend", NullValueHandling = NullValueHandling.Ignore)]
         public object extend { get; set; }
-
+        /// <summary>
+        /// 字体
+        /// </summary>
         [JsonProperty("font", NullValueHandling = NullValueHandling.Ignore)]
         public object font { get; set; }
 
