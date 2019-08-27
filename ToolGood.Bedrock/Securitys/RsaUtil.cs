@@ -166,7 +166,11 @@ namespace ToolGood.Bedrock
         private static byte[] privateDecrypt(RSACryptoServiceProvider rsa, byte[] bytes)
         {
             var keySize = rsa.KeySize / 8;
-            if (bytes.Length <= keySize) {
+            if (bytes.Length < keySize) {//修复 js base64化bug
+                byte[] bs = new byte[keySize];
+                Array.Copy(bytes, 0, bs, keySize - bytes.Length, bytes.Length);
+                return rsa.Decrypt(bs, false);
+            } else if (bytes.Length == keySize) {
                 return rsa.Decrypt(bytes, false);
             }
             using (MemoryStream ms = new MemoryStream()) {
@@ -175,7 +179,7 @@ namespace ToolGood.Bedrock
                     var length = Math.Min(keySize, bytes.Length - index);
                     var bs = new byte[length];
                     Array.Copy(bytes, index, bs, 0, length);
-                    var bs2 = rsa.Decrypt(bs, false);
+                    byte[] bs2 = rsa.Decrypt(bs, false);
                     ms.Write(bs2, 0, bs2.Length);
                     index += keySize;
                 }
