@@ -46,7 +46,7 @@ namespace ToolGood.Bedrock.Web
             var request = context.Request;
             StringBuilder actionParm = new StringBuilder();
             if (request.Method == "POST") {
-                if (request.ContentType.ToLower().Contains("form-data") == false || request.ContentType.ToLower().Contains("json") == false) {
+                if (request.ContentType.ToLower().Contains("form-data") == false && request.ContentType.ToLower().Contains("json") == false) {
                     using (var buffer = new MemoryStream()) {
                         //request.EnableRewind();
                         request.Body.Position = 0;
