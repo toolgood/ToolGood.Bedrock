@@ -3,28 +3,27 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.Unicode;
+using System.Threading.Tasks;
 using ToolGood.Bedrock.Dependency;
 using ToolGood.Bedrock.Dependency.AutofacContainer;
-using ToolGood.Bedrock.Internals;
 using ToolGood.Bedrock.Web.Loggers;
 using ToolGood.Bedrock.Web.Middlewares;
 using ToolGood.Bedrock.Web.ResumeFiles.Executor;
@@ -139,7 +138,7 @@ namespace ToolGood.Bedrock.Web
         public virtual IConfiguration Configuration { get; }
         public virtual IContainer AutofacContainer { get; private set; }
 
-        public StartupCore(IHostingEnvironment env)
+        public StartupCore(IWebHostEnvironment env)
         {
             MyHostingEnvironment.ApplicationName = env.ApplicationName;
             MyHostingEnvironment.ContentRootPath = env.ContentRootPath;
@@ -179,7 +178,8 @@ namespace ToolGood.Bedrock.Web
         public virtual IServiceProvider ConfigureServices(IServiceCollection services)
         {
             //services.AddSingleton<IConfiguration>(Configuration);
-            var hostingEnvironment = services.BuildServiceProvider().GetService<IHostingEnvironment>();
+        
+            var hostingEnvironment = services.BuildServiceProvider().GetService<IWebHostEnvironment>();
 
             var config = GetMyConfig();
             if (config.UseResponseCaching) { services.AddResponseCaching(); }
@@ -215,41 +215,22 @@ namespace ToolGood.Bedrock.Web
             if (config.UseIHttpContextAccessor) { services.AddHttpContextAccessor(); }
 
             if (config.UseMvc) {
-                var mvcBuilder = services.AddMvc(options => {
+                var mvcBuilder = services.AddControllers(options => {
                     options.Filters.Add<HttpGlobalExceptionFilter>();
-                    //if (config.UseRsaDecrypt) { options.ModelBinderProviders.Insert(0, new RsaDecryptModelBinderProvider()); }
-                    //options.ModelBinderProviders.Insert(0, new QueryArgsModelBinderProvider());
                 })
                   .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                   .AddDataAnnotationsLocalization()
-                  .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                 
                   .AddJsonOptions(options => {
-                      options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                      options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                      options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-                      options.SerializerSettings.TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple;
-                      options.SerializerSettings.Converters.Add(new JsonCustomDoubleConvert());// json序列化时， 防止double，末尾出现小数点浮动,
-                      options.SerializerSettings.Converters.Add(new JsonCustomDoubleNullConvert());// json序列化时， 防止double，末尾出现小数点浮动,
+                      options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);//System.Text.Json 序列化中文时的编码问题
+                      options.JsonSerializerOptions.ReadCommentHandling = System.Text.Json.JsonCommentHandling.Allow; // 忽略注释
+                      options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase; // 首字母小写
+                      options.JsonSerializerOptions.WriteIndented = false;  // 不格式化json字符串 
+                      options.JsonSerializerOptions.AllowTrailingCommas = true;  // 可以结尾有逗号
+                      options.JsonSerializerOptions.IgnoreReadOnlyProperties = true;  // 忽略只读属性
+                      options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;  // 忽略大小写
                   }
               );
-                if (config.UsePlugin) {
-                    mvcBuilder.AddRazorOptions(options => {
-                        foreach (var assembly in AppLoader.Instance(hostingEnvironment).AppAssemblies) {
-                            var reference = MetadataReference.CreateFromFile(assembly.Location);
-                            options.AdditionalCompilationReferences.Add(reference);
-                        }
-                    });
-                    services.Configure<RazorViewEngineOptions>(options => {
-                        foreach (var assembly in AppLoader.Instance(hostingEnvironment).AppAssemblies) {
-                            var embeddedFileProvider = new EmbeddedFileProvider(assembly, assembly.GetName().Name);
-                            options.FileProviders.Add(embeddedFileProvider);
-                        }
-                    });
-                }
-                if (config.UseTheme) {
-                    services.Configure<RazorViewEngineOptions>(options => { options.ViewLocationExpanders.Add(new ViewLocationExpander()); });
-                }
-
             }
             services.TryAddSingleton<IActionResultExecutor<ResumePhysicalFileResult>, ResumePhysicalFileResultExecutor>();
             services.TryAddSingleton<IActionResultExecutor<ResumeVirtualFileResult>, ResumeVirtualFileResultExecutor>();
@@ -273,13 +254,25 @@ namespace ToolGood.Bedrock.Web
             return new AutofacServiceProvider(AutofacContainer);
         }
 
+        public class JsonCustomDoubleConvert : IInputFormatter
+        {
+            public bool CanRead(InputFormatterContext context)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<InputFormatterResult> ReadAsync(InputFormatterContext context)
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param>
-        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
             var config = GetMyConfig();
@@ -327,38 +320,38 @@ namespace ToolGood.Bedrock.Web
                 if (config.UseTheme) {
                     app.UseMiddleware<ThemeMiddleware>();
                 }
-
-                app.UseMvc(routes => {
-                    RouteRegister(routes);
-                    routes.MapRoute(
-                     name: "areas",
-                     template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                    );
-                    routes.MapRoute(
-                        name: "imageDefaultC",
-                        template: "Image/C{w:int}x{h:int}/{*u}",
-                        defaults: new { controller = "Image", action = "C", });
-                    routes.MapRoute(
+                app.UseEndpoints(endpoints => {
+                    endpoints.MapRazorPages();
+                    endpoints.MapControllerRoute(
+                        name: "areas",
+                        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                     );
+                    endpoints.MapControllerRoute(
+                       name: "imageDefaultC",
+                       pattern: "Image/C{w:int}x{h:int}/{*u}",
+                       defaults: new { controller = "Image", action = "C", });
+                    endpoints.MapControllerRoute(
                         name: "imageDefaultH",
-                        template: "Image/H{h:int}/{*u}",
+                        pattern: "Image/H{h:int}/{*u}",
                         defaults: new { controller = "Image", action = "H", });
-                    routes.MapRoute(
+                    endpoints.MapControllerRoute(
                         name: "imageDefaultW",
-                        template: "Image/W{w:int}/{*u}",
+                        pattern: "Image/W{w:int}/{*u}",
                         defaults: new { controller = "Image", action = "W", });
-                    routes.MapRoute(
+                    endpoints.MapControllerRoute(
                         name: "imageDefaultT",
-                        template: "Image/T{w:int}x{h:int}/{*u}",
+                        pattern: "Image/T{w:int}x{h:int}/{*u}",
                         defaults: new { controller = "Image", action = "T", });
-                    routes.MapRoute(
+                    endpoints.MapControllerRoute(
                         name: "imageDefaultQR",
-                        template: "Image/qr{w:int}x{h:int}/{*u}",
+                        pattern: "Image/qr{w:int}x{h:int}/{*u}",
                         defaults: new { controller = "Image", action = "QR", });
 
-                    routes.MapRoute(
+                    endpoints.MapControllerRoute(
                         name: "default",
-                        template: "{controller=Home:exists}/{action=Index}/{id?}");
+                        pattern: "{controller=Home:exists}/{action=Index}/{id?}");
                 });
+                 
             }
 
 

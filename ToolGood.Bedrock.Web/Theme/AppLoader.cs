@@ -12,12 +12,12 @@ namespace ToolGood.Bedrock.Web.Theme
     public class AppLoader
     {
         private static AppLoader _instance;
-        private static IHostingEnvironment _hostingEnvironment;
+        private static IWebHostEnvironment _hostingEnvironment;
         private readonly IList<string> _loadedAssemblies = new List<string>();
         //public IList<AppDescriptor> AppDescriptors = new List<AppDescriptor>();
         public IList<Assembly> AppAssemblies = new List<Assembly>();
 
-        public static AppLoader Instance(IHostingEnvironment hostingEnvironment)
+        public static AppLoader Instance(IWebHostEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment;
             return _instance ?? (_instance = new AppLoader());

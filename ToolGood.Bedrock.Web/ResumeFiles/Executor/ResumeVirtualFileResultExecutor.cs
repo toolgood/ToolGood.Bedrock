@@ -19,7 +19,7 @@ namespace ToolGood.Bedrock.Web.ResumeFiles.Executor
         /// </summary>
         /// <param name="loggerFactory"></param>
         /// <param name="hostingEnvironment"></param>
-        public ResumeVirtualFileResultExecutor(ILoggerFactory loggerFactory, IHostingEnvironment hostingEnvironment) : base(loggerFactory, hostingEnvironment)
+        public ResumeVirtualFileResultExecutor(ILoggerFactory loggerFactory, IWebHostEnvironment hostingEnvironment) : base(loggerFactory, hostingEnvironment)
         {
         }
 

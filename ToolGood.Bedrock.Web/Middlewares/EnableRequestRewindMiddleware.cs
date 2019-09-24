@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using System.Threading.Tasks;
 
 namespace ToolGood.Bedrock.Web.Middlewares
@@ -16,7 +15,7 @@ namespace ToolGood.Bedrock.Web.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            context.Request.EnableRewind();
+            //context.Request.EnableRewind();
             await _next(context);
         }
     }
