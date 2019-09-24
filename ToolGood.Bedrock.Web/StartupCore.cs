@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.IO;
 using System.Linq;
@@ -24,6 +26,7 @@ using System.Text.Unicode;
 using System.Threading.Tasks;
 using ToolGood.Bedrock.Dependency;
 using ToolGood.Bedrock.Dependency.AutofacContainer;
+using ToolGood.Bedrock.Internals;
 using ToolGood.Bedrock.Web.Loggers;
 using ToolGood.Bedrock.Web.Middlewares;
 using ToolGood.Bedrock.Web.ResumeFiles.Executor;
@@ -220,17 +223,24 @@ namespace ToolGood.Bedrock.Web
                 })
                   .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                   .AddDataAnnotationsLocalization()
-                 
-                  .AddJsonOptions(options => {
-                      options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);//System.Text.Json 序列化中文时的编码问题
-                      options.JsonSerializerOptions.ReadCommentHandling = System.Text.Json.JsonCommentHandling.Allow; // 忽略注释
-                      options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase; // 首字母小写
-                      options.JsonSerializerOptions.WriteIndented = false;  // 不格式化json字符串 
-                      options.JsonSerializerOptions.AllowTrailingCommas = true;  // 可以结尾有逗号
-                      options.JsonSerializerOptions.IgnoreReadOnlyProperties = true;  // 忽略只读属性
-                      options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;  // 忽略大小写
-                  }
-              );
+                  .AddNewtonsoftJson(options=> {
+                      options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                      options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                      options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+                      options.SerializerSettings.TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple;
+                      options.SerializerSettings.Converters.Add(new JsonCustomDoubleConvert());// json序列化时， 防止double，末尾出现小数点浮动,
+                      options.SerializerSettings.Converters.Add(new JsonCustomDoubleNullConvert());// json序列化时， 防止double，末尾出现小数点浮动,
+                  })
+                  //.AddJsonOptions(options => {
+                  //    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);//System.Text.Json 序列化中文时的编码问题
+                  //    options.JsonSerializerOptions.ReadCommentHandling = System.Text.Json.JsonCommentHandling.Allow; // 忽略注释
+                  //    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase; // 首字母小写
+                  //    options.JsonSerializerOptions.WriteIndented = false;  // 不格式化json字符串 
+                  //    options.JsonSerializerOptions.AllowTrailingCommas = true;  // 可以结尾有逗号
+                  //    options.JsonSerializerOptions.IgnoreReadOnlyProperties = true;  // 忽略只读属性
+                  //    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;  // 忽略大小写
+                  //})
+                  ;
             }
             services.TryAddSingleton<IActionResultExecutor<ResumePhysicalFileResult>, ResumePhysicalFileResultExecutor>();
             services.TryAddSingleton<IActionResultExecutor<ResumeVirtualFileResult>, ResumeVirtualFileResultExecutor>();
@@ -252,19 +262,6 @@ namespace ToolGood.Bedrock.Web
             ContainerManager.BeginLeftScope();
             AutofacContainer = (ContainerManager.Instance.Container as AutofacObjectContainer).Container;
             return new AutofacServiceProvider(AutofacContainer);
-        }
-
-        public class JsonCustomDoubleConvert : IInputFormatter
-        {
-            public bool CanRead(InputFormatterContext context)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task<InputFormatterResult> ReadAsync(InputFormatterContext context)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         /// <summary>
@@ -320,6 +317,7 @@ namespace ToolGood.Bedrock.Web
                 if (config.UseTheme) {
                     app.UseMiddleware<ThemeMiddleware>();
                 }
+                app.UseRouting();
                 app.UseEndpoints(endpoints => {
                     endpoints.MapRazorPages();
                     endpoints.MapControllerRoute(
