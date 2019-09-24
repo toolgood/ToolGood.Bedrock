@@ -35,7 +35,7 @@ using IStartup = ToolGood.Bedrock.Web.Theme.IStartup;
 namespace ToolGood.Bedrock.Web
 {
     /// <summary>
-    /// 
+    /// .net core
     /// </summary>
     public abstract class StartupCore
     {
