@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <OutputType>Library</OutputType>
+    <TargetFrameworks>netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>_key.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -17,22 +16,23 @@
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <FileVersion>2.0.0.0</FileVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-
-
-  </ItemGroup>
+ 
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.2' ">
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
     <PackageReference Include="System.Text.Json" Version="4.6.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ToolGood.Bedrock.Dependency\ToolGood.Bedrock.Dependency.csproj" />
-    <ProjectReference Include="..\ToolGood.Bedrock\ToolGood.Bedrock.csproj" />
-  </ItemGroup>
+  
+  
 
   <ItemGroup>
     <None Include="..\LICENSE">
@@ -41,11 +41,23 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ToolGood.Bedrock.Dependency\ToolGood.Bedrock.Dependency.csproj" />
+    <ProjectReference Include="..\ToolGood.Bedrock\ToolGood.Bedrock.csproj" />
+  </ItemGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.2|AnyCPU'">
     <DocumentationFile>bin\Debug\netcoreapp2.2\ToolGood.Bedrock.Web.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.2|AnyCPU'">
     <DocumentationFile>bin\Release\netcoreapp2.2\ToolGood.Bedrock.Web.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.0|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp3.0\ToolGood.Bedrock.Web.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.0|AnyCPU'">
+    <DocumentationFile>bin\Release\netcoreapp3.0\ToolGood.Bedrock.Web.xml</DocumentationFile>
   </PropertyGroup>
   
 </Project>
