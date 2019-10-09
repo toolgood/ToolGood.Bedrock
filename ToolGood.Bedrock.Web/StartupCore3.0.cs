@@ -4,6 +4,7 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -40,7 +41,7 @@ namespace ToolGood.Bedrock.Web
     /// </summary>
     public abstract class StartupCore
     {
-#region _appConfigFiles _appConfigFiles2
+        #region _appConfigFiles _appConfigFiles2
         /// <summary>
         /// 固定路径
         /// </summary>
@@ -135,7 +136,7 @@ namespace ToolGood.Bedrock.Web
             return null;
         }
 
-#endregion
+        #endregion
 
         public virtual IConfiguration Configuration { get; }
         public virtual IContainer AutofacContainer { get; private set; }
@@ -170,14 +171,19 @@ namespace ToolGood.Bedrock.Web
         }
 
 
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
 
+
+            //builder.RegisterModule(new AutofacModule());
+        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public virtual IServiceProvider ConfigureServices(IServiceCollection services)
+        public virtual void ConfigureServices(IServiceCollection services)
         {
             //services.AddSingleton<IConfiguration>(Configuration);
 
@@ -220,6 +226,7 @@ namespace ToolGood.Bedrock.Web
                 var mvcBuilder = services.AddControllers(options => {
                     options.Filters.Add<HttpGlobalExceptionFilter>();
                 })
+                  .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                   .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                   .AddDataAnnotationsLocalization()
                   .AddNewtonsoftJson(options => {
@@ -253,14 +260,16 @@ namespace ToolGood.Bedrock.Web
             ServiceRegister(services);
             if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(hostingEnvironment).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.ConfigureServices(services, Configuration); } }
 
-            var builder = new ContainerBuilder();
-            builder.Populate(services);
-            IocManagerRegister(ContainerManager.UseAutofacContainer(builder));
-            if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(hostingEnvironment).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.IocManagerRegister(ContainerManager.Instance); } }
+            //var builder = new ContainerBuilder();
 
-            ContainerManager.BeginLeftScope();
-            AutofacContainer = (ContainerManager.Instance.Container as AutofacObjectContainer).Container;
-            return new AutofacServiceProvider(AutofacContainer);
+            //IocManagerRegister(ContainerManager.UseAutofacContainer(builder));
+
+            //if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(hostingEnvironment).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.IocManagerRegister(ContainerManager.Instance); } }
+
+            //builder.Populate(services);
+            //ContainerManager.BeginLeftScope();
+            //AutofacContainer = (ContainerManager.Instance.Container as AutofacObjectContainer).Container;
+            //return new AutofacServiceProvider(AutofacContainer);
         }
 
         /// <summary>
@@ -284,7 +293,7 @@ namespace ToolGood.Bedrock.Web
             if (config.UseResponseCompression) { app.UseResponseCompression(); }//使用压缩
             if (config.UseResponseCaching) { app.UseResponseCaching(); }//使用缓存
 
-#region UseStaticFiles
+            #region UseStaticFiles
             var provider = new FileExtensionContentTypeProvider();
             provider.Mappings.Add(".properties", "application/octet-stream");
             provider.Mappings.Add(".bcmap", "application/octet-stream");
@@ -302,7 +311,7 @@ namespace ToolGood.Bedrock.Web
                     ServeUnknownFileTypes = true
                 });
             }
-#endregion
+            #endregion
 
             if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(env).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.Configure(app); } }
             if (config.UseSession) { app.UseCookiePolicy(); app.UseSession(); } //使用session
@@ -350,7 +359,7 @@ namespace ToolGood.Bedrock.Web
                 });
 
             }
-
+             
 
         }
 
