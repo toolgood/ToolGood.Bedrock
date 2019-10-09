@@ -7,17 +7,25 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Text;
 
+#if NETCOREAPP3_0
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IWebHostEnvironment;
+#elif NETCOREAPP2_2
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+#endif
+
+
+
 namespace ToolGood.Bedrock.Web.Theme
 {
     public class AppLoader
     {
         private static AppLoader _instance;
-        private static IWebHostEnvironment _hostingEnvironment;
+        private static IHostingEnvironment _hostingEnvironment;
         private readonly IList<string> _loadedAssemblies = new List<string>();
-        //public IList<AppDescriptor> AppDescriptors = new List<AppDescriptor>();
         public IList<Assembly> AppAssemblies = new List<Assembly>();
 
-        public static AppLoader Instance(IWebHostEnvironment hostingEnvironment)
+ 
+        public static AppLoader Instance(IHostingEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment;
             return _instance ?? (_instance = new AppLoader());

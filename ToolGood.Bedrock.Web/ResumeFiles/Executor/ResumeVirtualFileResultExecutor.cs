@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 using Microsoft.Net.Http.Headers;
 using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
 
+#if NETCOREAPP3_0
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IWebHostEnvironment;
+#elif NETCOREAPP2_2
+using IHostingEnvironment=Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+#endif
+
+
 namespace ToolGood.Bedrock.Web.ResumeFiles.Executor
 {
     /// <summary>
@@ -19,9 +26,13 @@ namespace ToolGood.Bedrock.Web.ResumeFiles.Executor
         /// </summary>
         /// <param name="loggerFactory"></param>
         /// <param name="hostingEnvironment"></param>
-        public ResumeVirtualFileResultExecutor(ILoggerFactory loggerFactory, IWebHostEnvironment hostingEnvironment) : base(loggerFactory, hostingEnvironment)
+        public ResumeVirtualFileResultExecutor(ILoggerFactory loggerFactory, IHostingEnvironment hostingEnvironment) : base(loggerFactory, hostingEnvironment)
         {
         }
+ 
+
+
+
 
         /// <summary>
         /// 执行FileResult

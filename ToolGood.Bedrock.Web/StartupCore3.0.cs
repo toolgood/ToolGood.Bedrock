@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿#if NETCOREAPP3_0
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,8 +21,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using System.Threading.Tasks;
 using ToolGood.Bedrock.Dependency;
@@ -41,7 +40,7 @@ namespace ToolGood.Bedrock.Web
     /// </summary>
     public abstract class StartupCore
     {
-        #region _appConfigFiles _appConfigFiles2
+#region _appConfigFiles _appConfigFiles2
         /// <summary>
         /// 固定路径
         /// </summary>
@@ -136,7 +135,7 @@ namespace ToolGood.Bedrock.Web
             return null;
         }
 
-        #endregion
+#endregion
 
         public virtual IConfiguration Configuration { get; }
         public virtual IContainer AutofacContainer { get; private set; }
@@ -156,7 +155,7 @@ namespace ToolGood.Bedrock.Web
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
             var path = GetAppConfigPath();
-            if (string.IsNullOrEmpty(path)==false) {
+            if (string.IsNullOrEmpty(path) == false) {
                 builder.AddXmlFile(path, true, false);
             }
             Configuration = builder.Build();
@@ -181,7 +180,7 @@ namespace ToolGood.Bedrock.Web
         public virtual IServiceProvider ConfigureServices(IServiceCollection services)
         {
             //services.AddSingleton<IConfiguration>(Configuration);
-        
+
             var hostingEnvironment = services.BuildServiceProvider().GetService<IWebHostEnvironment>();
 
             var config = GetMyConfig();
@@ -223,7 +222,7 @@ namespace ToolGood.Bedrock.Web
                 })
                   .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                   .AddDataAnnotationsLocalization()
-                  .AddNewtonsoftJson(options=> {
+                  .AddNewtonsoftJson(options => {
                       options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                       options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                       options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
@@ -285,7 +284,7 @@ namespace ToolGood.Bedrock.Web
             if (config.UseResponseCompression) { app.UseResponseCompression(); }//使用压缩
             if (config.UseResponseCaching) { app.UseResponseCaching(); }//使用缓存
 
-            #region UseStaticFiles
+#region UseStaticFiles
             var provider = new FileExtensionContentTypeProvider();
             provider.Mappings.Add(".properties", "application/octet-stream");
             provider.Mappings.Add(".bcmap", "application/octet-stream");
@@ -303,7 +302,7 @@ namespace ToolGood.Bedrock.Web
                     ServeUnknownFileTypes = true
                 });
             }
-            #endregion
+#endregion
 
             if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(env).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.Configure(app); } }
             if (config.UseSession) { app.UseCookiePolicy(); app.UseSession(); } //使用session
@@ -349,7 +348,7 @@ namespace ToolGood.Bedrock.Web
                         name: "default",
                         pattern: "{controller=Home:exists}/{action=Index}/{id?}");
                 });
-                 
+
             }
 
 
@@ -393,3 +392,5 @@ namespace ToolGood.Bedrock.Web
         protected virtual void ApplicationRegister(IApplicationBuilder app) { }
     }
 }
+
+#endif
