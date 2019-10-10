@@ -40,14 +40,7 @@
         /// </summary>
         public bool UseIHttpContextAccessor { get; set; } = true;
 
-        /// <summary>
-        /// 使用 主题 
-        /// </summary>
-        public bool UseTheme { get; set; } = false;
-        /// <summary>
-        /// 使用 插件
-        /// </summary>
-        public bool UsePlugin { get; set; } = false;
+ 
 
     }
 }
