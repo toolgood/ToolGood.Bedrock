@@ -33,7 +33,7 @@ namespace ToolGood.Bedrock.Plugins.Loader
             this AssemblyLoadContextBuilder builder,
             string runtimeConfigPath,
             bool includeDevConfig,
-            out Exception? error)
+            out Exception error)
         {
             error = null;
             try
@@ -44,7 +44,7 @@ namespace ToolGood.Bedrock.Plugins.Loader
                     return builder;
                 }
 
-                RuntimeConfig? devConfig = null;
+                RuntimeConfig devConfig = null;
                 if (includeDevConfig)
                 {
                     var configDevPath = runtimeConfigPath.Substring(0, runtimeConfigPath.Length - JsonExt.Length) + ".dev.json";
@@ -83,7 +83,7 @@ namespace ToolGood.Bedrock.Plugins.Loader
             return builder;
         }
 
-        private static void AddProbingPaths(AssemblyLoadContextBuilder builder, RuntimeOptions options, string? tfm)
+        private static void AddProbingPaths(AssemblyLoadContextBuilder builder, RuntimeOptions options, string tfm)
         {
             if (options.AdditionalProbingPaths == null)
             {
@@ -113,7 +113,7 @@ namespace ToolGood.Bedrock.Plugins.Loader
             }
         }
 
-        private static RuntimeConfig? TryReadConfig(string path)
+        private static RuntimeConfig TryReadConfig(string path)
         {
             try
             {

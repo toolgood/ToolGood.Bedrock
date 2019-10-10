@@ -75,7 +75,7 @@ namespace ToolGood.Bedrock.Plugins.Loader
         /// </summary>
         /// <param name="assemblyName"></param>
         /// <returns></returns>
-        protected override Assembly? Load(AssemblyName assemblyName)
+        protected override Assembly Load(AssemblyName assemblyName)
         {
             if (assemblyName.Name == null)
             {
@@ -154,9 +154,9 @@ namespace ToolGood.Bedrock.Plugins.Loader
             {
                 return base.LoadFromAssemblyPath(path);
             }
-
-            using var file = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-            return LoadFromStream(file);
+            using (var file = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+                return LoadFromStream(file);
+            }
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace ToolGood.Bedrock.Plugins.Loader
             return base.LoadUnmanagedDll(unmanagedDllName);
         }
 
-        private bool SearchForLibrary(ManagedLibrary library, out string? path)
+        private bool SearchForLibrary(ManagedLibrary library, out string path)
         {
             // 1. Check for in _basePath + app local path
             var localFile = Path.Combine(_basePath, library.AppLocalPath);
@@ -265,7 +265,7 @@ namespace ToolGood.Bedrock.Plugins.Loader
             return false;
         }
 
-        private bool SearchForLibrary(NativeLibrary library, string prefix, out string? path)
+        private bool SearchForLibrary(NativeLibrary library, string prefix, out string path)
         {
             // 1. Search in base path
             foreach (var ext in PlatformInformation.NativeLibraryExtensions)

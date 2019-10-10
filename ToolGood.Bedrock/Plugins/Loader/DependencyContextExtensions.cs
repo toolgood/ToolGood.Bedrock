@@ -24,7 +24,7 @@ namespace ToolGood.Bedrock.Plugins.Loader
         /// <param name="depsFilePath">The full path to the .deps.json file.</param>
         /// <param name="error">An error, if one occurs while reading .deps.json</param>
         /// <returns>The builder.</returns>
-        public static AssemblyLoadContextBuilder TryAddDependencyContext(this AssemblyLoadContextBuilder builder, string depsFilePath, out Exception? error)
+        public static AssemblyLoadContextBuilder TryAddDependencyContext(this AssemblyLoadContextBuilder builder, string depsFilePath, out Exception error)
         {
             error = null;
             try

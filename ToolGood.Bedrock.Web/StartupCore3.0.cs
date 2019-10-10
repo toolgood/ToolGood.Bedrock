@@ -1,5 +1,6 @@
 ﻿#if NETCOREAPP3_0
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
@@ -26,8 +28,6 @@ using ToolGood.Bedrock.Web.Loggers;
 using ToolGood.Bedrock.Web.Middlewares;
 using ToolGood.Bedrock.Web.ResumeFiles.Executor;
 using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
-using ToolGood.Bedrock.Web.Theme;
-using IStartup = ToolGood.Bedrock.Web.Theme.IStartup;
 
 namespace ToolGood.Bedrock.Web
 {
@@ -143,9 +143,7 @@ namespace ToolGood.Bedrock.Web
             MyHostingEnvironment.WebRootPath = env.WebRootPath;
             MyHostingEnvironment.IsDevelopment = env.IsDevelopment();
 
-
             var builder = new ConfigurationBuilder()
-
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
@@ -154,17 +152,9 @@ namespace ToolGood.Bedrock.Web
                 builder.AddXmlFile(path, true, false);
             }
             Configuration = builder.Build();
-            //var builder = new ConfigurationBuilder()
-            //   .SetBasePath(env.ContentRootPath)
-            //   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            //   .AddEnvironmentVariables();
-            //Configuration = builder.Build();
-            //services.AddSingleton<IConfiguration>(Configuration);
-
-            //Configuration = configuration;
         }
 
- 
+
 
         /// <summary>
         /// 
@@ -173,12 +163,15 @@ namespace ToolGood.Bedrock.Web
         /// <returns></returns>
         public virtual void ConfigureServices(IServiceCollection services)
         {
-            //services.AddSingleton<IConfiguration>(Configuration);
-
             var hostingEnvironment = services.BuildServiceProvider().GetService<IWebHostEnvironment>();
 
             var config = GetMyConfig();
+
+            #region UseResponseCaching
             if (config.UseResponseCaching) { services.AddResponseCaching(); }
+            #endregion       
+
+            #region UseResponseCompression
             if (config.UseResponseCompression) {
                 services.AddResponseCompression(options => {
                     options.Providers.Add<BrotliCompressionProvider>();
@@ -186,6 +179,9 @@ namespace ToolGood.Bedrock.Web
                     options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "image/svg+xml" });
                 });
             }
+            #endregion
+
+            #region UseSession UseCookie
             if (config.UseSession) {
                 services.AddDistributedMemoryCache();
                 services.AddSession(options => {
@@ -206,60 +202,64 @@ namespace ToolGood.Bedrock.Web
                 services.Configure<CookiePolicyOptions>(options => {
                     options.CheckConsentNeeded = context => false;
                     options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                    options.Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
                 });
             }
+            #endregion
+
+            #region UseIHttpContextAccessor
             if (config.UseIHttpContextAccessor) { services.AddHttpContextAccessor(); }
+            #endregion
 
+            #region UseMvc UseWebapi UseRazorPages
             if (config.UseMvc) {
-
-                services.AddRazorPages();
+                var mvcBuilder = services.AddControllersWithViews(options => {
+                    options.Filters.Add<HttpGlobalExceptionFilter>();
+                });
+                mvcBuilder.AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
+                mvcBuilder.AddDataAnnotationsLocalization();
+                AddNewtonsoftJson(mvcBuilder);
+            } else if (config.UseWebapi) {
                 var mvcBuilder = services.AddControllers(options => {
                     options.Filters.Add<HttpGlobalExceptionFilter>();
-                })
-                  .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                  .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-                  .AddDataAnnotationsLocalization()
-                  .AddNewtonsoftJson(options => {
-                      options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                      options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                      options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-                      options.SerializerSettings.TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple;
-                      options.SerializerSettings.Converters.Add(new JsonCustomDoubleConvert());// json序列化时， 防止double，末尾出现小数点浮动,
-                      options.SerializerSettings.Converters.Add(new JsonCustomDoubleNullConvert());// json序列化时， 防止double，末尾出现小数点浮动,
-                  })
-                  //.AddJsonOptions(options => {
-                  //    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);//System.Text.Json 序列化中文时的编码问题
-                  //    options.JsonSerializerOptions.ReadCommentHandling = System.Text.Json.JsonCommentHandling.Allow; // 忽略注释
-                  //    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase; // 首字母小写
-                  //    options.JsonSerializerOptions.WriteIndented = false;  // 不格式化json字符串 
-                  //    options.JsonSerializerOptions.AllowTrailingCommas = true;  // 可以结尾有逗号
-                  //    options.JsonSerializerOptions.IgnoreReadOnlyProperties = true;  // 忽略只读属性
-                  //    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;  // 忽略大小写
-                  //})
-                  ;
+                });
+                AddNewtonsoftJson(mvcBuilder);
             }
+            if (config.UseRazorPages) {
+                var mvcBuilder = services.AddRazorPages();
+                mvcBuilder.AddDataAnnotationsLocalization();
+                AddNewtonsoftJson(mvcBuilder);
+            }
+            #endregion
+
+            #region UseCors
+            if (config.UseCors) {
+                services.AddCors(options => {
+                    CorsRegister(options);
+                    if (config.AllowAllCors) {
+                        options.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+                    }
+                });
+            }
+            #endregion
+
             services.TryAddSingleton<IActionResultExecutor<ResumePhysicalFileResult>, ResumePhysicalFileResultExecutor>();
             services.TryAddSingleton<IActionResultExecutor<ResumeVirtualFileResult>, ResumeVirtualFileResultExecutor>();
             services.TryAddSingleton<IActionResultExecutor<ResumeFileStreamResult>, ResumeFileStreamResultExecutor>();
             services.TryAddSingleton<IActionResultExecutor<ResumeFileContentResult>, ResumeFileContentResultExecutor>();
-
-            if (config.UseCors) { services.AddCors(options => { options.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials()); }); }
-
             services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
-
             ServiceRegister(services);
-            if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(hostingEnvironment).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.ConfigureServices(services, Configuration); } }
-
-            //var builder = new ContainerBuilder();
-
-            //IocManagerRegister(ContainerManager.UseAutofacContainer(builder));
-
-            //if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(hostingEnvironment).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.IocManagerRegister(ContainerManager.Instance); } }
-
-            //builder.Populate(services);
-            //ContainerManager.BeginLeftScope();
-            //AutofacContainer = (ContainerManager.Instance.Container as AutofacObjectContainer).Container;
-            //return new AutofacServiceProvider(AutofacContainer);
+        }
+        private void AddNewtonsoftJson(IMvcBuilder mvcBuilder)
+        {
+            mvcBuilder.AddNewtonsoftJson(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+                options.SerializerSettings.TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple;
+                options.SerializerSettings.Converters.Add(new JsonCustomDoubleConvert());// json序列化时， 防止double，末尾出现小数点浮动,
+                options.SerializerSettings.Converters.Add(new JsonCustomDoubleNullConvert());// json序列化时， 防止double，末尾出现小数点浮动,
+            });
         }
 
         /// <summary>
@@ -269,7 +269,6 @@ namespace ToolGood.Bedrock.Web
         /// <param name="env"></param>
         public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             var config = GetMyConfig();
 
             if (env.IsDevelopment()) {
@@ -280,15 +279,19 @@ namespace ToolGood.Bedrock.Web
                     app.UseHsts();
                 }
             }
+            if (config.UseHsts) { app.UseHttpsRedirection(); }
             if (config.UseResponseCompression) { app.UseResponseCompression(); }//使用压缩
             if (config.UseResponseCaching) { app.UseResponseCaching(); }//使用缓存
 
-            #region UseStaticFiles
+            #region 注册Mine
             var provider = new FileExtensionContentTypeProvider();
             provider.Mappings.Add(".properties", "application/octet-stream");
             provider.Mappings.Add(".bcmap", "application/octet-stream");
-            MineRegister(provider);//注册Mine
+            MineRegister(provider.Mappings);//注册Mine 
             app.UseStaticFiles(new StaticFileOptions { ContentTypeProvider = provider });
+            #endregion
+
+            #region UselLetsEncrypt
             if (config.UselLetsEncrypt) {
                 var path = Path.Combine(env.ContentRootPath, ".well-known");
                 if (Directory.Exists(path) == false) {
@@ -303,25 +306,29 @@ namespace ToolGood.Bedrock.Web
             }
             #endregion
 
-            if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(env).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.Configure(app); } }
+            #region UseSession UseCookie
             if (config.UseSession) { app.UseCookiePolicy(); app.UseSession(); } //使用session
-            else if (config.UseCookie) { app.UseCookiePolicy(); }//使用cookie
+            else if (config.UseCookie) { app.UseCookiePolicy(); }//使用cookie 
+            #endregion
+
             if (config.UseCors) { app.UseCors(); }
 
-            app.UseEnableRequestRewind();
-            ApplicationRegister(app);
+            //app.UseEnableRequestRewind();
 
-            if (config.UseMvc) {
-                if (config.UseTheme) {
-                    app.UseMiddleware<ThemeMiddleware>();
-                }
-                app.UseRouting();
-                app.UseEndpoints(endpoints => {
+            app.UseRouting();
+
+            if (config.UseAuthentication) { app.UseAuthentication(); }
+
+
+
+            #region UseMvc UseWebapi UseRazorPages
+
+            app.UseEndpoints(endpoints => {
+                RouteRegister(endpoints);
+                if (config.UseRazorPages) {
                     endpoints.MapRazorPages();
-                    endpoints.MapControllerRoute(
-                        name: "areas",
-                        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                     );
+                }
+                if (config.UseMvc) {
                     endpoints.MapControllerRoute(
                        name: "imageDefaultC",
                        pattern: "Image/C{w:int}x{h:int}/{*u}",
@@ -344,13 +351,19 @@ namespace ToolGood.Bedrock.Web
                         defaults: new { controller = "Image", action = "QR", });
 
                     endpoints.MapControllerRoute(
+                        name: "areas",
+                        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                     );
+                    endpoints.MapControllerRoute(
                         name: "default",
                         pattern: "{controller=Home}/{action=Index}/{id?}");
-                });
+                } else if (config.UseWebapi) {
+                    endpoints.MapControllers();
+                }
+            });
+            #endregion
 
-            }
-             
-
+            ApplicationRegister(app);
         }
 
         /// <summary>
@@ -363,7 +376,7 @@ namespace ToolGood.Bedrock.Web
         /// Mine 注册
         /// </summary>
         /// <param name="provider"></param>
-        protected virtual void MineRegister(FileExtensionContentTypeProvider provider) { }
+        protected virtual void MineRegister(IDictionary<string, string> mapping) { }
 
         /// <summary>
         /// 服务注册
@@ -371,18 +384,17 @@ namespace ToolGood.Bedrock.Web
         /// <param name="services"></param>
         protected virtual void ServiceRegister(IServiceCollection services) { }
 
-
-        ///// <summary>
-        ///// IOC注册
-        ///// </summary>
-        ///// <param name="containerManager"></param>
-        //protected virtual void IocManagerRegister(ContainerManager containerManager) { }
+        /// <summary>
+        /// 跨域注册
+        /// </summary>
+        /// <param name="options"></param>
+        protected virtual void CorsRegister(CorsOptions options) { }
 
         /// <summary>
         /// 注册路由
         /// </summary>
         /// <param name="routes"></param>
-        protected virtual void RouteRegister(IRouteBuilder routes) { }
+        protected virtual void RouteRegister(IEndpointRouteBuilder routes) { }
 
         /// <summary>
         /// app注册 
