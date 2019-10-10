@@ -30,6 +30,17 @@
         /// 使用 MVC
         /// </summary>
         public bool UseMvc { get; set; } = true;
+
+        /// <summary>
+        /// 使用 Webapi
+        /// </summary>
+        public bool UseWebapi { get; set; } = true;
+
+        /// <summary>
+        /// 使用 RazorPages
+        /// </summary>
+        public bool UseRazorPages { get; set; } = true;
+
         /// <summary>
         /// 使用 跨域
         /// </summary>
@@ -40,14 +51,7 @@
         /// </summary>
         public bool UseIHttpContextAccessor { get; set; } = true;
 
-        /// <summary>
-        /// 使用 主题 
-        /// </summary>
-        public bool UseTheme { get; set; } = false;
-        /// <summary>
-        /// 使用 插件
-        /// </summary>
-        public bool UsePlugin { get; set; } = false;
+ 
 
     }
 }

@@ -30,8 +30,6 @@ using ToolGood.Bedrock.Web.Loggers;
 using ToolGood.Bedrock.Web.Middlewares;
 using ToolGood.Bedrock.Web.ResumeFiles.Executor;
 using ToolGood.Bedrock.Web.ResumeFiles.ResumeFileResult;
-using ToolGood.Bedrock.Web.Theme;
-using IStartup = ToolGood.Bedrock.Web.Theme.IStartup;
 
 namespace ToolGood.Bedrock.Web
 {
@@ -233,24 +231,6 @@ namespace ToolGood.Bedrock.Web
                       options.SerializerSettings.Converters.Add(new JsonCustomDoubleNullConvert());// json序列化时， 防止double，末尾出现小数点浮动,
                   }
               );
-                if (config.UsePlugin) {
-                    mvcBuilder.AddRazorOptions(options => {
-                        foreach (var assembly in AppLoader.Instance(hostingEnvironment).AppAssemblies) {
-                            var reference = MetadataReference.CreateFromFile(assembly.Location);
-                            options.AdditionalCompilationReferences.Add(reference);
-                        }
-                    });
-                    services.Configure<RazorViewEngineOptions>(options => {
-                        foreach (var assembly in AppLoader.Instance(hostingEnvironment).AppAssemblies) {
-                            var embeddedFileProvider = new EmbeddedFileProvider(assembly, assembly.GetName().Name);
-                            options.FileProviders.Add(embeddedFileProvider);
-                        }
-                    });
-                }
-                if (config.UseTheme) {
-                    services.Configure<RazorViewEngineOptions>(options => { options.ViewLocationExpanders.Add(new ViewLocationExpander()); });
-                }
-
             }
             services.TryAddSingleton<IActionResultExecutor<ResumePhysicalFileResult>, ResumePhysicalFileResultExecutor>();
             services.TryAddSingleton<IActionResultExecutor<ResumeVirtualFileResult>, ResumeVirtualFileResultExecutor>();
@@ -260,14 +240,11 @@ namespace ToolGood.Bedrock.Web
             if (config.UseCors) { services.AddCors(options => { options.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials()); }); }
 
             services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
-
             ServiceRegister(services);
-            if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(hostingEnvironment).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.ConfigureServices(services, Configuration); } }
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
             IocManagerRegister(ContainerManager.UseAutofacContainer(builder));
-            if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(hostingEnvironment).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.IocManagerRegister(ContainerManager.Instance); } }
 
             ContainerManager.BeginLeftScope();
             AutofacContainer = (ContainerManager.Instance.Container as AutofacObjectContainer).Container;
@@ -316,7 +293,6 @@ namespace ToolGood.Bedrock.Web
             }
 #endregion
 
-            if (config.UsePlugin) { foreach (var startup in AppLoader.Instance(env).AppAssemblies.GetImplementationsOf<IStartup>()) { startup.Configure(app); } }
             if (config.UseSession) { app.UseCookiePolicy(); app.UseSession(); } //使用session
             else if (config.UseCookie) { app.UseCookiePolicy(); }//使用cookie
             if (config.UseCors) { app.UseCors(); }
@@ -325,9 +301,6 @@ namespace ToolGood.Bedrock.Web
             ApplicationRegister(app);
 
             if (config.UseMvc) {
-                if (config.UseTheme) {
-                    app.UseMiddleware<ThemeMiddleware>();
-                }
 
                 app.UseMvc(routes => {
                     RouteRegister(routes);
