@@ -30,6 +30,17 @@
         /// 使用 MVC
         /// </summary>
         public bool UseMvc { get; set; } = true;
+
+        /// <summary>
+        /// 使用 Webapi
+        /// </summary>
+        public bool UseWebapi { get; set; } = true;
+
+        /// <summary>
+        /// 使用 RazorPages
+        /// </summary>
+        public bool UseRazorPages { get; set; } = true;
+
         /// <summary>
         /// 使用 跨域
         /// </summary>
