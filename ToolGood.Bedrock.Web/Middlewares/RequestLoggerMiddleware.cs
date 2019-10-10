@@ -23,7 +23,7 @@ namespace ToolGood.Bedrock.Web.Middlewares
             if (request.Method == "POST") {
                 if (request.ContentType.ToLower().Contains("form-data") == false || request.ContentType.ToLower().Contains("json") == false) {
                     using (var buffer = new MemoryStream()) {
-                        request.EnableBuffering();
+                        if (!request.Body.CanSeek) { request.EnableBuffering(); }
                         request.Body.Position = 0;
                         request.Body.CopyTo(buffer);
                         request.Body.Position = 0;

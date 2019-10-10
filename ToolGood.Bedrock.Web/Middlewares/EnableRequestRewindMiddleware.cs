@@ -15,7 +15,8 @@
 
 //        public async Task Invoke(HttpContext context)
 //        {
-//            context.Request.EnableBuffering();
+//            if (!context.Request.Body.CanSeek) { context.Request.EnableBuffering(); }
+//            //context.Request.EnableBuffering();
 //            await _next(context);
 //        }
 //    }
