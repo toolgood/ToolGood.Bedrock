@@ -5,7 +5,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text.Json;
+using Newtonsoft.Json;
+//using System.Text.Json;
 
 namespace ToolGood.Bedrock.Plugins.Loader
 {
@@ -15,10 +16,9 @@ namespace ToolGood.Bedrock.Plugins.Loader
     public static class RuntimeConfigExtensions
     {
         private const string JsonExt = ".json";
-        private static readonly JsonSerializerOptions s_serializerOptions = new JsonSerializerOptions()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
+        //private static readonly JsonSerializerOptions s_serializerOptions = new JsonSerializerOptions() {
+        //    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        //};
 
         /// <summary>
         /// Adds additional probing paths to a managed load context using settings found in the runtimeconfig.json
@@ -36,48 +36,38 @@ namespace ToolGood.Bedrock.Plugins.Loader
             out Exception error)
         {
             error = null;
-            try
-            {
+            try {
                 var config = TryReadConfig(runtimeConfigPath);
-                if (config == null)
-                {
+                if (config == null) {
                     return builder;
                 }
 
                 RuntimeConfig devConfig = null;
-                if (includeDevConfig)
-                {
+                if (includeDevConfig) {
                     var configDevPath = runtimeConfigPath.Substring(0, runtimeConfigPath.Length - JsonExt.Length) + ".dev.json";
                     devConfig = TryReadConfig(configDevPath);
                 }
 
                 var tfm = config.runtimeOptions?.Tfm ?? devConfig?.runtimeOptions?.Tfm;
 
-                if (config.runtimeOptions != null)
-                {
+                if (config.runtimeOptions != null) {
                     AddProbingPaths(builder, config.runtimeOptions, tfm);
                 }
 
-                if (devConfig?.runtimeOptions != null)
-                {
+                if (devConfig?.runtimeOptions != null) {
                     AddProbingPaths(builder, devConfig.runtimeOptions, tfm);
                 }
 
-                if (tfm != null)
-                {
+                if (tfm != null) {
                     var dotnet = Process.GetCurrentProcess().MainModule.FileName;
-                    if (string.Equals(Path.GetFileNameWithoutExtension(dotnet), "dotnet", StringComparison.OrdinalIgnoreCase))
-                    {
+                    if (string.Equals(Path.GetFileNameWithoutExtension(dotnet), "dotnet", StringComparison.OrdinalIgnoreCase)) {
                         var dotnetHome = Path.GetDirectoryName(dotnet);
-                        if (dotnetHome != null)
-                        {
+                        if (dotnetHome != null) {
                             builder.AddProbingPath(Path.Combine(dotnetHome, "store", RuntimeInformation.OSArchitecture.ToString().ToLowerInvariant(), tfm));
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 error = ex;
             }
             return builder;
@@ -85,23 +75,18 @@ namespace ToolGood.Bedrock.Plugins.Loader
 
         private static void AddProbingPaths(AssemblyLoadContextBuilder builder, RuntimeOptions options, string tfm)
         {
-            if (options.AdditionalProbingPaths == null)
-            {
+            if (options.AdditionalProbingPaths == null) {
                 return;
             }
 
-            foreach (var item in options.AdditionalProbingPaths)
-            {
+            foreach (var item in options.AdditionalProbingPaths) {
                 var path = item;
-                if (path.Contains("|arch|"))
-                {
+                if (path.Contains("|arch|")) {
                     path = path.Replace("|arch|", RuntimeInformation.OSArchitecture.ToString().ToLowerInvariant());
                 }
 
-                if (path.Contains("|tfm|"))
-                {
-                    if (tfm == null)
-                    {
+                if (path.Contains("|tfm|")) {
+                    if (tfm == null) {
                         // We don't have enough information to parse this
                         continue;
                     }
@@ -115,13 +100,10 @@ namespace ToolGood.Bedrock.Plugins.Loader
 
         private static RuntimeConfig TryReadConfig(string path)
         {
-            try
-            {
-                var file = File.ReadAllBytes(path);
-                return JsonSerializer.Deserialize<RuntimeConfig>(file, s_serializerOptions);
-            }
-            catch
-            {
+            try {
+                var txt = File.ReadAllText(path);
+                return JsonConvert.DeserializeObject<RuntimeConfig>(txt);
+            } catch {
                 return null;
             }
         }
