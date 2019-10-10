@@ -358,7 +358,7 @@ namespace ToolGood.Bedrock.Web
 
                     routes.MapRoute(
                         name: "default",
-                        template: "{controller=Home:exists}/{action=Index}/{id?}");
+                        template: "{controller=Home}/{action=Index}/{id?}");
                 });
             }
 

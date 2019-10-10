@@ -1,6 +1,4 @@
 ﻿#if NETCOREAPP3_0
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -23,9 +21,6 @@ using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using System.Threading.Tasks;
-using ToolGood.Bedrock.Dependency;
-using ToolGood.Bedrock.Dependency.AutofacContainer;
 using ToolGood.Bedrock.Internals;
 using ToolGood.Bedrock.Web.Loggers;
 using ToolGood.Bedrock.Web.Middlewares;
@@ -139,7 +134,6 @@ namespace ToolGood.Bedrock.Web
         #endregion
 
         public virtual IConfiguration Configuration { get; }
-        public virtual IContainer AutofacContainer { get; private set; }
 
         public StartupCore(IWebHostEnvironment env)
         {
@@ -170,13 +164,7 @@ namespace ToolGood.Bedrock.Web
             //Configuration = configuration;
         }
 
-
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-
-
-            //builder.RegisterModule(new AutofacModule());
-        }
+ 
 
         /// <summary>
         /// 
@@ -223,6 +211,8 @@ namespace ToolGood.Bedrock.Web
             if (config.UseIHttpContextAccessor) { services.AddHttpContextAccessor(); }
 
             if (config.UseMvc) {
+
+                services.AddRazorPages();
                 var mvcBuilder = services.AddControllers(options => {
                     options.Filters.Add<HttpGlobalExceptionFilter>();
                 })
@@ -355,7 +345,7 @@ namespace ToolGood.Bedrock.Web
 
                     endpoints.MapControllerRoute(
                         name: "default",
-                        pattern: "{controller=Home:exists}/{action=Index}/{id?}");
+                        pattern: "{controller=Home}/{action=Index}/{id?}");
                 });
 
             }
@@ -382,11 +372,11 @@ namespace ToolGood.Bedrock.Web
         protected virtual void ServiceRegister(IServiceCollection services) { }
 
 
-        /// <summary>
-        /// IOC注册
-        /// </summary>
-        /// <param name="containerManager"></param>
-        protected virtual void IocManagerRegister(ContainerManager containerManager) { }
+        ///// <summary>
+        ///// IOC注册
+        ///// </summary>
+        ///// <param name="containerManager"></param>
+        //protected virtual void IocManagerRegister(ContainerManager containerManager) { }
 
         /// <summary>
         /// 注册路由

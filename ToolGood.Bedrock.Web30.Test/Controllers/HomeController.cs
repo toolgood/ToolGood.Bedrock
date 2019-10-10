@@ -17,7 +17,7 @@ namespace ToolGood.Bedrock.Web30.Test.Controllers
         {
             _logger = logger;
         }
-
+        [HttpGet("/")]
         public IActionResult Index()
         {
             return View();

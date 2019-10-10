@@ -16,15 +16,17 @@
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <FileVersion>2.0.0.0</FileVersion>
   </PropertyGroup>
-  
- 
- 
+
 
   <ItemGroup>
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
+    <ProjectReference Include="..\ToolGood.Bedrock\ToolGood.Bedrock.csproj" />
   </ItemGroup>
 
+ 
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.2' ">
+    <ProjectReference Include="..\ToolGood.Bedrock.Dependency\ToolGood.Bedrock.Dependency.csproj" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
   </ItemGroup>
 
@@ -41,13 +43,9 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <None Include="StartupCore2.2.cs" />
-  </ItemGroup>
+   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ToolGood.Bedrock.Dependency\ToolGood.Bedrock.Dependency.csproj" />
-    <ProjectReference Include="..\ToolGood.Bedrock\ToolGood.Bedrock.csproj" />
-  </ItemGroup>
+
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.2|AnyCPU'">
     <DocumentationFile>bin\Debug\netcoreapp2.2\ToolGood.Bedrock.Web.xml</DocumentationFile>
