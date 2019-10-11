@@ -1,5 +1,4 @@
-﻿#if NETCOREAPP3_0
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -79,6 +78,13 @@ namespace ToolGood.Bedrock.Web
             var assembly = Assembly.Load(assemblyName);
             var types = assembly.GetTypes();
             foreach (var implementationType in types) {
+                if (implementationType.IsAbstract) { continue; }
+                if (implementationType.IsInterface) { continue; }
+                if (implementationType.IsImport) { continue; }
+                if (implementationType.IsClass == false) { continue; }
+                if (implementationType.IsGenericType) { continue; }
+
+
                 if (predicate != null) {
                     if (predicate(implementationType) == false) {
                         continue;
@@ -87,9 +93,9 @@ namespace ToolGood.Bedrock.Web
                 var interfacesTypes = implementationType.GetInterfaces();
                 if (interfacesTypes.Length == 1) {
                     switch (lifeStyle) {
-                        case LifeStyle.Transient: service.AddTransient(implementationType, interfacesTypes[0]); break;
-                        case LifeStyle.Singleton: service.AddSingleton(implementationType, interfacesTypes[0]); break;
-                        case LifeStyle.PerLifetimeScope: service.AddScoped(implementationType, interfacesTypes[0]); break;
+                        case LifeStyle.Transient: service.AddTransient(interfacesTypes[0], implementationType); break;
+                        case LifeStyle.Singleton: service.AddSingleton(interfacesTypes[0], implementationType); break;
+                        case LifeStyle.PerLifetimeScope: service.AddScoped(interfacesTypes[0], implementationType); break;
                         default: break;
                     }
                 } else {
@@ -117,6 +123,12 @@ namespace ToolGood.Bedrock.Web
         {
             var types = assembly.GetTypes();
             foreach (var implementationType in types) {
+                if (implementationType.IsAbstract) { continue; }
+                if (implementationType.IsInterface) { continue; }
+                if (implementationType.IsImport) { continue; }
+                if (implementationType.IsClass == false) { continue; }
+                if (implementationType.IsGenericType) { continue; }
+
                 if (predicate != null) {
                     if (predicate(implementationType) == false) {
                         continue;
@@ -125,9 +137,9 @@ namespace ToolGood.Bedrock.Web
                 var interfacesTypes = implementationType.GetInterfaces();
                 if (interfacesTypes.Length == 1) {
                     switch (lifeStyle) {
-                        case LifeStyle.Transient: service.AddTransient(implementationType, interfacesTypes[0]); break;
-                        case LifeStyle.Singleton: service.AddSingleton(implementationType, interfacesTypes[0]); break;
-                        case LifeStyle.PerLifetimeScope: service.AddScoped(implementationType, interfacesTypes[0]); break;
+                        case LifeStyle.Transient: service.AddTransient(interfacesTypes[0], implementationType); break;
+                        case LifeStyle.Singleton: service.AddSingleton(interfacesTypes[0], implementationType); break;
+                        case LifeStyle.PerLifetimeScope: service.AddScoped(interfacesTypes[0], implementationType); break;
                         default: break;
                     }
                 } else {
@@ -146,4 +158,3 @@ namespace ToolGood.Bedrock.Web
     }
 }
 
-#endif

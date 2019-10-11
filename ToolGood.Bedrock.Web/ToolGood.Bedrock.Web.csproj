@@ -20,12 +20,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ToolGood.Bedrock\ToolGood.Bedrock.csproj" />
+    <ProjectReference Include="..\ToolGood.Bedrock.Dependency\ToolGood.Bedrock.Dependency.csproj" />
   </ItemGroup>
 
  
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.2' ">
-    <ProjectReference Include="..\ToolGood.Bedrock.Dependency\ToolGood.Bedrock.Dependency.csproj" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
   </ItemGroup>
