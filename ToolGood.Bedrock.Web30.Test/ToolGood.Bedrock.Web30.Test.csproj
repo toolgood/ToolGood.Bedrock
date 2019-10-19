@@ -8,4 +8,8 @@
     <ProjectReference Include="..\ToolGood.Bedrock.Web\ToolGood.Bedrock.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

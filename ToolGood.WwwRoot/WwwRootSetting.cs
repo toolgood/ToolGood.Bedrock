@@ -28,6 +28,9 @@ namespace {NameSpace}
         [HttpGet(""{FileUrl}"")]
         public IActionResult {FileMethod}()
         {
+            if (Request.Headers[""If-None-Match""]  == ""{FileHash}"") {
+                return StatusCode(304);
+            }
             Response.Headers[""Cache-Control""] = ""max-age=315360000"";
             Response.Headers[""Etag""] = ""{FileHash}"";
             Response.Headers[""Date""] = DateTime.Now.ToString(""r"");

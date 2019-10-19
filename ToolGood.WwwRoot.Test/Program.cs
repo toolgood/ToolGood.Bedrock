@@ -8,7 +8,7 @@ namespace ToolGood.WwwRoot.Test
         {
             WwwRootSetting setting = new WwwRootSetting();
             setting.NameSpace = "ToolGood.WwwRoot.Test";
-            setting.FolderPath = @"F:\git\ToolGood.Bedrock\ToolGood.Bedrock.Web30.Test\wwwroot\";
+            setting.FolderPath = @"F:\git\ToolGood.Bedrock\ToolGood.Bedrock.Web.Test\wwwroot\";
             setting.OutFolderPath = @"F:\git\ToolGood.Bedrock\ToolGood.Bedrock.Web30.Test\Controllers\wwwroot";
             setting.BuildControllers();
 
