@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using System;
-using ToolGood.Bedrock.Web.Constants;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ToolGood.Bedrock.Web.Loggers
 {
