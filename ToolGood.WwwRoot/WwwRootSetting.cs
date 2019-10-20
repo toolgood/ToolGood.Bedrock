@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using ToolGood.Bedrock;
 
 namespace ToolGood.WwwRoot
@@ -119,11 +120,14 @@ namespace {NameSpace}
                 wwwRootFile.FileContent = wwwRootFile.GetFileContent(bytes);
                 wwwRootFile.FileMime = wwwRootFile.GetFileMime(file);
                 wwwRootFile.FileUrl = file.Substring(setting.FolderPath.Length).Replace("\\", "/").TrimStart('/');
-                wwwRootFile.FileMethod = wwwRootFile.FileUrl.Replace("/", "_").Replace("-", "_").Replace(".", "_");
+                wwwRootFile.FileMethod =
+                    Regex.Replace(wwwRootFile.FileUrl, 
+                    "[^0-9_a-zA-Z\u4E00-\u9FCB\u3400-\u4DB5\u20000-\u2A6D6\u2A700-\u2B734\u2B740-\u2B81D\u3007]", "_");
+  
 
 
 
-                var txt = setting.Template;
+            var txt = setting.Template;
                 if (i == 0) { txt = setting.FirstTemplate; }
                 txt = txt.Replace("{NameSpace}", setting.NameSpace);
                 txt = txt.Replace("{ControllerName}", setting.ControllerName);
