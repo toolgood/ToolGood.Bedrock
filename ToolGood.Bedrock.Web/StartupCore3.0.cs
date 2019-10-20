@@ -291,6 +291,13 @@ namespace ToolGood.Bedrock.Web
             app.UseStaticFiles(new StaticFileOptions { ContentTypeProvider = provider });
             #endregion
 
+            #region logsPath
+            var logsPath = Path.Combine(env.ContentRootPath, "logs");
+            if (Directory.Exists(logsPath) == false) {
+                Directory.CreateDirectory(logsPath);
+            }
+            #endregion
+
             #region UselLetsEncrypt
             if (config.UselLetsEncrypt) {
                 var path = Path.Combine(env.ContentRootPath, ".well-known");
@@ -313,12 +320,10 @@ namespace ToolGood.Bedrock.Web
 
             if (config.UseCors) { app.UseCors(); }
 
-            //app.UseEnableRequestRewind();
 
             app.UseRouting();
 
             if (config.UseAuthentication) { app.UseAuthentication(); }
-
 
 
             #region UseMvc UseWebapi UseRazorPages
