@@ -11,9 +11,9 @@
     <Copyright>Copyright 2016-2019 ToolGood</Copyright>
     <Authors>ToolGood</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.0.2</Version>
-    <FileVersion>2.0.0.2</FileVersion>
-    <AssemblyVersion>2.0.0.2</AssemblyVersion>
+    <Version>2.0.0.3</Version>
+    <FileVersion>2.0.0.3</FileVersion>
+    <AssemblyVersion>2.0.0.3</AssemblyVersion>
 
     <DefineConstants Condition="'$(TargetFramework)' == 'netcoreapp3.0'">$(DefineConstants);FEATURE_UNLOAD</DefineConstants>
     <DefineConstants Condition="'$(TargetFramework)' == 'netcoreapp3.0'">$(DefineConstants);FEATURE_NATIVE_RESOLVER</DefineConstants>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ToolGood.Bedrock.Web.Mime;
 using System.IO;
+using ToolGood.Bedrock;
 
 namespace ToolGood.WwwRoot
 {
@@ -30,15 +31,16 @@ namespace ToolGood.WwwRoot
             ext = ext.Replace(".", "");
 
             foreach (var item in DefaultMimeItems.Items) {
-                if (item.Extension== ext) {
+                if (item.Extension == ext) {
                     return item.MimeType;
                 }
             }
             return "application/octet-stream";
         }
 
-        public  string GetFileContent(byte[] bytes)
+        public string GetFileContent(byte[] bytes)
         {
+            bytes = CompressionUtil.BrCompress(bytes);
             return Convert.ToBase64String(bytes);
         }
 
