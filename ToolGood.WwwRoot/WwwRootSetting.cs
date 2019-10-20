@@ -32,26 +32,24 @@ namespace {NameSpace}
         [HttpGet(""{FileUrl}"")]
         public IActionResult {FileMethod}()
         {
-            if (Request.Headers[""If-None-Match""]  == ""{FileHash}"") {
-                return StatusCode(304);
-            }
-            SetResponseHeaders(""{FileHash}"");
+            if (SetResponseHeaders(""{FileHash}"") == false) { return StatusCode(304); }
             const string s = ""{FileContent}"";
             var bytes = UseCompressBytes(s);
             return File(bytes, ""{FileMime}"");
         }
-        private void SetResponseHeaders(string etag)
+        private bool SetResponseHeaders(string etag)
         {
+            if (Request.Headers[""If-None-Match""] == etag) { return false; }
             Response.Headers[""Cache-Control""] = ""max-age=315360000"";
             Response.Headers[""Etag""] = etag;
             Response.Headers[""Date""] = DateTime.Now.ToString(""r"");
             Response.Headers[""Expires""] = DateTime.Now.AddYears(100).ToString(""r"");
-            Response.Headers[""Content-Encoding""] = ""gzip"";
+            return true;
         }
         private byte[] UseCompressBytes(string s)
         {
             var bytes = Convert.FromBase64String(s);
-            if (Request.Headers[""Accept-Encoding""].ToString().Replace("" "","""").Split(',').Contains(""br"")) {
+            if (Request.Headers[""Accept-Encoding""].ToString().Replace("" "", """").Split(',').Contains(""br"")) {
                 Response.Headers[""Content-Encoding""] = ""br"";
             } else {
                 Response.Headers[""Content-Encoding""] = ""gzip"";
@@ -59,14 +57,13 @@ namespace {NameSpace}
                     using (BrotliStream zStream = new BrotliStream(stream, CompressionMode.Decompress)) {
                         using (var resultStream = new MemoryStream()) {
                             zStream.CopyTo(resultStream);
-                            bytes= resultStream.ToArray();
+                            bytes = resultStream.ToArray();
                         }
                     }
                 }
                 using (MemoryStream stream = new MemoryStream()) {
                     using (GZipStream zStream = new GZipStream(stream, CompressionMode.Compress)) {
                         zStream.Write(bytes, 0, bytes.Length);
-                        zStream.Close();
                     }
                     bytes = stream.ToArray();
                 }
@@ -86,10 +83,7 @@ namespace {NameSpace}
         [HttpGet(""{FileUrl}"")]
         public IActionResult {FileMethod}()
         {
-            if (Request.Headers[""If-None-Match""]  == ""{FileHash}"") {
-                return StatusCode(304);
-            }
-            SetResponseHeaders(""{FileHash}"");
+            if (SetResponseHeaders(""{FileHash}"") == false) { return StatusCode(304); }
             const string s = ""{FileContent}"";
             var bytes = UseCompressBytes(s);
             return File(bytes, ""{FileMime}"");

@@ -13,15 +13,15 @@ namespace ToolGood.Bedrock
         /// </summary>
         /// <param name="data">要压缩的字节数组</param>
         /// <returns>压缩后的数组</returns>
-        public static byte[] DeflateCompress(byte[] data)
+        public static byte[] DeflateCompress(byte[] data, bool fastest = false)
         {
-            if (data == null || data.Length < 1)
+            if (data == null || data.Length == 0)
                 return data;
             try {
                 using (MemoryStream stream = new MemoryStream()) {
-                    using (DeflateStream zStream = new DeflateStream(stream, CompressionMode.Compress)) {
+                    var level = fastest ? CompressionLevel.Fastest : CompressionLevel.Optimal;
+                    using (DeflateStream zStream = new DeflateStream(stream, level)) {
                         zStream.Write(data, 0, data.Length);
-                        zStream.Close();
                     }
                     return stream.ToArray();
                 }
@@ -37,7 +37,7 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public static byte[] DeflateDecompression(byte[] data)
         {
-            if (data == null || data.Length < 1)
+            if (data == null || data.Length == 0)
                 return data;
             try {
                 using (MemoryStream stream = new MemoryStream(data)) {
@@ -58,15 +58,15 @@ namespace ToolGood.Bedrock
         /// </summary>
         /// <param name="data">要压缩的字节数组</param>
         /// <returns>Gzip压缩后的数组</returns>
-        public static byte[] GzipCompress(byte[] data)
+        public static byte[] GzipCompress(byte[] data, bool fastest = false)
         {
-            if (data == null || data.Length < 1)
+            if (data == null || data.Length == 0)
                 return data;
             try {
                 using (MemoryStream stream = new MemoryStream()) {
-                    using (GZipStream zStream = new GZipStream(stream, CompressionMode.Compress)) {
+                    var level = fastest ? CompressionLevel.Fastest : CompressionLevel.Optimal;
+                    using (GZipStream zStream = new GZipStream(stream, level)) {
                         zStream.Write(data, 0, data.Length);
-                        zStream.Close();
                     }
                     return stream.ToArray();
                 }
@@ -82,7 +82,7 @@ namespace ToolGood.Bedrock
         /// <returns>Gzip压缩后的数组</returns>
         public static byte[] GzipDecompress(byte[] data)
         {
-            if (data == null || data.Length < 1)
+            if (data == null || data.Length == 0)
                 return data;
             try {
                 using (MemoryStream stream = new MemoryStream(data)) {
@@ -105,16 +105,15 @@ namespace ToolGood.Bedrock
         /// </summary>
         /// <param name="data">要压缩的字节数组</param>
         /// <returns>Gzip压缩后的数组</returns>
-        public static byte[] BrCompress(byte[] data)
+        public static byte[] BrCompress(byte[] data, bool fastest = false)
         {
-            if (data == null || data.Length < 1)
+            if (data == null || data.Length == 0)
                 return data;
             try {
                 using (MemoryStream stream = new MemoryStream()) {
-                    
-                    using (BrotliStream zStream = new BrotliStream(stream, CompressionLevel.Optimal)) {
+                    var level = fastest ? CompressionLevel.Fastest : CompressionLevel.Optimal;
+                    using (BrotliStream zStream = new BrotliStream(stream, level)) {
                         zStream.Write(data, 0, data.Length);
-                        zStream.Close();
                     }
                     return stream.ToArray();
                 }
@@ -130,7 +129,7 @@ namespace ToolGood.Bedrock
         /// <returns>Gzip压缩后的数组</returns>
         public static byte[] BrDecompress(byte[] data)
         {
-            if (data == null || data.Length < 1)
+            if (data == null || data.Length == 0)
                 return data;
             try {
                 using (MemoryStream stream = new MemoryStream(data)) {
