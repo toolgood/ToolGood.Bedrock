@@ -462,7 +462,7 @@ namespace ToolGood.AnyDiff
             /// <summary>
             /// Initialize the Diff-Data buffer.
             /// </summary>
-            /// <param name="data">reference to the buffer</param>
+            /// <param name="initData">reference to the buffer</param>
             internal DiffData(int[] initData)
             {
                 Data = initData;

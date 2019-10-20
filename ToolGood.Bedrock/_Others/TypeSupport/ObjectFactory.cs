@@ -133,7 +133,7 @@ namespace TypeSupport
         /// <summary>
         /// Create a new, empty object of a given type
         /// </summary>
-        /// <param name="typeRegistry">A type registry that specifies custom mappings or factories</param>
+        /// <param name="type">A type registry that specifies custom mappings or factories</param>
         /// <param name="dimensions">For array types, the dimensions of the array to create</param>
         /// <returns></returns>
         public object CreateEmptyObject(Type type, params object[] dimensions)
@@ -144,8 +144,6 @@ namespace TypeSupport
         /// <summary>
         /// Create a new, empty object of a given type
         /// </summary>
-        /// <param name="typeRegistry">A type registry that specifies custom mappings or factories</param>
-        /// <param name="initializer">An optional initializer to use to create the object</param>
         /// <param name="dimensions">For array types, the dimensions of the array to create</param>
         /// <returns></returns>
         public T CreateEmptyObject<T>(params object[] dimensions)
@@ -156,7 +154,6 @@ namespace TypeSupport
         /// <summary>
         /// Create a new, empty object of a given type
         /// </summary>
-        /// <param name="typeRegistry">A type registry that specifies custom mappings or factories</param>
         /// <param name="initializer">An optional initializer to use to create the object</param>
         /// <returns></returns>
         public T CreateEmptyObject<T>(Func<T> initializer)
@@ -199,7 +196,6 @@ namespace TypeSupport
         /// </summary>
         /// <param name="type">The type of object to construct</param>
         /// <param name="typeRegistry">A type registry for constructing unknown types</param>
-        /// <param name="typeDescriptor">A type descriptor that indicates the embedded concrete type for an interface type</param>
         /// <param name="initializer">An optional initializer to use to create the object</param>
         /// <param name="dimensions">For array types, the dimensions of the array to create</param>
         /// <returns></returns>

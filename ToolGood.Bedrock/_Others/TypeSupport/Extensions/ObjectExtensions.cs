@@ -14,6 +14,7 @@ namespace TypeSupport.Extensions
         /// Get all of the properties of an object
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="options"></param>
         /// <returns></returns>
         public static ICollection<ExtendedProperty> GetProperties(this object obj, PropertyOptions options)
         {
@@ -24,7 +25,7 @@ namespace TypeSupport.Extensions
         /// Get all of the fields of an object
         /// </summary>
         /// <param name="obj"></param>
-        /// <param name="includeAutoPropertyBackingFields">True to include the compiler generated backing fields for auto-property getters/setters</param>
+        /// <param name="options">True to include the compiler generated backing fields for auto-property getters/setters</param>
         /// <returns></returns>
         public static ICollection<ExtendedField> GetFields(this object obj, FieldOptions options)
         {
@@ -35,6 +36,7 @@ namespace TypeSupport.Extensions
         /// Get all of the methods of an object
         /// </summary>
         /// <param name="obj"></param>
+        /// <param name="options"></param>
         /// <returns></returns>
         public static ICollection<ExtendedMethod> GetMethods(this object obj, MethodOptions options)
         {
@@ -45,7 +47,7 @@ namespace TypeSupport.Extensions
         /// Get a property from an object instance
         /// </summary>
         /// <param name="obj"></param>
-        /// <param name="fieldName">Field name</param>
+        /// <param name="name">Field name</param>
         /// <returns></returns>
         public static PropertyInfo GetProperty(this object obj, string name)
         {
@@ -57,7 +59,7 @@ namespace TypeSupport.Extensions
         /// Get a property from an object instance and specify the derived type to match
         /// </summary>
         /// <param name="obj"></param>
-        /// <param name="fieldName">Field name</param>
+        /// <param name="name">Field name</param>
         /// <param name="derivedType">The type that defines the named property, or the exact type of the property</param>
         /// <returns></returns>
         public static PropertyInfo GetProperty(this object obj, string name, Type derivedType)

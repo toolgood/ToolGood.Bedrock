@@ -13,7 +13,8 @@ namespace TypeSupport.Extensions
         /// <summary>
         /// Get all of the properties of an object
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="type"></param>
+        /// <param name="options"></param>
         /// <returns></returns>
         public static ICollection<ExtendedProperty> GetProperties(this Type type, PropertyOptions options)
         {
@@ -48,8 +49,8 @@ namespace TypeSupport.Extensions
         /// <summary>
         /// Get all of the fields of an object
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="includeAutoPropertyBackingFields">True to include the compiler generated backing fields for auto-property getters/setters</param>
+        /// <param name="type"></param>
+        /// <param name="options">True to include the compiler generated backing fields for auto-property getters/setters</param>
         /// <returns></returns>
         public static ICollection<ExtendedField> GetFields(this Type type, FieldOptions options)
         {
@@ -84,8 +85,8 @@ namespace TypeSupport.Extensions
         /// <summary>
         /// Get all of the fields of an object
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="includeAutoPropertyBackingFields">True to include the compiler generated backing fields for auto-property getters/setters</param>
+        /// <param name="type"></param>
+        /// <param name="options">True to include the compiler generated backing fields for auto-property getters/setters</param>
         /// <returns></returns>
         public static ICollection<ExtendedMethod> GetMethods(this Type type, MethodOptions options)
         {
@@ -115,7 +116,7 @@ namespace TypeSupport.Extensions
         /// <summary>
         /// Check if a type contains a property
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="type"></param>
         /// <param name="name">Property name</param>
         /// <returns></returns>
         public static bool ContainsProperty(this Type type, string name)
@@ -126,7 +127,7 @@ namespace TypeSupport.Extensions
         /// <summary>
         /// Check if a type contains a field
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="type"></param>
         /// <param name="name">Field name</param>
         /// <returns></returns>
         public static bool ContainsField(this Type type, string name)

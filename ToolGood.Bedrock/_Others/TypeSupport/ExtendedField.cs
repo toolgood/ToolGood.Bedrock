@@ -63,7 +63,6 @@ namespace TypeSupport
         /// Create an extended field
         /// </summary>
         /// <param name="fieldInfo"></param>
-        /// <param name="value"></param>
         public ExtendedField(FieldInfo fieldInfo)
         {
             _fieldInfo = fieldInfo;

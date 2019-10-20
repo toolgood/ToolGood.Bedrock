@@ -161,6 +161,7 @@ namespace TypeSupport
         /// Create an extended property
         /// </summary>
         /// <param name="methodInfo"></param>
+        /// <param name="parentType"></param>
         public ExtendedMethod(MethodInfo methodInfo, Type parentType)
         {
             _methodInfo = methodInfo;

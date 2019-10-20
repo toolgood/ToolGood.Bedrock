@@ -12,6 +12,7 @@ namespace ToolGood.Bedrock
         /// 默认压缩
         /// </summary>
         /// <param name="data">要压缩的字节数组</param>
+        /// <param name="fastest">快速模式</param>
         /// <returns>压缩后的数组</returns>
         public static byte[] DeflateCompress(byte[] data, bool fastest = false)
         {
@@ -33,8 +34,8 @@ namespace ToolGood.Bedrock
         /// <summary>
         /// 解压
         /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
+        /// <param name="data">要解压的字节数组</param>
+        /// <returns>解压后的数组</returns>
         public static byte[] DeflateDecompression(byte[] data)
         {
             if (data == null || data.Length == 0)
@@ -57,7 +58,8 @@ namespace ToolGood.Bedrock
         /// Gzip压缩
         /// </summary>
         /// <param name="data">要压缩的字节数组</param>
-        /// <returns>Gzip压缩后的数组</returns>
+        /// <param name="fastest">快速模式</param>
+        /// <returns>压缩后的数组</returns>
         public static byte[] GzipCompress(byte[] data, bool fastest = false)
         {
             if (data == null || data.Length == 0)
@@ -78,8 +80,8 @@ namespace ToolGood.Bedrock
         /// <summary>
         /// Gzip解压
         /// </summary>
-        /// <param name="data">要压缩的字节数组</param>
-        /// <returns>Gzip压缩后的数组</returns>
+        /// <param name="data">要解压的字节数组</param>
+        /// <returns>解压后的数组</returns>
         public static byte[] GzipDecompress(byte[] data)
         {
             if (data == null || data.Length == 0)
@@ -104,7 +106,8 @@ namespace ToolGood.Bedrock
         /// Br压缩
         /// </summary>
         /// <param name="data">要压缩的字节数组</param>
-        /// <returns>Gzip压缩后的数组</returns>
+        /// <param name="fastest">快速模式</param>
+        /// <returns>压缩后的数组</returns>
         public static byte[] BrCompress(byte[] data, bool fastest = false)
         {
             if (data == null || data.Length == 0)
@@ -123,10 +126,10 @@ namespace ToolGood.Bedrock
         }
 
         /// <summary>
-        /// Br压缩
+        /// Br解压
         /// </summary>
-        /// <param name="data">要压缩的字节数组</param>
-        /// <returns>Gzip压缩后的数组</returns>
+        /// <param name="data">要解压的字节数组</param>
+        /// <returns>解压后的数组</returns>
         public static byte[] BrDecompress(byte[] data)
         {
             if (data == null || data.Length == 0)

@@ -142,7 +142,6 @@ namespace ToolGood.AnyDiff
         /// <param name="currentDepth">The current depth of the tree recursion</param>
         /// <param name="maxDepth">The maximum number of tree children to recurse</param>
         /// <param name="objectTree">A hash table containing the tree that has already been traversed, to prevent recursion loops</param>
-        /// <param name="allowCompareDifferentObjects">True to allow comparing of objects with different types</param>
         /// <param name="options">Specify the comparison options</param>
         /// <param name="propertyList">A list of property names or full path names to ignore</param>
         /// <returns></returns>
@@ -543,6 +542,7 @@ namespace ToolGood.AnyDiff
         /// <param name="path">Full path to object</param>
         /// <param name="options">Comparison options</param>
         /// <param name="propertyList">List of names or paths to process for inclusion or exclusion</param>
+        /// <param name="attributes"> </param>
         /// <returns></returns>
         private FilterResult GetPropertyInclusionState(string name, string path, ComparisonOptions options, List<string> propertyList, IEnumerable<CustomAttributeData> attributes)
         {

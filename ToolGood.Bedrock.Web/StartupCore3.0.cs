@@ -380,7 +380,7 @@ namespace ToolGood.Bedrock.Web
         /// <summary>
         /// Mine 注册
         /// </summary>
-        /// <param name="provider"></param>
+        /// <param name="mapping"></param>
         protected virtual void MineRegister(IDictionary<string, string> mapping) { }
 
         /// <summary>

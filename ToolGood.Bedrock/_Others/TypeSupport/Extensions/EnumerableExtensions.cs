@@ -63,7 +63,7 @@ namespace TypeSupport.Extensions
         }
 
         /// <summary>
-        /// Determines wether an element is in the List<> with case sensitivity options
+        /// Determines wether an element is in the List  with case sensitivity options
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>

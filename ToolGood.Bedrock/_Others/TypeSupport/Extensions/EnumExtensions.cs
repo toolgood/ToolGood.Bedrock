@@ -183,7 +183,7 @@ namespace TypeSupport.Extensions
         /// Convert a enum to a list of key value pairs (int id and string value)
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
+        /// <param name="enumType"></param>
         /// <returns></returns>
         public static IEnumerable<KeyValuePair<T, string>> ToListOfKeyValuePairs<T>(this Type enumType)
             where T : struct, IConvertible
@@ -199,8 +199,8 @@ namespace TypeSupport.Extensions
         /// <summary>
         /// Convert a enum to a list of key value pairs (int id and string value)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
+        /// <param name="enumType"></param>
+        /// <param name="enumValueType"></param>
         /// <returns></returns>
         public static IEnumerable<KeyValuePair<object, string>> ToListOfKeyValuePairs(this Type enumType, Type enumValueType)
         {
