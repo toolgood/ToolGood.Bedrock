@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/toolgood/ToolGood.Bedrock</PackageProjectUrl>
     <RepositoryUrl>https://github.com/toolgood/ToolGood.Bedrock</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>1.0.0.2</Version>
+    <Version>1.0.0.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,4 +25,11 @@
     </None>
   </ItemGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.0|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp3.0\ToolGood.WwwRoot.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.0|AnyCPU'">
+    <DocumentationFile>bin\Release\netcoreapp3.0\ToolGood.WwwRoot.xml</DocumentationFile>
+  </PropertyGroup>
+  
 </Project>

@@ -7,19 +7,43 @@ using ToolGood.Bedrock;
 
 namespace ToolGood.WwwRoot
 {
+    /// <summary>
+    /// wwwroot 生成 *.cs 文件
+    /// </summary>
     public class WwwRootSetting
     {
-        public string FolderPath { get; set; }
+        /// <summary>
+        /// 输入文件夹路径
+        /// </summary>
+        public string InFolderPath { get; set; }
 
+        /// <summary>
+        /// 输出文件夹路径
+        /// </summary>
         public string OutFolderPath { get; set; }
 
+        /// <summary>
+        /// 排除文件后缀
+        /// </summary>
+        public List<string> ExcludeFileSuffixs { get; set; } = new List<string>();
 
+        /// <summary>
+        /// 排除文件
+        /// </summary>
+        public List<string> ExcludeFiles { get; set; } = new List<string>();
 
-        public string NameSpace { get; set; } = "ToolGood.WwwRoot";
+        /// <summary>
+        /// 命名空间
+        /// </summary>
+        public string NameSpace { get; set; }
 
-        public string ControllerName { get; set; } = "WwwRootController";
+        /// <summary>
+        /// 控制器名
+        /// </summary>
+        public string ControllerName { get; set; }
 
-        public string FirstTemplate = @"using Microsoft.AspNetCore.Mvc;
+        #region 模板
+        private string FirstTemplate = @"using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -73,8 +97,7 @@ namespace {NameSpace}
     }
 }";
 
-
-        public string Template = @"using Microsoft.AspNetCore.Mvc;
+        private string Template = @"using Microsoft.AspNetCore.Mvc;
 using System;
 namespace {NameSpace}
 {
@@ -89,19 +112,37 @@ namespace {NameSpace}
             return File(bytes, ""{FileMime}"");
         }
     }
-}";
+}"; 
+        #endregion
 
+        /// <summary>
+        /// 生成控制器
+        /// </summary>
         public void BuildControllers()
         {
+            if (string.IsNullOrEmpty(InFolderPath)) { throw new ArgumentNullException("FolderPath"); }
+            if (string.IsNullOrEmpty(OutFolderPath)) { throw new ArgumentNullException("OutFolderPath"); }
+            if (string.IsNullOrEmpty(NameSpace)) { throw new ArgumentNullException("NameSpace"); }
+            if (string.IsNullOrEmpty(ControllerName)) { throw new ArgumentNullException("ControllerName"); }
+
             var setting = this;
-            if (setting.FolderPath.EndsWith("\\") == false) { setting.FolderPath += "\\"; }
+            if (setting.InFolderPath.EndsWith("\\") == false) { setting.InFolderPath += "\\"; }
             if (setting.OutFolderPath.EndsWith("\\") == false) { setting.OutFolderPath += "\\"; }
 
-
-            var files = Directory.GetFiles(setting.FolderPath, "*.*", SearchOption.AllDirectories);
-
+            var files = Directory.GetFiles(setting.InFolderPath, "*.*", SearchOption.AllDirectories);
             for (int i = 0; i < files.Length; i++) {
                 var file = files[i];
+                if (ExcludeFileSuffixs != null && ExcludeFileSuffixs.Count > 0) {
+                    var isExclude = false;
+                    foreach (var suffix in ExcludeFileSuffixs) {
+                        if (file.EndsWith(suffix)) { isExclude = true; break; }
+                    }
+                    if (isExclude) { continue; }
+                }
+                if (ExcludeFiles != null && ExcludeFiles.Count > 0) {
+                    if (ExcludeFiles.Contains(Path.GetFileName(file))) { continue; }
+                }
+
                 Console.WriteLine("Load:" + file);
                 var bytes = File.ReadAllBytes(file);
 
@@ -113,15 +154,13 @@ namespace {NameSpace}
                 };
                 wwwRootFile.FileContent = wwwRootFile.GetFileContent(bytes);
                 wwwRootFile.FileMime = wwwRootFile.GetFileMime(file);
-                wwwRootFile.FileUrl = file.Substring(setting.FolderPath.Length).Replace("\\", "/").TrimStart('/');
+                wwwRootFile.FileUrl = file.Substring(setting.InFolderPath.Length).Replace("\\", "/").TrimStart('/');
                 wwwRootFile.FileMethod =
-                    Regex.Replace(wwwRootFile.FileUrl, 
+                    Regex.Replace(wwwRootFile.FileUrl,
                     "[^0-9_a-zA-Z\u4E00-\u9FCB\u3400-\u4DB5\u20000-\u2A6D6\u2A700-\u2B734\u2B740-\u2B81D\u3007]", "_");
-  
 
 
-
-            var txt = setting.Template;
+                var txt = setting.Template;
                 if (i == 0) { txt = setting.FirstTemplate; }
                 txt = txt.Replace("{NameSpace}", setting.NameSpace);
                 txt = txt.Replace("{ControllerName}", setting.ControllerName);
@@ -131,7 +170,7 @@ namespace {NameSpace}
                 txt = txt.Replace("{FileContent}", wwwRootFile.FileContent);
                 txt = txt.Replace("{FileMime}", wwwRootFile.FileMime);
 
-                var outPath = file.Replace(setting.FolderPath, setting.OutFolderPath) + ".cs";
+                var outPath = file.Replace(setting.InFolderPath, setting.OutFolderPath) + ".cs";
                 Directory.CreateDirectory(Path.GetDirectoryName(outPath));
 
                 File.WriteAllText(outPath, txt);

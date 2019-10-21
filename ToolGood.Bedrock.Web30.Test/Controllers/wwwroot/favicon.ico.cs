@@ -43,7 +43,6 @@ namespace ToolGood.WwwRoot.Test
                 using (MemoryStream stream = new MemoryStream()) {
                     using (GZipStream zStream = new GZipStream(stream, CompressionMode.Compress)) {
                         zStream.Write(bytes, 0, bytes.Length);
-                        zStream.Close();
                     }
                     bytes = stream.ToArray();
                 }
