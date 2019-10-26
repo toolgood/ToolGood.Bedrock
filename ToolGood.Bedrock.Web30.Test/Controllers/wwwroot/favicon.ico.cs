@@ -28,10 +28,10 @@ namespace ToolGood.WwwRoot.Test
         private byte[] UseCompressBytes(string s)
         {
             var bytes = Convert.FromBase64String(s);
-            if (Request.Headers["Accept-Encoding"].ToString().Replace(" ", "").Split(',').Contains("br")) {
+            var sp = Request.Headers["Accept-Encoding"].ToString().Replace(" ", "").ToLower().Split(',');
+            if (sp.Contains("br")) {
                 Response.Headers["Content-Encoding"] = "br";
-            } else {
-                Response.Headers["Content-Encoding"] = "gzip";
+            } else  {
                 using (MemoryStream stream = new MemoryStream(bytes)) {
                     using (BrotliStream zStream = new BrotliStream(stream, CompressionMode.Decompress)) {
                         using (var resultStream = new MemoryStream()) {
@@ -40,11 +40,15 @@ namespace ToolGood.WwwRoot.Test
                         }
                     }
                 }
-                using (MemoryStream stream = new MemoryStream()) {
-                    using (GZipStream zStream = new GZipStream(stream, CompressionMode.Compress)) {
-                        zStream.Write(bytes, 0, bytes.Length);
+                if (sp.Contains("gzip")) {
+                    Response.Headers["Content-Encoding"] = "gzip";
+                    using (MemoryStream stream = new MemoryStream()) {
+                        using (GZipStream zStream = new GZipStream(stream, CompressionMode.Compress)) {
+                            zStream.Write(bytes, 0, bytes.Length);
+                            zStream.Close();
+                        }
+                        bytes = stream.ToArray();
                     }
-                    bytes = stream.ToArray();
                 }
             }
             return bytes;
