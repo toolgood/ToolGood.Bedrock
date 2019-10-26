@@ -1,5 +1,8 @@
 ﻿using System.IO;
 using System.IO.Compression;
+#if NETSTANDARD2_0
+using Brotli;
+#endif
 
 namespace ToolGood.Bedrock
 {
@@ -124,6 +127,31 @@ namespace ToolGood.Bedrock
                 return data;
             }
         }
+#else
+        /// <summary>
+        /// Br压缩
+        /// </summary>
+        /// <param name="data">要压缩的字节数组</param>
+        /// <param name="fastest">快速模式</param>
+        /// <returns>压缩后的数组</returns>
+        public static byte[] BrCompress(byte[] data)
+        {
+            if (data == null || data.Length == 0)
+                return data;
+            try {
+                using (MemoryStream stream = new MemoryStream()) {
+                    using (BrotliStream zStream = new BrotliStream(stream,  CompressionMode.Compress)) {
+                        zStream.Write(data, 0, data.Length);
+                    }
+                    return stream.ToArray();
+                }
+            } catch {
+                return data;
+            }
+        }
+
+#endif
+
 
         /// <summary>
         /// Br解压
@@ -147,10 +175,6 @@ namespace ToolGood.Bedrock
                 return data;
             }
         }
-
-#endif
-
-
 
     }
 
