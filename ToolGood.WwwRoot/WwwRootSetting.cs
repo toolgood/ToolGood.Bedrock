@@ -156,7 +156,7 @@ namespace {NameSpace}
                     FileHash = HashUtil.GetMd5String(bytes),
                     FileName = Path.GetFileName(file),
                 };
-                wwwRootFile.FileContent = wwwRootFile.GetFileContent(bytes);
+                wwwRootFile.FileContent = wwwRootFile.GetFileContent(bytes,file);
                 wwwRootFile.FileMime = wwwRootFile.GetFileMime(file);
                 wwwRootFile.FileUrl = file.Substring(setting.InFolderPath.Length).Replace("\\", "/").TrimStart('/');
                 wwwRootFile.FileMethod =
