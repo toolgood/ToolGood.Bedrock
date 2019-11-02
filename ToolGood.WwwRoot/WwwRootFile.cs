@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Text;
 using ToolGood.Bedrock.Web.Mime;
-using System.IO;
-using ToolGood.Bedrock;
-using WebMarkupMin.Yui;
+using WebMarkupMin.Core;
 using WebMarkupMin.MsAjax;
 using WebMarkupMin.NUglify;
-using WebMarkupMin.Core;
+using WebMarkupMin.Yui;
 
 namespace ToolGood.WwwRoot
 {
@@ -58,7 +58,7 @@ namespace ToolGood.WwwRoot
                 string tar = XHtmlMinifierBytes(bytes);
                 bytes = Encoding.UTF8.GetBytes(tar);
             }
-            bytes = CompressionUtil.BrCompress(bytes);
+            bytes = BrCompress(bytes);
             return Convert.ToBase64String(bytes);
         }
         private static string JsMinifier(byte[] bytes)
@@ -151,12 +151,22 @@ namespace ToolGood.WwwRoot
             return tar;
         }
 
-        public string GetFileContent(byte[] bytes)
+
+        private static byte[] BrCompress(byte[] data)
         {
-            bytes = CompressionUtil.BrCompress(bytes);
-            return Convert.ToBase64String(bytes);
+            if (data == null || data.Length == 0)
+                return data;
+            try {
+                using (MemoryStream stream = new MemoryStream()) {
+                    var level = CompressionLevel.Optimal;
+                    using (BrotliStream zStream = new BrotliStream(stream, level)) {
+                        zStream.Write(data, 0, data.Length);
+                    }
+                    return stream.ToArray();
+                }
+            } catch {
+                return data;
+            }
         }
-
-
     }
 }
