@@ -57,10 +57,13 @@ namespace System.Net
             Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0");
         }
 
-
-
         protected override WebRequest GetWebRequest(Uri address)
         {
+            if (address.IdnHost != address.Host) {
+                var url = address.Scheme + "://" + address.IdnHost + address.PathAndQuery;
+                address = new Uri(url);
+            }
+
             HttpWebRequest request = (HttpWebRequest)base.GetWebRequest(address);
             request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
             if (_useCookie) request.CookieContainer = Cookies;
@@ -69,11 +72,6 @@ namespace System.Net
             if (_timeout != null) request.Timeout = (int)_timeout * 1000;
             if (_readWriteTimeout != null) request.Timeout = (int)_readWriteTimeout * 1000;
             return request;
-        }
-
-        public void SetUserAgent(string ua)
-        {
-            _userAgent = ua;
         }
 
         #region 02 扩展 上传方法 和 下载图片方法
@@ -94,6 +92,10 @@ namespace System.Net
         #endregion 02 扩展 上传方法 和 下载图片方法
 
         #region 03 加载 网页前操作
+        public void SetUserAgent(string ua)
+        {
+            _userAgent = ua;
+        }
 
         public void ResetHeaders()
         {
