@@ -42,7 +42,7 @@ namespace ToolGood.WwwRoot
             return "application/octet-stream";
         }
 
-        public string GetFileContent(byte[] bytes, string file)
+        public string GetFileContent(byte[] bytes, string file,string type)
         {
             var ext = Path.GetExtension(file).ToLower();
             if (ext == ".css") {
@@ -58,7 +58,7 @@ namespace ToolGood.WwwRoot
                 string tar = XHtmlMinifierBytes(bytes);
                 bytes = Encoding.UTF8.GetBytes(tar);
             }
-            bytes = BrCompress(bytes);
+            bytes = CompressFile(bytes, type);
             return Convert.ToBase64String(bytes);
         }
         private static string JsMinifier(byte[] bytes)
@@ -152,17 +152,27 @@ namespace ToolGood.WwwRoot
         }
 
 
-        private static byte[] BrCompress(byte[] data)
+        private static byte[] CompressFile(byte[] data,string type)
         {
             if (data == null || data.Length == 0)
                 return data;
             try {
-                using (MemoryStream stream = new MemoryStream()) {
-                    var level = CompressionLevel.Optimal;
-                    using (BrotliStream zStream = new BrotliStream(stream, level)) {
-                        zStream.Write(data, 0, data.Length);
+                if (type=="gzip") {
+                    using (MemoryStream stream = new MemoryStream()) {
+                        var level = CompressionLevel.Optimal;
+                        using (GZipStream zStream = new GZipStream(stream, level)) {
+                            zStream.Write(data, 0, data.Length);
+                        }
+                        return stream.ToArray();
                     }
-                    return stream.ToArray();
+                } else {
+                    using (MemoryStream stream = new MemoryStream()) {
+                        var level = CompressionLevel.Optimal;
+                        using (BrotliStream zStream = new BrotliStream(stream, level)) {
+                            zStream.Write(data, 0, data.Length);
+                        }
+                        return stream.ToArray();
+                    }
                 }
             } catch {
                 return data;

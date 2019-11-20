@@ -12,6 +12,10 @@ namespace ToolGood.WwwRoot
     public class WwwRootSetting
     {
         /// <summary>
+        /// 压缩类型 默认 br, 可选 gzip (火狐http不支持br压缩)
+        /// </summary>
+        public string CompressionType { get; set; } = "br";
+        /// <summary>
         /// 输入文件夹路径
         /// </summary>
         public string InFolderPath { get; set; }
@@ -39,10 +43,10 @@ namespace ToolGood.WwwRoot
         /// <summary>
         /// 控制器名
         /// </summary>
-        public string ControllerName { get; set; }="WwwRootController";
+        public string ControllerName { get; set; } = "WwwRootController";
 
         #region 模板
-        private string FirstTemplate = @"using Microsoft.AspNetCore.Mvc;
+        private string brFirstTemplate = @"using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -99,7 +103,63 @@ namespace {NameSpace}
         }
     }
 }";
+        private string gzipFirstTemplate = @"using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
 
+namespace {NameSpace}
+{
+    public partial class {ControllerName} : Controller
+    {
+        [HttpGet(""{FileUrl}"")]
+        public IActionResult {FileMethod}()
+        {
+            if (SetResponseHeaders(""{FileHash}"") == false) { return StatusCode(304); }
+            const string s = ""{FileContent}"";
+            var bytes = UseCompressBytes(s);
+            return File(bytes, ""{FileMime}"");
+        }
+        private bool SetResponseHeaders(string etag)
+        {
+            if (Request.Headers[""If-None-Match""] == etag) { return false; }
+            Response.Headers[""Cache-Control""] = ""max-age=315360000"";
+            Response.Headers[""Etag""] = etag;
+            Response.Headers[""Date""] = DateTime.Now.ToString(""r"");
+            Response.Headers[""Expires""] = DateTime.Now.AddYears(100).ToString(""r"");
+            return true;
+        }
+        private byte[] UseCompressBytes(string s)
+        {
+            var bytes = Convert.FromBase64String(s);
+            var sp = Request.Headers[""Accept-Encoding""].ToString().Replace("" "", """").ToLower().Split(',');
+            if (sp.Contains(""gzip"")) {
+                Response.Headers[""Content-Encoding""] = ""gzip"";
+            } else  {
+                using (MemoryStream stream = new MemoryStream(bytes)) {
+                    using (GZipStream zStream = new GZipStream(stream, CompressionMode.Decompress)) {
+                        using (var resultStream = new MemoryStream()) {
+                            zStream.CopyTo(resultStream);
+                            bytes = resultStream.ToArray();
+                        }
+                    }
+                }
+                if (sp.Contains(""br"")) {
+                    Response.Headers[""Content-Encoding""] = ""br"";
+                    using (MemoryStream stream = new MemoryStream()) {
+                        using (BrotliStream zStream = new BrotliStream(stream, CompressionMode.Compress)) {
+                            zStream.Write(bytes, 0, bytes.Length);
+                            zStream.Close();
+                        }
+                        bytes = stream.ToArray();
+                    }
+                }
+            }
+            return bytes;
+        }
+    }
+}";
         private string Template = @"using Microsoft.AspNetCore.Mvc;
 using System;
 namespace {NameSpace}
@@ -115,7 +175,7 @@ namespace {NameSpace}
             return File(bytes, ""{FileMime}"");
         }
     }
-}"; 
+}";
         #endregion
 
         /// <summary>
@@ -155,7 +215,7 @@ namespace {NameSpace}
                     FileHash = HashUtil.GetMd5String(bytes),
                     FileName = Path.GetFileName(file),
                 };
-                wwwRootFile.FileContent = wwwRootFile.GetFileContent(bytes,file);
+                wwwRootFile.FileContent = wwwRootFile.GetFileContent(bytes, file, CompressionType);
                 wwwRootFile.FileMime = wwwRootFile.GetFileMime(file);
                 wwwRootFile.FileUrl = file.Substring(setting.InFolderPath.Length).Replace("\\", "/").TrimStart('/');
                 wwwRootFile.FileMethod =
@@ -164,7 +224,13 @@ namespace {NameSpace}
 
 
                 var txt = setting.Template;
-                if (i == 0) { txt = setting.FirstTemplate; }
+                if (i == 0) {
+                    if (CompressionType == "gzip") {
+                        txt = setting.gzipFirstTemplate;
+                    } else {
+                        txt = setting.brFirstTemplate;
+                    }
+                }
                 txt = txt.Replace("{NameSpace}", setting.NameSpace);
                 txt = txt.Replace("{ControllerName}", setting.ControllerName);
                 txt = txt.Replace("{FileUrl}", wwwRootFile.FileUrl);
