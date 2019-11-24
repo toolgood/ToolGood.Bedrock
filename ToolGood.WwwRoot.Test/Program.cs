@@ -10,6 +10,7 @@ namespace ToolGood.WwwRoot.Test
             setting.NameSpace = "ToolGood.WwwRoot.Test";
             setting.InFolderPath = @"F:\git\ToolGood.Bedrock\ToolGood.Bedrock.Web.Test\wwwroot\";
             setting.OutFolderPath = @"F:\git\ToolGood.Bedrock\ToolGood.Bedrock.Web30.Test\Controllers\wwwroot";
+            //setting.CompressionType = "gzip";
 
             setting.ExcludeFileSuffixs.Add(".old.js");
             setting.ExcludeFileSuffixs.Add(".map");

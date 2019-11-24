@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>_key.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -12,23 +12,16 @@
     <RepositoryUrl>https://github.com/toolgood/ToolGood.Bedrock</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>2.0.0.3</Version>
-    <AssemblyVersion>2.0.0.3</AssemblyVersion>
-    <FileVersion>2.0.0.3</FileVersion>
+    <Version>3.0.0.3</Version>
+    <AssemblyVersion>3.0.0.3</AssemblyVersion>
+    <FileVersion>3.0.0.3</FileVersion>
   </PropertyGroup>
 
 
   <ItemGroup>
     <ProjectReference Include="..\ToolGood.Bedrock\ToolGood.Bedrock.csproj" />
-    <ProjectReference Include="..\ToolGood.Bedrock.Dependency\ToolGood.Bedrock.Dependency.csproj" />
   </ItemGroup>
-
  
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.2' ">
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
-  </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
@@ -44,14 +37,6 @@
     </None>
    </ItemGroup>
 
-
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.2|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp2.2\ToolGood.Bedrock.Web.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.2|AnyCPU'">
-    <DocumentationFile>bin\Release\netcoreapp2.2\ToolGood.Bedrock.Web.xml</DocumentationFile>
-  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.0|AnyCPU'">
     <DocumentationFile>bin\Debug\netcoreapp3.0\ToolGood.Bedrock.Web.xml</DocumentationFile>

@@ -49,7 +49,7 @@ namespace ToolGood.Bedrock.Dependency
         /// <param name="serviceType">服务类型</param>
         /// <param name="implementationType">实例类型</param>
         /// <param name="serviceName">服务名字</param>
-        /// <param name="life">生命周期</param>
+        /// <param name="lifeStyle">生命周期</param>
 
         void RegisterType(Type serviceType, Type implementationType, string serviceName = null, LifeStyle lifeStyle = LifeStyle.Singleton);
 

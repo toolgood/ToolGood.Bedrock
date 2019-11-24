@@ -6,27 +6,27 @@ using System.Text;
 
 namespace ToolGood.Bedrock.Web
 {
-    public static class IServiceCollectionExtensions
+    /// <summary>
+    /// 生命周期
+    /// </summary>
+    public enum LifeStyle
     {
         /// <summary>
-        /// 生命周期
+        /// 默认
         /// </summary>
-        public enum LifeStyle
-        {
-            /// <summary>
-            /// 默认
-            /// </summary>
-            Transient = 1,
-            /// <summary>
-            /// 单例
-            /// </summary>
-            Singleton,
-            /// <summary>
-            /// 在一个生命周期域中，每一个依赖或调用创建一个单一的共享的实例，且每一个不同的生命周期域，实例是唯一的，不共享的。
-            /// </summary>
-            PerLifetimeScope
-        }
+        Transient = 1,
+        /// <summary>
+        /// 单例
+        /// </summary>
+        Singleton,
+        /// <summary>
+        /// 在一个生命周期域中，每一个依赖或调用创建一个单一的共享的实例，且每一个不同的生命周期域，实例是唯一的，不共享的。
+        /// </summary>
+        PerLifetimeScope
+    }
 
+    public static class IServiceCollectionExtensions
+    {
 
         /// <summary>
         /// 
@@ -83,6 +83,7 @@ namespace ToolGood.Bedrock.Web
                 if (implementationType.IsImport) { continue; }
                 if (implementationType.IsClass == false) { continue; }
                 if (implementationType.IsGenericType) { continue; }
+                if (implementationType.IsSealed) { continue; }
 
 
                 if (predicate != null) {
