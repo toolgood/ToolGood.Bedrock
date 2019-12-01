@@ -70,7 +70,7 @@ namespace System.Net
             request.AllowAutoRedirect = true;
             if (_proxy != null) request.Proxy = this.Proxy;
             if (_timeout != null) request.Timeout = (int)_timeout * 1000;
-            if (_readWriteTimeout != null) request.Timeout = (int)_readWriteTimeout * 1000;
+            if (_readWriteTimeout != null) request.ReadWriteTimeout = (int)_readWriteTimeout * 1000;
             return request;
         }
 
