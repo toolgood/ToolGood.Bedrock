@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 
-namespace ToolGood.Bedrock.Net
+namespace System.Net
 {
     /// <summary>
     /// Socket客户端操作类

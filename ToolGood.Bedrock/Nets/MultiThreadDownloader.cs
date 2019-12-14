@@ -7,7 +7,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ToolGood.Bedrock.Net
+namespace System.Net
 {
     /// <summary>
     /// 文件合并改变事件

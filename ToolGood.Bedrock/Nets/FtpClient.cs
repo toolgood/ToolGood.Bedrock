@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace ToolGood.Bedrock.Net
+namespace System.Net
 {
     /// <summary>
     /// FTP客户端操作类

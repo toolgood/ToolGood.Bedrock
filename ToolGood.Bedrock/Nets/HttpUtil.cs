@@ -10,7 +10,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Web;
 
-namespace ToolGood.Bedrock
+namespace System.Net
 {
     /// <summary>
     /// 用于Web API操作 不支持跳转

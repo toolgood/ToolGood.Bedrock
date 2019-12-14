@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 
-namespace ToolGood.Bedrock.Net
+namespace System.Net
 {
     /// <summary>
     /// 部分下载器

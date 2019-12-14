@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using System.Text;
 
-namespace ToolGood.Bedrock.Net
+namespace System.Net
 {
     /// <summary>
     /// SMTP服务器 实体类
