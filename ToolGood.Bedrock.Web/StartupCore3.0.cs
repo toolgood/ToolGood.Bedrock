@@ -1,5 +1,4 @@
-﻿#if NETCOREAPP3_0
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -408,5 +407,4 @@ namespace ToolGood.Bedrock.Web
         protected virtual void ApplicationRegister(IApplicationBuilder app) { }
     }
 }
-
-#endif
+ 
