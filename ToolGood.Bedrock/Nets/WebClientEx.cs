@@ -52,7 +52,7 @@ namespace System.Net
         {
             Cookies = new CookieContainer();
             Headers.Add(HttpRequestHeader.Accept, "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-            Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip,deflate");
+            Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip,deflate,br");
             Headers.Add(HttpRequestHeader.AcceptLanguage, "zh-CN,zh;q=0.8");
             Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0");
         }
@@ -65,7 +65,7 @@ namespace System.Net
             }
 
             HttpWebRequest request = (HttpWebRequest)base.GetWebRequest(address);
-            request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+            request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip | DecompressionMethods.Brotli;
             if (_useCookie) request.CookieContainer = Cookies;
             request.AllowAutoRedirect = true;
             if (_proxy != null) request.Proxy = this.Proxy;
@@ -92,11 +92,18 @@ namespace System.Net
         #endregion 02 扩展 上传方法 和 下载图片方法
 
         #region 03 加载 网页前操作
+        /// <summary>
+        /// 设置UserAgent
+        /// </summary>
+        /// <param name="ua"></param>
         public void SetUserAgent(string ua)
         {
             _userAgent = ua;
         }
 
+        /// <summary>
+        /// 重置 头部
+        /// </summary>
         public void ResetHeaders()
         {
             Headers.Clear();
@@ -116,16 +123,27 @@ namespace System.Net
             this._timeout = null;
         }
 
+        /// <summary>
+        /// 使用
+        /// </summary>
+        /// <param name="timeout"></param>
         public void SetReadWriteTimeout(int timeout)
         {
             this._readWriteTimeout = timeout;
         }
 
+        /// <summary>
+        /// 不使用
+        /// </summary>
         public void RemoveReadWriteTimeout()
         {
             this._readWriteTimeout = null;
         }
 
+        /// <summary>
+        /// 使用 引用
+        /// </summary>
+        /// <param name="url"></param>
         public void SetReferer(string url)
         {
             if (url == "") {
@@ -135,6 +153,13 @@ namespace System.Net
             }
         }
 
+        /// <summary>
+        /// 使用 代理
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <param name="proxy"></param>
+        /// <param name="userName"></param>
+        /// <param name="userPass"></param>
         public void SetWebProxy(string ip, int proxy, string userName = "", string userPass = "")
         {
             ip = ip.Trim();
@@ -145,6 +170,9 @@ namespace System.Net
                 _proxy.Credentials = new NetworkCredential(userName, userPass);
         }
 
+        /// <summary>
+        /// 移除 代理
+        /// </summary>
         public void RemoveWebProxy()
         {
             this._proxy = null;
@@ -153,17 +181,27 @@ namespace System.Net
         #endregion 03 加载 网页前操作
 
         #region 04 Cookie 操作
-
+        /// <summary>
+        /// 关闭 cookie
+        /// </summary>
         public void CookieClose()
         {
             _useCookie = false;
         }
 
+        /// <summary>
+        /// 开启cookie
+        /// </summary>
         public void CookieOpen()
         {
             _useCookie = true;
         }
 
+        /// <summary>
+        /// 获取所有 Cookie 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         public string GetCookie(string url)
         {
             StringBuilder sb = new StringBuilder();
@@ -177,6 +215,12 @@ namespace System.Net
             return sb.ToString();
         }
 
+        /// <summary>
+        /// 获取 Cookie
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public string GetCookieValue(string url, string key)
         {
             Uri u = new Uri(url);
@@ -188,11 +232,28 @@ namespace System.Net
             return null;
         }
 
+        /// <summary>
+        /// 添加 Cookie
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         public void AddCookie(string url, string key, string value)
         {
-            Cookies.Add(new Uri(url), new Cookie(key, value));
+            var uri = new Uri(url);
+            if (uri.Port == 80) {
+                var u = uri.Scheme + "://" + uri.Host + "/";
+                Cookies.Add(new Uri(u), new Cookie(key, value));
+            } else {
+                var u = uri.Scheme + "://" + uri.Host + ":" + uri.Port + "/";
+                Cookies.Add(new Uri(u), new Cookie(key, value));
+            }
         }
 
+        /// <summary>
+        /// 导出Cookie 类型
+        /// </summary>
+        /// <returns></returns>
         public byte[] GetCookieBytes()
         {
             using (MemoryStream ms = new MemoryStream()) {
@@ -202,6 +263,10 @@ namespace System.Net
             }
         }
 
+        /// <summary>
+        /// cookie 为 GetCookieBytes（）导出Cookie类型
+        /// </summary>
+        /// <param name="cookie"></param>
         public void SetCookieBytes(byte[] cookie)
         {
             using (MemoryStream ms = new MemoryStream()) {
@@ -211,6 +276,10 @@ namespace System.Net
             }
         }
 
+        /// <summary>
+        /// 保存  Cookie 
+        /// </summary>
+        /// <param name="fileName"></param>
         public void SaveCookies(string fileName)
         {
             using (Stream stream = File.Create(fileName)) {
@@ -221,6 +290,10 @@ namespace System.Net
             }
         }
 
+        /// <summary>
+        /// 加载 Cookie
+        /// </summary>
+        /// <param name="fileName"></param>
         public void LoadCookies(string fileName)
         {
             try {
