@@ -31,7 +31,6 @@
         /// </summary>
         public bool UseMvc { get; set; } = true;
 
-#if NETCOREAPP3_0
         /// <summary>
         /// 使用 Webapi
         /// </summary>
@@ -42,7 +41,6 @@
         /// </summary>
         public bool UseRazorPages { get; set; } = true;
 
-#endif
         /// <summary>
         /// 使用 跨域
         /// </summary>
