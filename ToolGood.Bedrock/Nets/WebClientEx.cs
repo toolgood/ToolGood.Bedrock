@@ -5,6 +5,7 @@ using System.Net.Security;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Collections.Generic;
 
 namespace System.Net
 {
@@ -14,8 +15,8 @@ namespace System.Net
         public const string Baiduspider = "Baiduspider+(+http://www.baidu.com/search/spider.htm)";
         public const string Googlebot = "Googlebot/2.1 (+http://www.google.com/bot.html)";
 
-        public const string Chrome = "Mozilla / 5.0(Windows NT 6.1; WOW64) AppleWebKit / 537.11(KHTML, like Gecko) Chrome / 23.0.1271.64 Safari / 537.11";
-        public const string Firefox = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0";
+        public const string Chrome = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11(KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11";
+        public const string Firefox = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0";
         public const string Safari = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50";
         public const string IE = "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0; .NET CLR 2.0.50727; SLCC2; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.3; .NET4.0C; Tablet PC 2.0; .NET4.0E)";
 
@@ -38,6 +39,8 @@ namespace System.Net
 
         private int? _timeout;
         private int? _readWriteTimeout;
+        private int? _continueTimeout;
+
 
         static WebClientEx()
         {
@@ -71,10 +74,27 @@ namespace System.Net
             if (_proxy != null) request.Proxy = this.Proxy;
             if (_timeout != null) request.Timeout = (int)_timeout * 1000;
             if (_readWriteTimeout != null) request.ReadWriteTimeout = (int)_readWriteTimeout * 1000;
+            if (_continueTimeout != null) request.ContinueTimeout = (int)_continueTimeout * 1000;
+
             return request;
         }
 
+
+
         #region 02 扩展 上传方法 和 下载图片方法
+
+        public byte[] PostForm(string url, Dictionary<string,string> dict)
+        {
+            var str = "";
+            foreach (var item in dict) {
+                if (str.Length > 0) { str += "&"; }
+                str += item.Key + "=" + System.Web.HttpUtility.UrlEncode(item.Value);
+            }
+            var postData = Encoding.ASCII.GetBytes(str);
+            this.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            return this.UploadData(url, "POST", postData);
+        }
+
 
         public byte[] PostForm(string url, string formData)
         {
@@ -131,13 +151,19 @@ namespace System.Net
         {
             this._readWriteTimeout = timeout;
         }
-
-        /// <summary>
-        /// 不使用
-        /// </summary>
         public void RemoveReadWriteTimeout()
         {
             this._readWriteTimeout = null;
+        }
+
+        public void SetContinueTimeout(int timeout)
+        {
+            this._continueTimeout = timeout;
+        }
+
+        public void RemoveContinueTimeout()
+        {
+            this._continueTimeout = null;
         }
 
         /// <summary>
