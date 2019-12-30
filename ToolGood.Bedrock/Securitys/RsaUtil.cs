@@ -382,9 +382,8 @@ namespace ToolGood.Bedrock
 
         private static RSAParameters LoadCertPublicKey(string certString)
         {
-            var file = Path.GetTempFileName();
-            File.WriteAllText(file, certString);
-            X509Certificate2 c1 = new X509Certificate2(file);
+            var bytes = Encoding.Default.GetBytes(certString);
+            X509Certificate2 c1 = new X509Certificate2(bytes);
             string keyPublic = c1.PublicKey.Key.ToXmlString(false);  // 公钥
             return LoadXmlString(keyPublic);
         }
