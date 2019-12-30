@@ -328,16 +328,41 @@ namespace ToolGood.Bedrock
             return rsaPub.VerifyData(HashbyteSignature, hashType, signedData);
         }
 
-        #endregion  
+        #endregion
 
 
 
         #region 密钥解析
+        public static string ConvertToXml(string key, string password = null)
+        {
+            if (key.StartsWith("<")) { return key; }
+            try {
+                return SaveXmlString(LoadPemPrivateKey(key), true);
+            } catch (Exception) { }
+            try {
+                return SaveXmlString(LoadPemPublicKey(key), false);
+            } catch (Exception) { }
+
+            var bytes = Encoding.Default.GetBytes(key);
+            X509Certificate2 certificate2;
+            if (string.IsNullOrEmpty(password)) {
+                certificate2 = new X509Certificate2(bytes);
+            } else {
+                certificate2 = new X509Certificate2(bytes, password);
+            }
+            if (certificate2.HasPrivateKey) {
+                return certificate2.PrivateKey.ToXmlString(true);
+            }
+            return certificate2.PublicKey.Key.ToXmlString(false);
+        }
 
         private static string SaveXmlString(RSA rsa, bool includePrivateParameters)
         {
             RSAParameters parameters = rsa.ExportParameters(includePrivateParameters);
-
+            return SaveXmlString(parameters, includePrivateParameters);
+        }
+        private static string SaveXmlString(RSAParameters parameters, bool includePrivateParameters)
+        {
             if (includePrivateParameters) {
                 return string.Format("<RSAKeyValue><Modulus>{0}</Modulus><Exponent>{1}</Exponent><P>{2}</P><Q>{3}</Q><DP>{4}</DP><DQ>{5}</DQ><InverseQ>{6}</InverseQ><D>{7}</D></RSAKeyValue>",
                     Convert.ToBase64String(parameters.Modulus),
