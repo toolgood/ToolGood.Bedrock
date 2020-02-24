@@ -42,10 +42,10 @@ namespace System.Net
         private int? _continueTimeout;
 
 
-        //static WebClientEx()
-        //{
-        //    ServicePointManager.ServerCertificateValidationCallback = ValidateServerCertificate;
-        //}
+        static WebClientEx()
+        {
+            ServicePointManager.ServerCertificateValidationCallback = ValidateServerCertificate;
+        }
         private static bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
             return true;
@@ -67,11 +67,11 @@ namespace System.Net
                 address = new Uri(url);
             }
 
-            if (address.ToString().StartsWith("https")) {
-                Credentials = CredentialCache.DefaultNetworkCredentials;
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
-                ServicePointManager.ServerCertificateValidationCallback = ValidateServerCertificate;
-            }
+            //if (address.ToString().StartsWith("https")) {
+            //    Credentials = CredentialCache.DefaultNetworkCredentials;
+            //    //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
+            //    ServicePointManager.ServerCertificateValidationCallback = ValidateServerCertificate;
+            //}
 
             HttpWebRequest request = (HttpWebRequest)base.GetWebRequest(address);
             request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip | DecompressionMethods.Brotli;

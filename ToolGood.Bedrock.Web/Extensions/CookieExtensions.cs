@@ -33,7 +33,7 @@ namespace ToolGood.Bedrock.Web
                 IsEssential = true,
                 HttpOnly = true,
                 //Secure = true, //非https会无效
-                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
+                //SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
             });
         }
         /// <summary>
@@ -51,7 +51,7 @@ namespace ToolGood.Bedrock.Web
                 IsEssential = true,
                 HttpOnly = true,
                 //Secure = true, //非https会无效
-                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
+                //SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
             });
         }
         /// <summary>
@@ -69,7 +69,7 @@ namespace ToolGood.Bedrock.Web
                 IsEssential = true,
                 HttpOnly = true,
                 //Secure = true,  //非https会无效
-                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
+                //SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None,
             });
         }
         /// <summary>

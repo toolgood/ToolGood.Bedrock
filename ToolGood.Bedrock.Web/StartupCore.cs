@@ -189,19 +189,19 @@ namespace ToolGood.Bedrock.Web
                     options.IOTimeout = TimeSpan.FromSeconds(1);
                     options.Cookie.IsEssential = true;
                     options.Cookie.HttpOnly = true;
-                    options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
-                    options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
+                    //options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                    //options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
                 });
                 services.Configure<CookiePolicyOptions>(options => {
                     options.CheckConsentNeeded = context => false;
-                    options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
-                    options.Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
+                    //options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                    //options.Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
                 });
             } else if (config.UseCookie) {
                 services.Configure<CookiePolicyOptions>(options => {
                     options.CheckConsentNeeded = context => false;
-                    options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
-                    options.Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
+                    //options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                    //options.Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
                 });
             }
             #endregion
