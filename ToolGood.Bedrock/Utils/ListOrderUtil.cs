@@ -29,12 +29,47 @@ namespace ToolGood.Bedrock
         /// <param name="txt"></param>
         /// <param name="num"></param>
         /// <returns></returns>
-        public static string BuildOrderString(string txt,int num)
+        public static string BuildOrderString(string txt, int num)
         {
             return Regex.Replace(txt, @"\d+", (m) => {
                 return m.Value.PadLeft(num, '0');
             });
         }
+
+        /// <summary>
+        /// 依据 数字 排序 倒序
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static List<string> OrderByDescOnNumber(List<string> list)
+        {
+            SortedDictionary<string, string> dict = new SortedDictionary<string, string>();
+            foreach (var num in list) {
+                var key = Regex.Replace(num, @"\d+", (m) => {
+                    return m.Value.PadLeft(20, '0');
+                });
+                dict[key] = num;
+            }
+            return dict.Values.Reverse().ToList();
+        }
+
+        /// <summary>
+        /// 依据 数字 排序 正序
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static List<string> OrderByOnNumber(List<string> list)
+        {
+            SortedDictionary<string, string> dict = new SortedDictionary<string, string>();
+            foreach (var num in list) {
+                var key = Regex.Replace(num, @"\d+", (m) => {
+                    return m.Value.PadLeft(20, '0');
+                });
+                dict[key] = num;
+            }
+            return dict.Values.Reverse().ToList();
+        }
+
 
 
         /// <summary>
