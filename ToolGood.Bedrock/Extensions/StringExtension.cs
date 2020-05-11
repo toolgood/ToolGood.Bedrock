@@ -10,6 +10,86 @@ namespace System
     /// </summary>
     public static partial class ObjectExtension
     {
+        #region List<string> string[]
+
+        public static bool ContainsWithIgnoreCase(IList<string> list,string value)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (value.Equals(list[i], StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+ 
+            }
+            return false;
+        }
+        public static bool ContainsWithIgnoreCase(string[] list, string value)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                if (value.Equals(list[i], StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+        public static bool HasStartsWithIgnoreCase(IList<string> list, string value)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].StartsWith(value, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+            }
+            return false;
+        }
+        public static bool HasStartsWithIgnoreCase(string[] list, string value)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                if (list[i].StartsWith(value, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+        public static bool HasEndsWithIgnoreCase(IList<string> list, string value)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].EndsWith(value, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+            }
+            return false;
+        }
+        public static bool HasEndsWithIgnoreCase(string[] list, string value)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                if (list[i].EndsWith(value, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+        #endregion
+
+
         #region 字符串扩展
 
 
