@@ -15,6 +15,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="dict\typedarray.js" />
+    <None Remove="ug.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="dict\typedarray.js" />
+    <EmbeddedResource Include="dict\ug.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -22,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Jint" Version="3.0.0-beta-1778" />
     <PackageReference Include="WebMarkupMin.MsAjax" Version="2.8.1" />
     <PackageReference Include="WebMarkupMin.NUglify" Version="2.8.1" />
     <PackageReference Include="WebMarkupMin.Yui" Version="2.8.1" />

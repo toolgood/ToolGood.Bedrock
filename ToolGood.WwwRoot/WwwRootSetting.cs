@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using ToolGood.Bedrock;
 
@@ -34,6 +35,11 @@ namespace ToolGood.WwwRoot
         /// 排除文件
         /// </summary>
         public List<string> ExcludeFiles { get; set; } = new List<string>();
+
+        /// <summary>
+        /// js加密,比较点慢 
+        /// </summary>
+        public List<string> JsEncryptionFiles { get; set; } = new List<string>();
 
         /// <summary>
         /// 命名空间
@@ -183,6 +189,7 @@ namespace {NameSpace}
         /// </summary>
         public void BuildControllers()
         {
+            JsEncryption jsEncryption = new JsEncryption();
             if (string.IsNullOrEmpty(InFolderPath)) { throw new ArgumentNullException("FolderPath"); }
             if (string.IsNullOrEmpty(OutFolderPath)) { throw new ArgumentNullException("OutFolderPath"); }
             if (string.IsNullOrEmpty(NameSpace)) { throw new ArgumentNullException("NameSpace"); }
@@ -191,6 +198,12 @@ namespace {NameSpace}
             var setting = this;
             if (setting.InFolderPath.EndsWith("\\") == false) { setting.InFolderPath += "\\"; }
             if (setting.OutFolderPath.EndsWith("\\") == false) { setting.OutFolderPath += "\\"; }
+
+            var jseFile = new List<string>();
+            foreach (var item in JsEncryptionFiles) {
+                jseFile.Add(Path.GetFullPath(item));
+            }
+
 
             var files = Directory.GetFiles(setting.InFolderPath, "*.*", SearchOption.AllDirectories);
             for (int i = 0; i < files.Length; i++) {
@@ -215,7 +228,17 @@ namespace {NameSpace}
                     FileHash = HashUtil.GetMd5String(bytes),
                     FileName = Path.GetFileName(file),
                 };
-                wwwRootFile.FileContent = wwwRootFile.GetFileContent(bytes, file, CompressionType);
+                if ( jseFile.Contains(file) && file.EndsWith(".js", StringComparison.OrdinalIgnoreCase)) {
+                    wwwRootFile.FileContent = wwwRootFile.GetFileContent(bytes, file, CompressionType);
+                    if (string.IsNullOrWhiteSpace(wwwRootFile.FileContent) == false) {
+                        var c = Encoding.UTF8.GetString(bytes);
+                        var t = jsEncryption.BuildTemplate(c);
+                        c = Convert.ToBase64String(Encoding.UTF8.GetBytes(t));
+                        wwwRootFile.FileContent = c;
+                    }
+                } else {
+                    wwwRootFile.FileContent = wwwRootFile.GetFileContent(bytes, file, CompressionType);
+                }
                 wwwRootFile.FileMime = wwwRootFile.GetFileMime(file);
                 wwwRootFile.FileUrl = file.Substring(setting.InFolderPath.Length).Replace("\\", "/").TrimStart('/');
                 wwwRootFile.FileMethod =

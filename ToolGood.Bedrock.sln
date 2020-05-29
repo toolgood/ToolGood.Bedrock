@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolGood.WwwRoot.Test", "To
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolGood.WwwRoot", "ToolGood.WwwRoot\ToolGood.WwwRoot.csproj", "{21720749-4DA5-479A-B043-BC096A95B05F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolGood.Bedrock.Web.Test", "ToolGood.Bedrock.Web.Test\ToolGood.Bedrock.Web.Test.csproj", "{9C7A3B0E-A56B-42EC-B2AD-D604C441A6CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{21720749-4DA5-479A-B043-BC096A95B05F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21720749-4DA5-479A-B043-BC096A95B05F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21720749-4DA5-479A-B043-BC096A95B05F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C7A3B0E-A56B-42EC-B2AD-D604C441A6CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C7A3B0E-A56B-42EC-B2AD-D604C441A6CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C7A3B0E-A56B-42EC-B2AD-D604C441A6CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C7A3B0E-A56B-42EC-B2AD-D604C441A6CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{5F523227-18D0-4582-9063-D284ECCB495A} = {D2B91058-C0AD-4232-97A3-61D63DCE8EFF}
 		{21A608C8-962F-4BCD-8F7D-BB9FD886BE2D} = {D2B91058-C0AD-4232-97A3-61D63DCE8EFF}
 		{1C46FED8-7A3F-4DB4-BC31-F38D6F228CDC} = {D2B91058-C0AD-4232-97A3-61D63DCE8EFF}
+		{9C7A3B0E-A56B-42EC-B2AD-D604C441A6CE} = {D2B91058-C0AD-4232-97A3-61D63DCE8EFF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3BBDAA42-CE0E-4231-A160-B71D966211D1}
