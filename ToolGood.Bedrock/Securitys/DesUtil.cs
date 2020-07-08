@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.IO;
+using Org.BouncyCastle.Security;
 
 namespace ToolGood.Bedrock
 {
@@ -91,6 +94,68 @@ namespace ToolGood.Bedrock
             if (string.IsNullOrWhiteSpace(key) || key.Length < 8) return "01234567";
             return key.Substring(0, 8);
         }
+
+
+        #region Java
+
+        public static string EncryptForJava(string input, string key)
+        {
+            var inCipher = CreateCipher(true, key);
+
+            var inputArray = Encoding.UTF8.GetBytes(input);
+
+            byte[] cipherData = inCipher.DoFinal(inputArray);
+
+            return Convert.ToBase64String(cipherData);
+        }
+
+        public static string DecryptForJava(string input, string key)
+        {
+            var inputArrary = Convert.FromBase64String(input);
+
+            var outCipher = CreateCipher(false, key);
+
+            var encryptedDataStream = new MemoryStream(inputArrary, false);
+
+            var dataStream = new MemoryStream();
+
+            var outCipherStream = new CipherStream(dataStream, null, outCipher);
+
+            int ch;
+            while ((ch = encryptedDataStream.ReadByte()) >= 0)
+            {
+                outCipherStream.WriteByte((byte) ch);
+            }
+
+            outCipherStream.Close();
+            encryptedDataStream.Close();
+
+            var dataBytes = dataStream.ToArray();
+
+            return Encoding.UTF8.GetString(dataBytes);
+        }
+
+        static IBufferedCipher CreateCipher(bool forEncryption, string key,
+            string cipMode = "DESede/ECB/PKCS5Padding")
+        {
+            var algorithmName = cipMode;
+            if (cipMode.IndexOf('/') >= 0)
+            {
+                algorithmName = cipMode.Substring(0, cipMode.IndexOf('/'));
+            }
+
+            var cipher = CipherUtilities.GetCipher(cipMode);
+
+            var keyBytes = Encoding.UTF8.GetBytes(key);
+
+            var keyParameter = ParameterUtilities.CreateKeyParameter(algorithmName, keyBytes);
+
+            cipher.Init(forEncryption, keyParameter);
+
+            return cipher;
+        }
+
+        #endregion
     }
 
 }
