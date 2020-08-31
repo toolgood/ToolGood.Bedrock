@@ -70,6 +70,12 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="7z.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
     <DocumentationFile>bin\Debug\netcoreapp3.1\ToolGood.Bedrock.xml</DocumentationFile>
