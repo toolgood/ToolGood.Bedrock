@@ -1,16 +1,16 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
-using System.Net;
 using System.Net.Security;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace System.Net
 {
 
-    public static class UserAgents
+    static class UserAgents
     {
         public const string Baiduspider = "Baiduspider+(+http://www.baidu.com/search/spider.htm)";
         public const string Googlebot = "Googlebot/2.1 (+http://www.google.com/bot.html)";
@@ -29,7 +29,7 @@ namespace System.Net
     }
 
     [ToolboxItem(false)]
-    public class WebClientEx : WebClient
+    class WebClientEx : WebClient
     {
         private string _userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0";
         private string _acceptLanguage = "zh-CN,zh;";
@@ -62,25 +62,27 @@ namespace System.Net
 
         protected override WebRequest GetWebRequest(Uri address)
         {
-            if (address.IdnHost != address.Host) {
+            if (address.IdnHost != address.Host)
+            {
                 var url = address.Scheme + "://" + address.IdnHost + address.PathAndQuery;
                 address = new Uri(url);
             }
 
-            //if (address.ToString().StartsWith("https")) {
-            //    Credentials = CredentialCache.DefaultNetworkCredentials;
-            //    //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
-            //    ServicePointManager.ServerCertificateValidationCallback = ValidateServerCertificate;
-            //}
+            if (address.ToString().StartsWith("https"))
+            {
+                Credentials = CredentialCache.DefaultNetworkCredentials;
+                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
+                ServicePointManager.ServerCertificateValidationCallback = ValidateServerCertificate;
+            }
 
-            HttpWebRequest request = (HttpWebRequest)base.GetWebRequest(address);
+            HttpWebRequest request = (HttpWebRequest) base.GetWebRequest(address);
             request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip | DecompressionMethods.Brotli;
             if (_useCookie) request.CookieContainer = Cookies;
             request.AllowAutoRedirect = true;
             if (_proxy != null) request.Proxy = this.Proxy;
-            if (_timeout != null) request.Timeout = (int)_timeout * 1000;
-            if (_readWriteTimeout != null) request.ReadWriteTimeout = (int)_readWriteTimeout * 1000;
-            if (_continueTimeout != null) request.ContinueTimeout = (int)_continueTimeout * 1000;
+            if (_timeout != null) request.Timeout = (int) _timeout * 1000;
+            if (_readWriteTimeout != null) request.ReadWriteTimeout = (int) _readWriteTimeout * 1000;
+            if (_continueTimeout != null) request.ContinueTimeout = (int) _continueTimeout * 1000;
 
             return request;
         }
@@ -92,13 +94,26 @@ namespace System.Net
         public byte[] PostForm(string url, Dictionary<string, string> dict)
         {
             var str = "";
-            foreach (var item in dict) {
+            foreach (var item in dict)
+            {
                 if (str.Length > 0) { str += "&"; }
                 str += item.Key + "=" + System.Web.HttpUtility.UrlEncode(item.Value);
             }
             var postData = Encoding.ASCII.GetBytes(str);
             this.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
             return this.UploadData(url, "POST", postData);
+        }
+        public Task<byte[]> PostFormAsync(string url, Dictionary<string, string> dict)
+        {
+            var str = "";
+            foreach (var item in dict)
+            {
+                if (str.Length > 0) { str += "&"; }
+                str += item.Key + "=" + System.Web.HttpUtility.UrlEncode(item.Value);
+            }
+            var postData = Encoding.ASCII.GetBytes(str);
+            this.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            return this.UploadDataTaskAsync(url, "POST", postData);
         }
 
 
@@ -108,11 +123,23 @@ namespace System.Net
             var postData = Encoding.ASCII.GetBytes(formData);
             return this.UploadData(url, "POST", postData);
         }
+        public Task<byte[]> PostFormAsync(string url, string formData)
+        {
+            this.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            var postData = Encoding.ASCII.GetBytes(formData);
+            return this.UploadDataTaskAsync(url, "POST", postData);
+        }
 
         public byte[] PostForm(string url, byte[] formData)
         {
             this.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
             return this.UploadData(url, "POST", formData);
+        }
+
+        public Task<byte[]> PostFormAsync(string url, byte[] formData)
+        {
+            this.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            return this.UploadDataTaskAsync(url, "POST", formData);
         }
 
         #endregion 02 扩展 上传方法 和 下载图片方法
@@ -178,9 +205,12 @@ namespace System.Net
         /// <param name="url"></param>
         public void SetReferer(string url)
         {
-            if (url == "") {
+            if (url == "")
+            {
                 this.Headers.Remove(HttpRequestHeader.Referer);
-            } else {
+            }
+            else
+            {
                 this.Headers[HttpRequestHeader.Referer] = url;
             }
         }
@@ -237,13 +267,16 @@ namespace System.Net
         public string GetCookie(string url)
         {
             StringBuilder sb = new StringBuilder();
-            try {
+            try
+            {
                 Uri u = new Uri(url);
-                foreach (Cookie cook in Cookies.GetCookies(u)) {
+                foreach (Cookie cook in Cookies.GetCookies(u))
+                {
                     sb.Append(cook.ToString());
                     sb.Append("; ");
                 }
-            } catch { }
+            }
+            catch { }
             return sb.ToString();
         }
 
@@ -256,8 +289,10 @@ namespace System.Net
         public string GetCookieValue(string url, string key)
         {
             Uri u = new Uri(url);
-            foreach (Cookie cook in Cookies.GetCookies(u)) {
-                if (cook.Name == key) {
+            foreach (Cookie cook in Cookies.GetCookies(u))
+            {
+                if (cook.Name == key)
+                {
                     return cook.Value;
                 }
             }
@@ -273,10 +308,13 @@ namespace System.Net
         public void AddCookie(string url, string key, string value)
         {
             var uri = new Uri(url);
-            if (uri.Port == 80) {
+            if (uri.Port == 80)
+            {
                 var u = uri.Scheme + "://" + uri.Host + "/";
                 Cookies.Add(new Uri(u), new Cookie(key, value));
-            } else {
+            }
+            else
+            {
                 var u = uri.Scheme + "://" + uri.Host + ":" + uri.Port + "/";
                 Cookies.Add(new Uri(u), new Cookie(key, value));
             }
@@ -288,7 +326,8 @@ namespace System.Net
         /// <returns></returns>
         public byte[] GetCookieBytes()
         {
-            using (MemoryStream ms = new MemoryStream()) {
+            using (MemoryStream ms = new MemoryStream())
+            {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(ms, Cookies);
                 return ms.ToArray();
@@ -301,10 +340,11 @@ namespace System.Net
         /// <param name="cookie"></param>
         public void SetCookieBytes(byte[] cookie)
         {
-            using (MemoryStream ms = new MemoryStream()) {
+            using (MemoryStream ms = new MemoryStream())
+            {
                 ms.Write(cookie, 0, cookie.Length);
                 BinaryFormatter formatter = new BinaryFormatter();
-                Cookies = (CookieContainer)formatter.Deserialize(ms);
+                Cookies = (CookieContainer) formatter.Deserialize(ms);
             }
         }
 
@@ -314,11 +354,14 @@ namespace System.Net
         /// <param name="fileName"></param>
         public void SaveCookies(string fileName)
         {
-            using (Stream stream = File.Create(fileName)) {
-                try {
+            using (Stream stream = File.Create(fileName))
+            {
+                try
+                {
                     BinaryFormatter formatter = new BinaryFormatter();
                     formatter.Serialize(stream, Cookies);
-                } catch (Exception) { }
+                }
+                catch (Exception) { }
             }
         }
 
@@ -328,12 +371,16 @@ namespace System.Net
         /// <param name="fileName"></param>
         public void LoadCookies(string fileName)
         {
-            try {
-                using (Stream stream = File.Open(fileName, FileMode.Open)) {
+            try
+            {
+                using (Stream stream = File.Open(fileName, FileMode.Open))
+                {
                     BinaryFormatter formatter = new BinaryFormatter();
-                    Cookies = (CookieContainer)formatter.Deserialize(stream);
+                    Cookies = (CookieContainer) formatter.Deserialize(stream);
                 }
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 Cookies = new CookieContainer();
             }
         }
