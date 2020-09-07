@@ -62,7 +62,7 @@ namespace ToolGood.Bedrock.Utils
             "umac-128-etm","umac-64","umac-64-etm","undefined","unfollow","unlike","unsubscribe","update","upgrade","upload","uploads","usenet","user",
             "username","users","uucp","validation","validations","var","verify","video","videos","video-stats","view","voice","void","vote","vpn","w",
             "wave","webdisk","webmail","webmaster","webrnail","website","whm","whois","widget","widgets","wifi","wiki","wpad","write","ww","www","www1",
-            "www2","www3","www4","www-data","wwww","xhtml","xhtrnl","xml","xxx","you","yourname","yourusername","zlib",
+            "www2","www3","www4","www-data","wwww","xhtml","xhtrnl","xml","xxx","you","yourname","yourusername","zlib","wwwroot",
         };
 
         /// <summary>
