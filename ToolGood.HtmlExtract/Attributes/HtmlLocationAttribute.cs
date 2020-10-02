@@ -8,7 +8,7 @@ namespace ToolGood.HtmlExtract.Attributes
         public string JqSelector { get; private set; }
         public int? Index { get; private set; }
 
-        public HtmlLocationAttribute(string jqSelector)
+        public HtmlLocationAttribute(string jqSelector = "body")
         {
             JqSelector = jqSelector;
         }

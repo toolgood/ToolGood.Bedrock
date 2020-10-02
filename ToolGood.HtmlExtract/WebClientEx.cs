@@ -62,27 +62,25 @@ namespace System.Net
 
         protected override WebRequest GetWebRequest(Uri address)
         {
-            if (address.IdnHost != address.Host)
-            {
+            if (address.IdnHost != address.Host) {
                 var url = address.Scheme + "://" + address.IdnHost + address.PathAndQuery;
                 address = new Uri(url);
             }
 
-            if (address.ToString().StartsWith("https"))
-            {
+            if (address.ToString().StartsWith("https")) {
                 Credentials = CredentialCache.DefaultNetworkCredentials;
                 //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
                 ServicePointManager.ServerCertificateValidationCallback = ValidateServerCertificate;
             }
 
-            HttpWebRequest request = (HttpWebRequest) base.GetWebRequest(address);
+            HttpWebRequest request = (HttpWebRequest)base.GetWebRequest(address);
             request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip | DecompressionMethods.Brotli;
             if (_useCookie) request.CookieContainer = Cookies;
             request.AllowAutoRedirect = true;
             if (_proxy != null) request.Proxy = this.Proxy;
-            if (_timeout != null) request.Timeout = (int) _timeout * 1000;
-            if (_readWriteTimeout != null) request.ReadWriteTimeout = (int) _readWriteTimeout * 1000;
-            if (_continueTimeout != null) request.ContinueTimeout = (int) _continueTimeout * 1000;
+            if (_timeout != null) request.Timeout = (int)_timeout * 1000;
+            if (_readWriteTimeout != null) request.ReadWriteTimeout = (int)_readWriteTimeout * 1000;
+            if (_continueTimeout != null) request.ContinueTimeout = (int)_continueTimeout * 1000;
 
             return request;
         }
@@ -94,8 +92,7 @@ namespace System.Net
         public byte[] PostForm(string url, Dictionary<string, string> dict)
         {
             var str = "";
-            foreach (var item in dict)
-            {
+            foreach (var item in dict) {
                 if (str.Length > 0) { str += "&"; }
                 str += item.Key + "=" + System.Web.HttpUtility.UrlEncode(item.Value);
             }
@@ -106,8 +103,7 @@ namespace System.Net
         public Task<byte[]> PostFormAsync(string url, Dictionary<string, string> dict)
         {
             var str = "";
-            foreach (var item in dict)
-            {
+            foreach (var item in dict) {
                 if (str.Length > 0) { str += "&"; }
                 str += item.Key + "=" + System.Web.HttpUtility.UrlEncode(item.Value);
             }
@@ -205,12 +201,9 @@ namespace System.Net
         /// <param name="url"></param>
         public void SetReferer(string url)
         {
-            if (url == "")
-            {
+            if (url == "") {
                 this.Headers.Remove(HttpRequestHeader.Referer);
-            }
-            else
-            {
+            } else {
                 this.Headers[HttpRequestHeader.Referer] = url;
             }
         }
@@ -267,16 +260,13 @@ namespace System.Net
         public string GetCookie(string url)
         {
             StringBuilder sb = new StringBuilder();
-            try
-            {
+            try {
                 Uri u = new Uri(url);
-                foreach (Cookie cook in Cookies.GetCookies(u))
-                {
+                foreach (Cookie cook in Cookies.GetCookies(u)) {
                     sb.Append(cook.ToString());
                     sb.Append("; ");
                 }
-            }
-            catch { }
+            } catch { }
             return sb.ToString();
         }
 
@@ -289,10 +279,8 @@ namespace System.Net
         public string GetCookieValue(string url, string key)
         {
             Uri u = new Uri(url);
-            foreach (Cookie cook in Cookies.GetCookies(u))
-            {
-                if (cook.Name == key)
-                {
+            foreach (Cookie cook in Cookies.GetCookies(u)) {
+                if (cook.Name == key) {
                     return cook.Value;
                 }
             }
@@ -308,17 +296,36 @@ namespace System.Net
         public void AddCookie(string url, string key, string value)
         {
             var uri = new Uri(url);
-            if (uri.Port == 80)
-            {
+            if (uri.Port == 80) {
                 var u = uri.Scheme + "://" + uri.Host + "/";
                 Cookies.Add(new Uri(u), new Cookie(key, value));
-            }
-            else
-            {
+            } else {
                 var u = uri.Scheme + "://" + uri.Host + ":" + uri.Port + "/";
                 Cookies.Add(new Uri(u), new Cookie(key, value));
             }
         }
+
+        public void AddCookieString(string url, string str)
+        {
+            var uri = new Uri(url);
+            //string u;
+            //if (uri.Port == 80) {
+            //    u = /*uri.Scheme + "://" +*/ uri.Host;// + "/";
+            //} else {
+            //    u = /*uri.Scheme + "://" + */uri.Host;// + ":" + uri.Port;// + "/";
+            //}
+            var txts = str.Split(';');
+            foreach (var txt in txts) {
+                var sp = txt.Split('=');
+                var cookie = new Cookie();
+                cookie.Domain = uri.Host;
+                cookie.Name = sp[0].Trim();
+                cookie.Value = sp[1].Trim();
+
+                Cookies.Add(cookie);
+            }
+        }
+
 
         /// <summary>
         /// 导出Cookie 类型
@@ -326,8 +333,7 @@ namespace System.Net
         /// <returns></returns>
         public byte[] GetCookieBytes()
         {
-            using (MemoryStream ms = new MemoryStream())
-            {
+            using (MemoryStream ms = new MemoryStream()) {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(ms, Cookies);
                 return ms.ToArray();
@@ -340,11 +346,10 @@ namespace System.Net
         /// <param name="cookie"></param>
         public void SetCookieBytes(byte[] cookie)
         {
-            using (MemoryStream ms = new MemoryStream())
-            {
+            using (MemoryStream ms = new MemoryStream()) {
                 ms.Write(cookie, 0, cookie.Length);
                 BinaryFormatter formatter = new BinaryFormatter();
-                Cookies = (CookieContainer) formatter.Deserialize(ms);
+                Cookies = (CookieContainer)formatter.Deserialize(ms);
             }
         }
 
@@ -354,14 +359,11 @@ namespace System.Net
         /// <param name="fileName"></param>
         public void SaveCookies(string fileName)
         {
-            using (Stream stream = File.Create(fileName))
-            {
-                try
-                {
+            using (Stream stream = File.Create(fileName)) {
+                try {
                     BinaryFormatter formatter = new BinaryFormatter();
                     formatter.Serialize(stream, Cookies);
-                }
-                catch (Exception) { }
+                } catch (Exception) { }
             }
         }
 
@@ -371,16 +373,12 @@ namespace System.Net
         /// <param name="fileName"></param>
         public void LoadCookies(string fileName)
         {
-            try
-            {
-                using (Stream stream = File.Open(fileName, FileMode.Open))
-                {
+            try {
+                using (Stream stream = File.Open(fileName, FileMode.Open)) {
                     BinaryFormatter formatter = new BinaryFormatter();
-                    Cookies = (CookieContainer) formatter.Deserialize(stream);
+                    Cookies = (CookieContainer)formatter.Deserialize(stream);
                 }
-            }
-            catch (Exception)
-            {
+            } catch (Exception) {
                 Cookies = new CookieContainer();
             }
         }

@@ -33,17 +33,13 @@ namespace ToolGood.HtmlExtract
         {
             var attrs = type.GetCustomAttributes<HtmlLocationAttribute>();
 
-            foreach (var attr in attrs)
-            {
-                LocationFunc func = (node) =>
-                {
+            foreach (var attr in attrs) {
+                LocationFunc func = (node) => {
                     var nds = node.QuerySelectorAll(attr.JqSelector);
-                    if (attr.Index == null)
-                    {
+                    if (attr.Index == null) {
                         return nds.ToList();
                     }
-                    if (nds.Count() < attr.Index.Value)
-                    {
+                    if (nds.Count() < attr.Index.Value) {
                         return new List<HtmlNode>() { nds[attr.Index.Value] };
                     }
                     return new List<HtmlNode>();
@@ -51,11 +47,10 @@ namespace ToolGood.HtmlExtract
                 locationsCache.Add(func);
             }
             var pis = type.GetProperties();
-            foreach (var pi in pis)
-            {
+            foreach (var pi in pis) {
+                propertyMappingCache.Add(pi.Name, pi);
                 var ats = pi.GetCustomAttributes<HtmlDataAttribute>();
-                foreach (var at in ats)
-                {
+                foreach (var at in ats) {
                     AddFieldMapping(pi, at.JqSelector, at.Index, at.AttrName);
                 }
             }
@@ -79,16 +74,14 @@ namespace ToolGood.HtmlExtract
             document.LoadHtml(html);
 
             List<HtmlNode> list = new List<HtmlNode>();
-            foreach (var item in locationsCache)
-            {
+            foreach (var item in locationsCache) {
                 var nodes = item(document.DocumentNode);
                 list.AddRange(nodes);
             }
             list = list.Distinct().ToList();
 
             List<T> result = new List<T>();
-            foreach (var node in list)
-            {
+            foreach (var node in list) {
                 var t = Parse(node);
                 result.Add(t);
             }
@@ -99,12 +92,9 @@ namespace ToolGood.HtmlExtract
         {
             T t = new T();
 
-            foreach (var fieldMapping in fieldMappingCache)
-            {
-                foreach (var item in fieldMapping.Value)
-                {
-                    if (item(node, t, fieldMapping.Key))
-                    {
+            foreach (var fieldMapping in fieldMappingCache) {
+                foreach (var item in fieldMapping.Value) {
+                    if (item(node, t, fieldMapping.Key)) {
                         break;
                     }
                 }
@@ -134,16 +124,14 @@ namespace ToolGood.HtmlExtract
         public void AddFieldMapping(string fieldName, FieldMappingFunc func)
         {
             PropertyInfo propertyInfo;
-            if (propertyMappingCache.TryGetValue(fieldName, out propertyInfo))
-            {
+            if (propertyMappingCache.TryGetValue(fieldName, out propertyInfo)) {
                 AddFieldMapping(propertyInfo, func);
             }
         }
         private void AddFieldMapping(PropertyInfo propertyInfo, FieldMappingFunc func)
         {
             List<FieldMappingFunc> list;
-            if (fieldMappingCache.TryGetValue(propertyInfo, out list) == false)
-            {
+            if (fieldMappingCache.TryGetValue(propertyInfo, out list) == false) {
                 list = new List<FieldMappingFunc>();
                 fieldMappingCache[propertyInfo] = list;
             }
@@ -184,50 +172,41 @@ namespace ToolGood.HtmlExtract
         public void AddFieldMapping(string fieldName, string jqSelector, int? index, string attrName)
         {
             PropertyInfo propertyInfo;
-            if (propertyMappingCache.TryGetValue(fieldName, out propertyInfo))
-            {
+            if (propertyMappingCache.TryGetValue(fieldName, out propertyInfo)) {
                 AddFieldMapping(propertyInfo, jqSelector, index, attrName);
             }
         }
         private void AddFieldMapping(PropertyInfo propertyInfo, string jqSelector, int? index, string attrName)
         {
             List<FieldMappingFunc> list;
-            if (fieldMappingCache.TryGetValue(propertyInfo, out list) == false)
-            {
+            if (fieldMappingCache.TryGetValue(propertyInfo, out list) == false) {
                 list = new List<FieldMappingFunc>();
                 fieldMappingCache[propertyInfo] = list;
             }
-            FieldMappingFunc func = (nd, obj, pi) =>
-             {
-                 HtmlNode node = null;
-                 if (index != null)
-                 {
-                     var nds = nd.QuerySelectorAll(jqSelector);
-                     if (nds.Count > index.Value) { node = nds[index.Value]; }
-                 }
-                 else
-                 {
-                     node = nd.QuerySelector(jqSelector);
-                 }
-                 if (node != null)
-                 {
-                     if (string.IsNullOrEmpty(attrName) == false)
-                     {
-                         var attr = node.Attributes[attrName];
-                         if (attr != null)
-                         {
-                             pi.SetValue(obj, To(attr.Value, pi.PropertyType));
-                             return true;
-                         }
-                     }
-                     else
-                     {
-                         pi.SetValue(obj, To(node.InnerText, pi.PropertyType));
-                         return true;
-                     }
-                 }
-                 return false;
-             };
+            FieldMappingFunc func = (nd, obj, pi) => {
+                HtmlNode node = null;
+                if (index != null) {
+                    var nds = nd.QuerySelectorAll(jqSelector);
+                    if (nds.Count > index.Value) { node = nds[index.Value]; }
+                } else if (string.IsNullOrEmpty(jqSelector)) {
+                    node = nd;
+                } else {
+                    node = nd.QuerySelector(jqSelector);
+                }
+                if (node != null) {
+                    if (string.IsNullOrEmpty(attrName) == false) {
+                        var attr = node.Attributes[attrName];
+                        if (attr != null) {
+                            pi.SetValue(obj, To(attr.Value, pi.PropertyType));
+                            return true;
+                        }
+                    } else {
+                        pi.SetValue(obj, To(node.InnerText, pi.PropertyType));
+                        return true;
+                    }
+                }
+                return false;
+            };
             list.Add(func);
         }
         private object To(object value, Type destinationType)
@@ -236,8 +215,7 @@ namespace ToolGood.HtmlExtract
         }
         private object To(object value, Type destinationType, CultureInfo culture)
         {
-            if (value != null)
-            {
+            if (value != null) {
                 var sourceType = value.GetType();
 
                 var destinationConverter = TypeDescriptor.GetConverter(destinationType);
@@ -249,7 +227,7 @@ namespace ToolGood.HtmlExtract
                     return sourceConverter.ConvertTo(null, culture, value, destinationType);
 
                 if (destinationType.IsEnum && value is int)
-                    return Enum.ToObject(destinationType, (int) value);
+                    return Enum.ToObject(destinationType, (int)value);
 
                 if (!destinationType.IsInstanceOfType(value))
                     return Convert.ChangeType(value, destinationType, culture);

@@ -8,7 +8,7 @@ namespace ToolGood.HtmlExtract
         protected override Expression VisitMember(MemberExpression node)
         {
             Field = node.Member.Name;
-            return null;
+            return base.VisitMember(node);
         }
     }
 
