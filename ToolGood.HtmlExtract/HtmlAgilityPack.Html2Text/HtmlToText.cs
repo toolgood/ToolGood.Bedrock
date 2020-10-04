@@ -100,14 +100,16 @@ namespace HtmlAgilityPack.Html2Text
                     written = ExtractTextAndWrite(child, writer);
                 }
                 writer.Append("| ");
-                return true;
+                return false;
             }
 
 
             {
                 var written = false;
                 foreach (var child in node.ChildNodes) {
-                    written = ExtractTextAndWrite(child, writer);
+                    if (ExtractTextAndWrite(child, writer)) {
+                        written = true;
+                    }
                 }
                 if (written && ElementNamesThatImplyNewLine.Contains(node.Name))
                     writer.AppendLine();
