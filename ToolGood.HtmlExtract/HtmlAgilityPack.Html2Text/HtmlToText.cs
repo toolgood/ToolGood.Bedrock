@@ -11,7 +11,7 @@ namespace HtmlAgilityPack.Html2Text
     public static class TextExtractor
     {
         private static HashSet<string> FormElementNames = new HashSet<string> { "label", "textarea", "button", "option", "select" };
-        private static HashSet<string> ElementNamesThatImplyNewLine = new HashSet<string> { "li", "div", "br", "p", "h1", "h2", "h3", "h4" };
+        private static HashSet<string> ElementNamesThatImplyNewLine = new HashSet<string> { "li", "div", "br", "p", "h1", "h2", "h3", "h4", "h5", "h6" };
 
 
         public static string ToText(this HtmlNode node)
@@ -44,7 +44,7 @@ namespace HtmlAgilityPack.Html2Text
                 return true;
             }
 
-            if (node.Name == "script" || node.Name == "style" || FormElementNames.Contains(node.Name))
+            if (node.Name.ToLower() == "script" || node.Name.ToLower() == "style" || FormElementNames.Contains(node.Name.ToLower()))
                 return false;
 
             if (node.Name.Equals("a", StringComparison.OrdinalIgnoreCase)) {
@@ -53,7 +53,7 @@ namespace HtmlAgilityPack.Html2Text
                     return false;
             }
 
-            if (node.Name.EndsWith("img", StringComparison.OrdinalIgnoreCase)) {
+            if (node.Name.Equals("img", StringComparison.OrdinalIgnoreCase)) {
                 string altText = node.GetAttributeValue("alt", null);
                 if (!string.IsNullOrWhiteSpace(altText)) {
                     writer.Append("[IMG: ");
@@ -111,7 +111,7 @@ namespace HtmlAgilityPack.Html2Text
                         written = true;
                     }
                 }
-                if (written && ElementNamesThatImplyNewLine.Contains(node.Name))
+                if (written && ElementNamesThatImplyNewLine.Contains(node.Name.ToLower()))
                     writer.AppendLine();
 
                 return written;
