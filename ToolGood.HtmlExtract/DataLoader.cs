@@ -9,6 +9,7 @@ using System.Reflection;
 using ToolGood.HtmlExtract.HtmlAgilityPack;
 using ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors;
 using ToolGood.HtmlExtract.Attributes;
+using HtmlAgilityPack.Html2Text;
 
 namespace ToolGood.HtmlExtract
 {
@@ -201,7 +202,7 @@ namespace ToolGood.HtmlExtract
                             return true;
                         }
                     } else {
-                        pi.SetValue(obj, To(node.InnerText, pi.PropertyType));
+                        pi.SetValue(obj, To(node.ToText().Trim(), pi.PropertyType));
                         return true;
                     }
                 }
