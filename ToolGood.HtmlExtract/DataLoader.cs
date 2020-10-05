@@ -195,16 +195,18 @@ namespace ToolGood.HtmlExtract
                     node = nd.QuerySelector(jqSelector);
                 }
                 if (node != null) {
-                    if (string.IsNullOrEmpty(attrName) == false) {
-                        var attr = node.Attributes[attrName];
-                        if (attr != null) {
-                            pi.SetValue(obj, To(attr.Value, pi.PropertyType));
+                    try {
+                        if (string.IsNullOrEmpty(attrName) == false) {
+                            var attr = node.Attributes[attrName];
+                            if (attr != null) {
+                                pi.SetValue(obj, To(attr.Value, pi.PropertyType));
+                                return true;
+                            }
+                        } else {
+                            pi.SetValue(obj, To(node.ToText().Trim(), pi.PropertyType));
                             return true;
                         }
-                    } else {
-                        pi.SetValue(obj, To(node.ToText().Trim(), pi.PropertyType));
-                        return true;
-                    }
+                    } catch (Exception) { }
                 }
                 return false;
             };

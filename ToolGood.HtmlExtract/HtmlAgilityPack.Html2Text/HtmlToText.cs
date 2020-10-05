@@ -47,11 +47,11 @@ namespace HtmlAgilityPack.Html2Text
             if (node.Name.ToLower() == "script" || node.Name.ToLower() == "style" || FormElementNames.Contains(node.Name.ToLower()))
                 return false;
 
-            if (node.Name.Equals("a", StringComparison.OrdinalIgnoreCase)) {
-                var siblings = node.ParentNode.ChildNodes;
-                if (!siblings.Any(n => n.Name != "a" && !string.IsNullOrEmpty(node.InnerText)))
-                    return false;
-            }
+            //if (node.Name.Equals("a", StringComparison.OrdinalIgnoreCase)) {
+            //    var siblings = node.ParentNode.ChildNodes;
+            //    if (!siblings.Any(n => n.Name != "a" && !string.IsNullOrEmpty(node.InnerText)))
+            //        return false;
+            //}
 
             if (node.Name.Equals("img", StringComparison.OrdinalIgnoreCase)) {
                 string altText = node.GetAttributeValue("alt", null);

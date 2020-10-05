@@ -307,13 +307,9 @@ namespace System.Net
 
         public void AddCookieString(string url, string str)
         {
+            if (string.IsNullOrEmpty(str)) { return; }
+
             var uri = new Uri(url);
-            //string u;
-            //if (uri.Port == 80) {
-            //    u = /*uri.Scheme + "://" +*/ uri.Host;// + "/";
-            //} else {
-            //    u = /*uri.Scheme + "://" + */uri.Host;// + ":" + uri.Port;// + "/";
-            //}
             var txts = str.Split(';');
             foreach (var txt in txts) {
                 var sp = txt.Split('=');
