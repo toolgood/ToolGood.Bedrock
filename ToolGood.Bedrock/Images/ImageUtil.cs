@@ -55,7 +55,8 @@ namespace ToolGood.Bedrock.Images
         {
             //创建目录
             string dir = Path.GetDirectoryName(fileSaveUrl);
-            if (!Directory.Exists(dir)) {
+            if (!Directory.Exists(dir))
+            {
                 Directory.CreateDirectory(dir);
             }
 
@@ -63,21 +64,26 @@ namespace ToolGood.Bedrock.Images
             Image initImage = Image.FromStream(fromFile, true);
 
             //原图宽高均小于模版，不作处理，直接保存
-            if ((initImage.Width <= side) && (initImage.Height <= side)) {
+            if ((initImage.Width <= side) && (initImage.Height <= side))
+            {
                 initImage.Save(fileSaveUrl, ImageFormat.Jpeg);
-            } else {
+            }
+            else
+            {
                 //原始图片的宽、高
                 int initWidth = initImage.Width;
                 int initHeight = initImage.Height;
 
                 //非正方型先裁剪为正方型
-                if (initWidth != initHeight) {
+                if (initWidth != initHeight)
+                {
                     //截图对象
                     Image pickedImage;
                     Graphics pickedG;
 
                     //宽大于高的横图
-                    if (initWidth > initHeight) {
+                    if (initWidth > initHeight)
+                    {
                         //对象实例化
                         pickedImage = new Bitmap(initHeight, initHeight);
                         pickedG = Graphics.FromImage(pickedImage);
@@ -93,7 +99,8 @@ namespace ToolGood.Bedrock.Images
                         initWidth = initHeight;
                     }
                     //高大于宽的竖图
-                    else {
+                    else
+                    {
                         //对象实例化
                         pickedImage = new Bitmap(initWidth, initWidth);
                         pickedG = Graphics.FromImage(pickedImage);
@@ -110,7 +117,7 @@ namespace ToolGood.Bedrock.Images
                     }
 
                     //将截图对象赋给原图
-                    initImage = (Image)pickedImage.Clone();
+                    initImage = (Image) pickedImage.Clone();
                     //释放截图资源
                     pickedG.Dispose();
                     pickedImage.Dispose();
@@ -131,12 +138,13 @@ namespace ToolGood.Bedrock.Images
                 //获取系统编码类型数组,包含了jpeg,bmp,png,gif,tiff
                 ImageCodecInfo[] icis = ImageCodecInfo.GetImageEncoders();
                 ImageCodecInfo ici = null;
-                foreach (ImageCodecInfo i in icis) {
+                foreach (ImageCodecInfo i in icis)
+                {
                     if ((i.MimeType == "image/jpeg") || (i.MimeType == "image/bmp") || (i.MimeType == "image/png") || (i.MimeType == "image/gif"))
                         ici = i;
                 }
                 EncoderParameters ep = new EncoderParameters(1);
-                ep.Param[0] = new EncoderParameter(Encoder.Quality, (byte)quality);
+                ep.Param[0] = new EncoderParameter(Encoder.Quality, (byte) quality);
                 //保存缩略图
                 resultImage.Save(fileSaveUrl, ici, ep);
                 //释放关键质量控制所用资源
@@ -168,16 +176,20 @@ namespace ToolGood.Bedrock.Images
             Image initImage = Image.FromStream(fromFile, true);
 
             //原图宽高均小于模版，不作处理，直接保存
-            if ((initImage.Width <= maxWidth) && (initImage.Height <= maxHeight)) {
+            if ((initImage.Width <= maxWidth) && (initImage.Height <= maxHeight))
+            {
                 initImage.Save(fileSaveUrl, ImageFormat.Jpeg);
-            } else {
+            }
+            else
+            {
                 //模版的宽高比例
-                double templateRate = (double)maxWidth / maxHeight;
+                double templateRate = (double) maxWidth / maxHeight;
                 //原图片的宽高比例
-                double initRate = (double)initImage.Width / initImage.Height;
+                double initRate = (double) initImage.Width / initImage.Height;
 
                 //原图与模版比例相等，直接缩放
-                if (templateRate == initRate) {
+                if (templateRate == initRate)
+                {
                     //按模版大小生成最终图片
                     Image templateImage = new Bitmap(maxWidth, maxHeight);
                     Graphics templateG = Graphics.FromImage(templateImage);
@@ -188,7 +200,8 @@ namespace ToolGood.Bedrock.Images
                     templateImage.Save(fileSaveUrl, ImageFormat.Jpeg);
                 }
                 //原图与模版比例不等，裁剪后缩放
-                else {
+                else
+                {
                     //裁剪对象
                     Image pickedImage;
                     Graphics pickedG;
@@ -198,36 +211,38 @@ namespace ToolGood.Bedrock.Images
                     Rectangle toR = new Rectangle(0, 0, 0, 0); //目标定位
 
                     //宽为标准进行裁剪
-                    if (templateRate > initRate) {
+                    if (templateRate > initRate)
+                    {
                         //裁剪对象实例化
-                        pickedImage = new Bitmap(initImage.Width, (int)Math.Floor(initImage.Width / templateRate));
+                        pickedImage = new Bitmap(initImage.Width, (int) Math.Floor(initImage.Width / templateRate));
                         pickedG = Graphics.FromImage(pickedImage);
 
                         //裁剪源定位
                         fromR.X = 0;
-                        fromR.Y = (int)Math.Floor((initImage.Height - initImage.Width / templateRate) / 2);
+                        fromR.Y = (int) Math.Floor((initImage.Height - initImage.Width / templateRate) / 2);
                         fromR.Width = initImage.Width;
-                        fromR.Height = (int)Math.Floor(initImage.Width / templateRate);
+                        fromR.Height = (int) Math.Floor(initImage.Width / templateRate);
 
                         //裁剪目标定位
                         toR.X = 0;
                         toR.Y = 0;
                         toR.Width = initImage.Width;
-                        toR.Height = (int)Math.Floor(initImage.Width / templateRate);
+                        toR.Height = (int) Math.Floor(initImage.Width / templateRate);
                     }
                     //高为标准进行裁剪
-                    else {
-                        pickedImage = new Bitmap((int)Math.Floor(initImage.Height * templateRate), initImage.Height);
+                    else
+                    {
+                        pickedImage = new Bitmap((int) Math.Floor(initImage.Height * templateRate), initImage.Height);
                         pickedG = Graphics.FromImage(pickedImage);
 
-                        fromR.X = (int)Math.Floor((initImage.Width - initImage.Height * templateRate) / 2);
+                        fromR.X = (int) Math.Floor((initImage.Width - initImage.Height * templateRate) / 2);
                         fromR.Y = 0;
-                        fromR.Width = (int)Math.Floor(initImage.Height * templateRate);
+                        fromR.Width = (int) Math.Floor(initImage.Height * templateRate);
                         fromR.Height = initImage.Height;
 
                         toR.X = 0;
                         toR.Y = 0;
-                        toR.Width = (int)Math.Floor(initImage.Height * templateRate);
+                        toR.Width = (int) Math.Floor(initImage.Height * templateRate);
                         toR.Height = initImage.Height;
                     }
 
@@ -250,7 +265,8 @@ namespace ToolGood.Bedrock.Images
                     //获取系统编码类型数组,包含了jpeg,bmp,png,gif,tiff
                     ImageCodecInfo[] icis = ImageCodecInfo.GetImageEncoders();
                     ImageCodecInfo ici = null;
-                    foreach (ImageCodecInfo i in icis) {
+                    foreach (ImageCodecInfo i in icis)
+                    {
                         if (i.MimeType == "image/jpeg" || i.MimeType == "image/bmp" || i.MimeType == "image/png" || i.MimeType == "image/gif")
                             ici = i;
                     }
@@ -299,10 +315,13 @@ namespace ToolGood.Bedrock.Images
             Image initImage = Image.FromStream(fromFile, true);
 
             //原图宽高均小于模版，不作处理，直接保存
-            if ((initImage.Width <= targetWidth) && (initImage.Height <= targetHeight)) {
+            if ((initImage.Width <= targetWidth) && (initImage.Height <= targetHeight))
+            {
                 //文字水印
-                if (watermarkText != "") {
-                    using (Graphics gWater = Graphics.FromImage(initImage)) {
+                if (watermarkText != "")
+                {
+                    using (Graphics gWater = Graphics.FromImage(initImage))
+                    {
                         Font fontWater = new Font("黑体", 10);
                         Brush brushWater = new SolidBrush(Color.White);
                         gWater.DrawString(watermarkText, fontWater, brushWater, 10, 10);
@@ -311,11 +330,15 @@ namespace ToolGood.Bedrock.Images
                 }
 
                 //透明图片水印
-                if (watermarkImage != "") {
-                    if (File.Exists(watermarkImage)) {
-                        using (Image wrImage = Image.FromFile(watermarkImage)) {
+                if (watermarkImage != "")
+                {
+                    if (File.Exists(watermarkImage))
+                    {
+                        using (Image wrImage = Image.FromFile(watermarkImage))
+                        {
                             //水印绘制条件：原始图片宽高均大于或等于水印图片
-                            if ((initImage.Width >= wrImage.Width) && (initImage.Height >= wrImage.Height)) {
+                            if ((initImage.Width >= wrImage.Width) && (initImage.Height >= wrImage.Height))
+                            {
                                 Graphics gWater = Graphics.FromImage(initImage);
 
                                 //透明属性
@@ -348,24 +371,30 @@ namespace ToolGood.Bedrock.Images
 
                 //保存
                 initImage.Save(savePath, ImageFormat.Jpeg);
-            } else {
+            }
+            else
+            {
                 //缩略图宽、高计算
                 double newWidth = initImage.Width;
                 double newHeight = initImage.Height;
 
                 //宽大于高或宽等于高（横图或正方）
-                if ((initImage.Width > initImage.Height) || (initImage.Width == initImage.Height)) {
+                if ((initImage.Width > initImage.Height) || (initImage.Width == initImage.Height))
+                {
                     //如果宽大于模版
-                    if (initImage.Width > targetWidth) {
+                    if (initImage.Width > targetWidth)
+                    {
                         //宽按模版，高按比例缩放
                         newWidth = targetWidth;
                         newHeight = initImage.Height * (targetWidth / initImage.Width);
                     }
                 }
                 //高大于宽（竖图）
-                else {
+                else
+                {
                     //如果高大于模版
-                    if (initImage.Height > targetHeight) {
+                    if (initImage.Height > targetHeight)
+                    {
                         //高按模版，宽按比例缩放
                         newHeight = targetHeight;
                         newWidth = initImage.Width * (targetHeight / initImage.Height);
@@ -374,7 +403,7 @@ namespace ToolGood.Bedrock.Images
 
                 //生成新图
                 //新建一个bmp图片
-                Image newImage = new Bitmap((int)newWidth, (int)newHeight);
+                Image newImage = new Bitmap((int) newWidth, (int) newHeight);
                 //新建一个画板
                 Graphics newG = Graphics.FromImage(newImage);
 
@@ -388,8 +417,10 @@ namespace ToolGood.Bedrock.Images
                 newG.DrawImage(initImage, new Rectangle(0, 0, newImage.Width, newImage.Height), new Rectangle(0, 0, initImage.Width, initImage.Height), GraphicsUnit.Pixel);
 
                 //文字水印
-                if (watermarkText != "") {
-                    using (Graphics gWater = Graphics.FromImage(newImage)) {
+                if (watermarkText != "")
+                {
+                    using (Graphics gWater = Graphics.FromImage(newImage))
+                    {
                         Font fontWater = new Font("宋体", 10);
                         Brush brushWater = new SolidBrush(Color.White);
                         gWater.DrawString(watermarkText, fontWater, brushWater, 10, 10);
@@ -398,11 +429,15 @@ namespace ToolGood.Bedrock.Images
                 }
 
                 //透明图片水印
-                if (watermarkImage != "") {
-                    if (File.Exists(watermarkImage)) {
-                        using (Image wrImage = Image.FromFile(watermarkImage)) {
+                if (watermarkImage != "")
+                {
+                    if (File.Exists(watermarkImage))
+                    {
+                        using (Image wrImage = Image.FromFile(watermarkImage))
+                        {
                             //水印绘制条件：原始图片宽高均大于或等于水印图片
-                            if ((newImage.Width >= wrImage.Width) && (newImage.Height >= wrImage.Height)) {
+                            if ((newImage.Width >= wrImage.Width) && (newImage.Height >= wrImage.Height))
+                            {
                                 Graphics gWater = Graphics.FromImage(newImage);
 
                                 //透明属性
@@ -473,7 +508,8 @@ namespace ToolGood.Bedrock.Images
         {
             int w = b.Width;
             int h = b.Height;
-            if ((rec.X >= w) || (rec.Y >= h)) {
+            if ((rec.X >= w) || (rec.Y >= h))
+            {
                 return null;
             }
 
@@ -481,13 +517,16 @@ namespace ToolGood.Bedrock.Images
                 rec.Width = w - rec.X;
             if (rec.Y + rec.Height > h)
                 rec.Height = h - rec.Y;
-            try {
+            try
+            {
                 Bitmap bmpOut = new Bitmap(rec.Width, rec.Height, PixelFormat.Format24bppRgb);
                 Graphics g = Graphics.FromImage(bmpOut);
                 g.DrawImage(b, new Rectangle(0, 0, rec.Width, rec.Height), new Rectangle(rec.X, rec.Y, rec.Width, rec.Height), GraphicsUnit.Pixel);
                 g.Dispose();
                 return bmpOut;
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 return null;
             }
         }
@@ -505,7 +544,8 @@ namespace ToolGood.Bedrock.Images
         /// <returns>处理以后的图片</returns>  
         public static Bitmap ResizeImage(Bitmap bmp, int newWidth, int newHeight)
         {
-            try {
+            try
+            {
                 Bitmap b = new Bitmap(newWidth, newHeight);
                 Graphics g = Graphics.FromImage(b);
                 // 插值算法的质量   
@@ -513,7 +553,9 @@ namespace ToolGood.Bedrock.Images
                 g.DrawImage(bmp, new Rectangle(0, 0, newWidth, newHeight), new Rectangle(0, 0, bmp.Width, bmp.Height), GraphicsUnit.Pixel);
                 g.Dispose();
                 return b;
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 return null;
             }
         }
@@ -530,7 +572,7 @@ namespace ToolGood.Bedrock.Images
         /// <param name="newWidth">新的宽度</param>  
         /// <param name="newHeight">新的高度</param>  
         /// <returns>处理以后的图片</returns>
-        public static Bitmap CutAndResize(Bitmap bmp, Rectangle rec, int newWidth, int newHeight) => ResizeImage(CutImage(bmp,rec),newWidth, newHeight);
+        public static Bitmap CutAndResize(Bitmap bmp, Rectangle rec, int newWidth, int newHeight) => ResizeImage(CutImage(bmp, rec), newWidth, newHeight);
 
         #endregion
 
@@ -549,33 +591,43 @@ namespace ToolGood.Bedrock.Images
         {
             //如果是第一次调用，原始图像的大小小于要压缩的大小，则直接复制文件，并且返回true
             FileInfo firstFileInfo = new FileInfo(sFile);
-            if (sfsc && firstFileInfo.Length < size * 1024) {
+            if (sfsc && firstFileInfo.Length < size * 1024)
+            {
                 firstFileInfo.CopyTo(dFile);
                 return true;
             }
 
-            using (Image iSource = Image.FromFile(sFile)) {
+            using (Image iSource = Image.FromFile(sFile))
+            {
                 ImageFormat tFormat = iSource.RawFormat;
                 int dHeight = iSource.Height;
                 int dWidth = iSource.Width;
                 int sW, sH;
                 //按比例缩放
                 Size temSize = new Size(iSource.Width, iSource.Height);
-                if (temSize.Width > dHeight || temSize.Width > dWidth) {
-                    if ((temSize.Width * dHeight) > (temSize.Width * dWidth)) {
+                if (temSize.Width > dHeight || temSize.Width > dWidth)
+                {
+                    if ((temSize.Width * dHeight) > (temSize.Width * dWidth))
+                    {
                         sW = dWidth;
                         sH = (dWidth * temSize.Height) / temSize.Width;
-                    } else {
+                    }
+                    else
+                    {
                         sH = dHeight;
                         sW = (temSize.Width * dHeight) / temSize.Height;
                     }
-                } else {
+                }
+                else
+                {
                     sW = temSize.Width;
                     sH = temSize.Height;
                 }
 
-                using (Bitmap bmp = new Bitmap(dWidth, dHeight)) {
-                    using (Graphics g = Graphics.FromImage(bmp)) {
+                using (Bitmap bmp = new Bitmap(dWidth, dHeight))
+                {
+                    using (Graphics g = Graphics.FromImage(bmp))
+                    {
                         g.Clear(Color.WhiteSmoke);
                         g.CompositingQuality = CompositingQuality.HighQuality;
                         g.SmoothingMode = SmoothingMode.HighQuality;
@@ -584,26 +636,35 @@ namespace ToolGood.Bedrock.Images
                     }
 
                     //以下代码为保存图片时，设置压缩质量
-                    using (EncoderParameters ep = new EncoderParameters()) {
+                    using (EncoderParameters ep = new EncoderParameters())
+                    {
                         long[] qy = new long[1];
                         qy[0] = flag;//设置压缩的比例1-100
-                        using (EncoderParameter eParam = new EncoderParameter(Encoder.Quality, qy)) {
+                        using (EncoderParameter eParam = new EncoderParameter(Encoder.Quality, qy))
+                        {
                             ep.Param[0] = eParam;
-                            try {
+                            try
+                            {
                                 ImageCodecInfo[] arrayIci = ImageCodecInfo.GetImageEncoders();
                                 ImageCodecInfo jpegIcIinfo = arrayIci.FirstOrDefault(t => t.FormatDescription.Equals("JPEG"));
-                                if (jpegIcIinfo != null) {
+                                if (jpegIcIinfo != null)
+                                {
                                     bmp.Save(dFile, jpegIcIinfo, ep);//dFile是压缩后的新路径
                                     FileInfo fi = new FileInfo(dFile);
-                                    if (fi.Length > 1024 * size) {
+                                    if (fi.Length > 1024 * size)
+                                    {
                                         flag = flag - 10;
                                         CompressImage(sFile, dFile, flag, size, false);
                                     }
-                                } else {
+                                }
+                                else
+                                {
                                     bmp.Save(dFile, tFormat);
                                 }
                                 return true;
-                            } catch {
+                            }
+                            catch
+                            {
                                 return false;
                             }
                         }
@@ -624,33 +685,43 @@ namespace ToolGood.Bedrock.Images
         public static bool CompressImage(Stream src, Stream dest, int flag = 90, int size = 1024, bool sfsc = true)
         {
             //如果是第一次调用，原始图像的大小小于要压缩的大小，则直接复制文件，并且返回true
-            if (sfsc && src.Length < size * 1024) {
+            if (sfsc && src.Length < size * 1024)
+            {
                 src.CopyTo(dest);
                 return true;
             }
 
-            using (Image iSource = Image.FromStream(src)) {
+            using (Image iSource = Image.FromStream(src))
+            {
                 ImageFormat tFormat = iSource.RawFormat;
                 int dHeight = iSource.Height;
                 int dWidth = iSource.Width;
                 int sW, sH;
                 //按比例缩放
                 Size temSize = new Size(iSource.Width, iSource.Height);
-                if (temSize.Width > dHeight || temSize.Width > dWidth) {
-                    if ((temSize.Width * dHeight) > (temSize.Width * dWidth)) {
+                if (temSize.Width > dHeight || temSize.Width > dWidth)
+                {
+                    if ((temSize.Width * dHeight) > (temSize.Width * dWidth))
+                    {
                         sW = dWidth;
                         sH = (dWidth * temSize.Height) / temSize.Width;
-                    } else {
+                    }
+                    else
+                    {
                         sH = dHeight;
                         sW = (temSize.Width * dHeight) / temSize.Height;
                     }
-                } else {
+                }
+                else
+                {
                     sW = temSize.Width;
                     sH = temSize.Height;
                 }
 
-                using (Bitmap bmp = new Bitmap(dWidth, dHeight)) {
-                    using (Graphics g = Graphics.FromImage(bmp)) {
+                using (Bitmap bmp = new Bitmap(dWidth, dHeight))
+                {
+                    using (Graphics g = Graphics.FromImage(bmp))
+                    {
                         g.Clear(Color.WhiteSmoke);
                         g.CompositingQuality = CompositingQuality.HighQuality;
                         g.SmoothingMode = SmoothingMode.HighQuality;
@@ -659,25 +730,34 @@ namespace ToolGood.Bedrock.Images
                     }
 
                     //以下代码为保存图片时，设置压缩质量
-                    using (EncoderParameters ep = new EncoderParameters()) {
+                    using (EncoderParameters ep = new EncoderParameters())
+                    {
                         long[] qy = new long[1];
                         qy[0] = flag;//设置压缩的比例1-100
-                        using (EncoderParameter eParam = new EncoderParameter(Encoder.Quality, qy)) {
+                        using (EncoderParameter eParam = new EncoderParameter(Encoder.Quality, qy))
+                        {
                             ep.Param[0] = eParam;
-                            try {
+                            try
+                            {
                                 ImageCodecInfo[] arrayIci = ImageCodecInfo.GetImageEncoders();
                                 ImageCodecInfo jpegIcIinfo = arrayIci.FirstOrDefault(t => t.FormatDescription.Equals("JPEG"));
-                                if (jpegIcIinfo != null) {
+                                if (jpegIcIinfo != null)
+                                {
                                     bmp.Save(dest, jpegIcIinfo, ep);//dFile是压缩后的新路径
-                                    if (dest.Length > 1024 * size) {
+                                    if (dest.Length > 1024 * size)
+                                    {
                                         flag = flag - 10;
                                         CompressImage(src, dest, flag, size, false);
                                     }
-                                } else {
+                                }
+                                else
+                                {
                                     bmp.Save(dest, tFormat);
                                 }
                                 return true;
-                            } catch {
+                            }
+                            catch
+                            {
                                 return false;
                             }
                         }
@@ -708,7 +788,8 @@ namespace ToolGood.Bedrock.Images
             int ow = originalImage.Width;
             int oh = originalImage.Height;
 
-            switch (mode) {
+            switch (mode)
+            {
                 case ThumbnailCutMode.Fixed: //指定高宽缩放（可能变形）                
                     break;
                 case ThumbnailCutMode.LockWidth: //指定宽，高按比例                    
@@ -718,12 +799,15 @@ namespace ToolGood.Bedrock.Images
                     towidth = originalImage.Width * height / originalImage.Height;
                     break;
                 case ThumbnailCutMode.Cut: //指定高宽裁减（不变形）                
-                    if (originalImage.Width / (double)originalImage.Height > towidth / (double)toheight) {
+                    if (originalImage.Width / (double) originalImage.Height > towidth / (double) toheight)
+                    {
                         oh = originalImage.Height;
                         ow = originalImage.Height * towidth / toheight;
                         y = 0;
                         x = (originalImage.Width - ow) / 2;
-                    } else {
+                    }
+                    else
+                    {
                         ow = originalImage.Width;
                         oh = originalImage.Width * height / towidth;
                         x = 0;
@@ -753,14 +837,80 @@ namespace ToolGood.Bedrock.Images
             //三：画那块区域。
             g.DrawImage(originalImage, new Rectangle(0, 0, towidth, toheight), new Rectangle(x, y, ow, oh), GraphicsUnit.Pixel);
 
-            try {
+            try
+            {
                 //以jpg格式保存缩略图
                 bitmap.Save(thumbnailPath, ImageFormat.Jpeg);
-            } finally {
+            }
+            finally
+            {
                 originalImage.Dispose();
                 bitmap.Dispose();
                 g.Dispose();
             }
+        }
+
+        public static Bitmap MakeThumbnail(Image originalImage, int width, int height, ThumbnailCutMode mode)
+        {
+            int towidth = width;
+            int toheight = height;
+
+            int x = 0;
+            int y = 0;
+            int ow = originalImage.Width;
+            int oh = originalImage.Height;
+
+            switch (mode)
+            {
+                case ThumbnailCutMode.Fixed: //指定高宽缩放（可能变形）                
+                    break;
+                case ThumbnailCutMode.LockWidth: //指定宽，高按比例                    
+                    toheight = originalImage.Height * width / originalImage.Width;
+                    break;
+                case ThumbnailCutMode.LockHeight: //指定高，宽按比例
+                    towidth = originalImage.Width * height / originalImage.Height;
+                    break;
+                case ThumbnailCutMode.Cut: //指定高宽裁减（不变形）                
+                    if (originalImage.Width / (double) originalImage.Height > towidth / (double) toheight)
+                    {
+                        oh = originalImage.Height;
+                        ow = originalImage.Height * towidth / toheight;
+                        y = 0;
+                        x = (originalImage.Width - ow) / 2;
+                    }
+                    else
+                    {
+                        ow = originalImage.Width;
+                        oh = originalImage.Width * height / towidth;
+                        x = 0;
+                        y = (originalImage.Height - oh) / 2;
+                    }
+                    break;
+            }
+
+            //新建一个bmp图片
+            Bitmap bitmap = new Bitmap(towidth, toheight);
+
+            //新建一个画板
+            Graphics g = Graphics.FromImage(bitmap);
+
+            //设置高质量插值法
+            g.InterpolationMode = InterpolationMode.High;
+
+            //设置高质量,低速度呈现平滑程度
+            g.SmoothingMode = SmoothingMode.HighQuality;
+
+            //清空画布并以透明背景色填充
+            g.Clear(Color.Transparent);
+
+            //在指定位置并且按指定大小绘制原图片的指定部分
+            //第一个：对哪张图片进行操作。
+            //二：画多么大。
+            //三：画那块区域。
+            g.DrawImage(originalImage, new Rectangle(0, 0, towidth, toheight), new Rectangle(x, y, ow, oh), GraphicsUnit.Pixel);
+            g.Dispose();
+
+            return bitmap;
         }
 
         #endregion
@@ -778,8 +928,10 @@ namespace ToolGood.Bedrock.Images
         {
             Bitmap bm = new Bitmap(width, height); //初始化一个记录经过处理后的图片对象
             int x, y; //x、y是循环次数，后面三个是记录红绿蓝三个值的
-            for (x = 0; x < width; x++) {
-                for (y = 0; y < height; y++) {
+            for (x = 0; x < width; x++)
+            {
+                for (y = 0; y < height; y++)
+                {
                     var pixel = mybm.GetPixel(x, y);
                     var resultR = pixel.R + val; //x、y是循环次数，后面三个是记录红绿蓝三个值的
                     var resultG = pixel.G + val; //x、y是循环次数，后面三个是记录红绿蓝三个值的
@@ -806,8 +958,10 @@ namespace ToolGood.Bedrock.Images
             Bitmap bm = new Bitmap(width, height); //初始化一个记录处理后的图片的对象
             int x, y, resultR, resultG, resultB;
             Color pixel;
-            for (x = 0; x < width; x++) {
-                for (y = 0; y < height; y++) {
+            for (x = 0; x < width; x++)
+            {
+                for (y = 0; y < height; y++)
+                {
                     pixel = mybm.GetPixel(x, y); //获取当前坐标的像素值
                     resultR = 255 - pixel.R; //反红
                     resultG = 255 - pixel.G; //反绿
@@ -832,8 +986,10 @@ namespace ToolGood.Bedrock.Images
         public static Bitmap Relief(Bitmap oldBitmap, int width, int height)
         {
             Bitmap newBitmap = new Bitmap(width, height);
-            for (int x = 0; x < width - 1; x++) {
-                for (int y = 0; y < height - 1; y++) {
+            for (int x = 0; x < width - 1; x++)
+            {
+                for (int y = 0; y < height - 1; y++)
+                {
                     var color1 = oldBitmap.GetPixel(x, y);
                     var color2 = oldBitmap.GetPixel(x + 1, y + 1);
                     var r = Math.Abs(color1.R - color2.R + 128);
@@ -864,17 +1020,58 @@ namespace ToolGood.Bedrock.Images
         /// <param name="newH">新的高度</param>
         public static async Task<Bitmap> ResizeImageAsync(Bitmap bmp, int newW, int newH)
         {
-            try {
-                using (Bitmap bap = new Bitmap(newW, newH)) {
-                    return await Task.Run(() => {
-                        using (Graphics g = Graphics.FromImage(bap)) {
+            try
+            {
+                using (Bitmap bap = new Bitmap(newW, newH))
+                {
+                    return await Task.Run(() =>
+                    {
+                        using (Graphics g = Graphics.FromImage(bap))
+                        {
                             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                            g.DrawImage(bap, new Rectangle(0, 0, newW, newH), new Rectangle(0, 0, bap.Width, bap.Height), GraphicsUnit.Pixel);
+                            g.DrawImage(bmp, new Rectangle(0, 0, newW, newH), new Rectangle(0, 0, bap.Width, bap.Height), GraphicsUnit.Pixel);
                         }
                         return bap;
                     }).ConfigureAwait(false);
                 }
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+
+
+        #endregion
+
+        #region 缩小图片，长宽不变
+
+        /// <summary>
+        /// 拉伸图片
+        /// </summary>
+        /// <param name="bmp">原始图片</param>
+        /// <param name="newW">新的宽度</param>
+        /// <param name="newH">新的高度</param>
+        public static Bitmap ScaleImage(Bitmap bmp, int newW, int newH)
+        {
+            try
+            {
+                Bitmap bap = new Bitmap(newW, newH);
+                using (Graphics g = Graphics.FromImage(bap))
+                {
+                    g.Clear(Color.White);
+                    //设置高质量,低速度呈现平滑程度
+                    g.SmoothingMode = SmoothingMode.HighQuality;
+                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    var x = (bap.Width - newW) / 2;
+                    var y = (bap.Height - newH) / 2;
+                    g.DrawImage(bmp, new Rectangle(x, y, newW, newH), new Rectangle(0, 0, bap.Width, bap.Height), GraphicsUnit.Pixel);
+                }
+                return bap;
+            }
+            catch (Exception)
+            {
                 return null;
             }
         }
@@ -895,8 +1092,10 @@ namespace ToolGood.Bedrock.Images
             {
                 int x, y;
                 Color pixel;
-                for (x = 0; x < width; x++) {
-                    for (y = 0; y < height; y++) {
+                for (x = 0; x < width; x++)
+                {
+                    for (y = 0; y < height; y++)
+                    {
                         pixel = mybm.GetPixel(x, y); //获取当前坐标的像素值
                         bm.SetPixel(x, y, Color.FromArgb(0, pixel.G, pixel.B)); //绘图
                     }
@@ -918,17 +1117,17 @@ namespace ToolGood.Bedrock.Images
         /// <param name="height">原始图片的高度</param>
         public static Bitmap RevPicLR(Bitmap mybm, int width, int height)
         {
-            using (Bitmap bm = new Bitmap(width, height)) {
-                int x, y, z; //x,y是循环次数,z是用来记录像素点的x坐标的变化的
-                for (y = height - 1; y >= 0; y--) {
-                    for (x = width - 1, z = 0; x >= 0; x--) {
-                        var pixel = mybm.GetPixel(x, y);
-                        bm.SetPixel(z++, y, Color.FromArgb(pixel.R, pixel.G, pixel.B)); //绘图
-                    }
+            Bitmap bm = new Bitmap(width, height);
+            int x, y, z; //x,y是循环次数,z是用来记录像素点的x坐标的变化的
+            for (y = height - 1; y >= 0; y--)
+            {
+                for (x = width - 1, z = 0; x >= 0; x--)
+                {
+                    var pixel = mybm.GetPixel(x, y);
+                    bm.SetPixel(z++, y, Color.FromArgb(pixel.R, pixel.G, pixel.B)); //绘图
                 }
-
-                return bm;
             }
+            return bm;
         }
 
         #endregion
@@ -944,17 +1143,16 @@ namespace ToolGood.Bedrock.Images
         public static Bitmap RevPicUD(Bitmap mybm, int width, int height)
         {
             Bitmap bm = new Bitmap(width, height);
-            using (bm) {
-                int x, y, z;
-                for (x = 0; x < width; x++) {
-                    for (y = height - 1, z = 0; y >= 0; y--) {
-                        var pixel = mybm.GetPixel(x, y);
-                        bm.SetPixel(x, z++, Color.FromArgb(pixel.R, pixel.G, pixel.B)); //绘图
-                    }
+            int x, y, z;
+            for (x = 0; x < width; x++)
+            {
+                for (y = height - 1, z = 0; y >= 0; y--)
+                {
+                    var pixel = mybm.GetPixel(x, y);
+                    bm.SetPixel(x, z++, Color.FromArgb(pixel.R, pixel.G, pixel.B)); //绘图
                 }
-
-                return bm;
             }
+            return bm;
         }
 
         #endregion
@@ -968,7 +1166,8 @@ namespace ToolGood.Bedrock.Images
         /// <param name="newfile">新文件</param>
         public static bool Compress(Image img, string newfile)
         {
-            try {
+            try
+            {
                 Size newSize = new Size(100, 125);
                 Bitmap outBmp = new Bitmap(newSize.Width, newSize.Height);
                 Graphics g = Graphics.FromImage(outBmp);
@@ -983,8 +1182,10 @@ namespace ToolGood.Bedrock.Images
                 encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, quality);
                 ImageCodecInfo[] arrayICI = ImageCodecInfo.GetImageEncoders();
                 ImageCodecInfo jpegICI = null;
-                for (int x = 0; x < arrayICI.Length; x++) {
-                    if (arrayICI[x].FormatDescription.Equals("JPEG")) {
+                for (int x = 0; x < arrayICI.Length; x++)
+                {
+                    if (arrayICI[x].FormatDescription.Equals("JPEG"))
+                    {
                         jpegICI = arrayICI[x]; //设置JPEG编码
                         break;
                     }
@@ -993,7 +1194,9 @@ namespace ToolGood.Bedrock.Images
                 if (jpegICI != null) outBmp.Save(newfile, ImageFormat.Jpeg);
                 outBmp.Dispose();
                 return true;
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 return false;
             }
         }
@@ -1026,10 +1229,13 @@ namespace ToolGood.Bedrock.Images
         public static Bitmap BWPic(Bitmap mybm, int width, int height)
         {
             Bitmap bm = new Bitmap(width, height);
-            using (bm) {
+            using (bm)
+            {
                 int x, y; //x,y是循环次数
-                for (x = 0; x < width; x++) {
-                    for (y = 0; y < height; y++) {
+                for (x = 0; x < width; x++)
+                {
+                    for (y = 0; y < height; y++)
+                    {
                         var pixel = mybm.GetPixel(x, y);
                         var result = (pixel.R + pixel.G + pixel.B) / 3; //记录处理后的像素值
                         bm.SetPixel(x, y, Color.FromArgb(result, result, result));
@@ -1051,7 +1257,8 @@ namespace ToolGood.Bedrock.Images
         /// <param name="pSavedPath">保存路径</param>
         public static void GetFrames(Image gif, string pSavedPath)
         {
-            using (gif) {
+            using (gif)
+            {
                 FrameDimension fd = new FrameDimension(gif.FrameDimensionsList[0]);
                 int count = gif.GetFrameCount(fd); //获取帧数(gif图片可能包含多帧，其它格式图片一般仅一帧)
                 for (int i = 0; i < count; i++) //以Jpeg格式保存各帧
@@ -1065,6 +1272,27 @@ namespace ToolGood.Bedrock.Images
         #endregion
 
 
+        #region 图像旋转
+        public static Bitmap RotateImage(Bitmap b, float angle)
+        {
+            //create a new empty bitmap to hold rotated image
+            Bitmap returnBitmap = new Bitmap(b.Width, b.Height);
+            //make a graphics object from the empty bitmap
+            Graphics g = Graphics.FromImage(returnBitmap);
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            //move rotation point to center of image
+            g.TranslateTransform((float) b.Width / 2, (float) b.Height / 2);
+            //rotate
+            g.RotateTransform(angle);
+            //move image back
+            g.TranslateTransform(-(float) b.Width / 2, -(float) b.Height / 2);
+            //draw passed in image onto graphics object
+            g.DrawImage(b, new Point(0, 0));
+            g.Dispose();
+            return returnBitmap;
+        }
+        #endregion
+
         /// <summary>
         /// 将dataUri保存为图片
         /// </summary>
@@ -1077,13 +1305,15 @@ namespace ToolGood.Bedrock.Images
             strbase64 = strbase64.Trim('\0');
             Bitmap bmp2;
             byte[] arr = Convert.FromBase64String(strbase64);
-            using (var ms = new MemoryStream(arr)) {
+            using (var ms = new MemoryStream(arr))
+            {
                 var bmp = new Bitmap(ms);
                 //新建第二个bitmap类型的bmp2变量。
                 bmp2 = new Bitmap(bmp, bmp.Width, bmp.Height);
                 //将第一个bmp拷贝到bmp2中
                 Graphics draw = Graphics.FromImage(bmp2);
-                using (draw) {
+                using (draw)
+                {
                     draw.DrawImage(bmp, 0, 0, bmp.Width, bmp.Height);
                 }
             }
@@ -1097,24 +1327,32 @@ namespace ToolGood.Bedrock.Images
         /// <returns></returns>
         public static async Task<string> UploadImageAsync(Stream stream)
         {
-            using (HttpClient httpClient = new HttpClient() {
+            using (HttpClient httpClient = new HttpClient()
+            {
                 BaseAddress = new Uri("https://sm.ms"),
-            }) {
+            })
+            {
                 httpClient.DefaultRequestHeaders.UserAgent.Add(ProductInfoHeaderValue.Parse("Mozilla/5.0"));
-                using (var bc = new StreamContent(stream)) {
-                    bc.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") {
+                using (var bc = new StreamContent(stream))
+                {
+                    bc.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                    {
                         FileName = "1.jpg",
                         Name = "smfile"
                     };
                     bc.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                    using (var content = new MultipartFormDataContent { bc }) {
-                        return await await httpClient.PostAsync("/api/upload", content).ContinueWith(async t => {
-                            if (t.IsCanceled || t.IsFaulted) {
+                    using (var content = new MultipartFormDataContent { bc })
+                    {
+                        return await await httpClient.PostAsync("/api/upload", content).ContinueWith(async t =>
+                        {
+                            if (t.IsCanceled || t.IsFaulted)
+                            {
                                 Console.WriteLine("发送请求出错了" + t.Exception);
                                 return string.Empty;
                             }
                             var res = await t;
-                            if (res.IsSuccessStatusCode) {
+                            if (res.IsSuccessStatusCode)
+                            {
                                 string s = await res.Content.ReadAsStringAsync();
                                 //var token = JObject.Parse(s);
                                 //if ((int)token["errno"] == 0)
@@ -1131,5 +1369,38 @@ namespace ToolGood.Bedrock.Images
                 }
             }
         }
+
+
+        /// <summary>
+        /// 亮度
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public static Bitmap BrightnessP(Bitmap a, int v)
+        {
+            System.Drawing.Imaging.BitmapData bmpData = a.LockBits(new Rectangle(0, 0, a.Width, a.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            int bytes = a.Width * a.Height * 3;
+            IntPtr ptr = bmpData.Scan0;
+            int stride = bmpData.Stride;
+            unsafe
+            {
+                byte* p = (byte*) ptr;
+                int temp;
+                for (int j = 0; j < a.Height; j++)
+                {
+                    for (int i = 0; i < a.Width * 3; i++, p++)
+                    {
+                        temp = (int) (p[0] + v);
+                        temp = (temp > 255) ? 255 : temp < 0 ? 0 : temp;
+                        p[0] = (byte) temp;
+                    }
+                    p += stride - a.Width * 3;
+                }
+            }
+            a.UnlockBits(bmpData);
+            return a;
+        }
+
     } //end classs
 }
