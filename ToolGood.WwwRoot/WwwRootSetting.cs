@@ -52,7 +52,7 @@ namespace ToolGood.WwwRoot
         public string ControllerName { get; set; } = "WwwRootController";
 
         #region 模板
-        private string brFirstTemplate = @"#if Release
+        private string brFirstTemplate = @"#if RELEASE
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
@@ -111,7 +111,7 @@ namespace {NameSpace}
     }
 }
 #endif";
-        private string gzipFirstTemplate = @"#if Release
+        private string gzipFirstTemplate = @"#if RELEASE
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
@@ -170,7 +170,7 @@ namespace {NameSpace}
     }
 }
 #endif";
-        private string Template = @"#if Release
+        private string Template = @"#if RELEASE
 using Microsoft.AspNetCore.Mvc;
 using System;
 namespace {NameSpace}
