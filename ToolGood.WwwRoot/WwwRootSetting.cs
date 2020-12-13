@@ -52,7 +52,8 @@ namespace ToolGood.WwwRoot
         public string ControllerName { get; set; } = "WwwRootController";
 
         #region 模板
-        private string brFirstTemplate = @"using Microsoft.AspNetCore.Mvc;
+        private string brFirstTemplate = @"#if Release
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -108,8 +109,10 @@ namespace {NameSpace}
             return bytes;
         }
     }
-}";
-        private string gzipFirstTemplate = @"using Microsoft.AspNetCore.Mvc;
+}
+#endif";
+        private string gzipFirstTemplate = @"#if Release
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -165,8 +168,10 @@ namespace {NameSpace}
             return bytes;
         }
     }
-}";
-        private string Template = @"using Microsoft.AspNetCore.Mvc;
+}
+#endif";
+        private string Template = @"#if Release
+using Microsoft.AspNetCore.Mvc;
 using System;
 namespace {NameSpace}
 {
@@ -181,7 +186,8 @@ namespace {NameSpace}
             return File(bytes, ""{FileMime}"");
         }
     }
-}";
+}
+#endif";
         #endregion
 
         /// <summary>
