@@ -1,4 +1,4 @@
-﻿namespace ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors.PseudoClassSelectors
+﻿namespace ToolGood.HtmlExtract.HtmlAgilityPack.PseudoClassSelectors
 {
     [PseudoClassName("nth-child")]
     internal class NthChildPseudoClass : PseudoClass

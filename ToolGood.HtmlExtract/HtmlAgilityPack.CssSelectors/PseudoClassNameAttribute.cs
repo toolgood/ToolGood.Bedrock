@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors
+namespace ToolGood.HtmlExtract.HtmlAgilityPack
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class PseudoClassNameAttribute : Attribute

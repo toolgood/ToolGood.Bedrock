@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors
+namespace ToolGood.HtmlExtract.HtmlAgilityPack
 {
     public class Tokenizer
     {

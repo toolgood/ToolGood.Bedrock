@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors
+namespace ToolGood.HtmlExtract.HtmlAgilityPack
 {
     public abstract class PseudoClass
     {
@@ -30,7 +30,7 @@ namespace ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors
         {
             var rt = new Dictionary<string, PseudoClass>(StringComparer.OrdinalIgnoreCase);
             
-            var types = Assembly.Load(new AssemblyName("ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors")).GetTypes().Where(i => !i.GetTypeInfo().IsAbstract && i.GetTypeInfo().IsSubclassOf(typeof(PseudoClass)));
+            var types = Assembly.Load(new AssemblyName("ToolGood.HtmlExtract.HtmlAgilityPack")).GetTypes().Where(i => !i.GetTypeInfo().IsAbstract && i.GetTypeInfo().IsSubclassOf(typeof(PseudoClass)));
             types = types.OrderBy(i => Equals(i.GetTypeInfo().Assembly, typeof(PseudoClass).GetTypeInfo().Assembly) ? 0 : 1).ToList();
 
             foreach (var type in types)

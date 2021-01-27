@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors.PseudoClassSelectors
+namespace ToolGood.HtmlExtract.HtmlAgilityPack.PseudoClassSelectors
 {
     [PseudoClassName("not")]
     internal class NotPseudoClass : PseudoClass

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors.Selectors;
+using ToolGood.HtmlExtract.HtmlAgilityPack.Selectors;
 
-namespace ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors
+namespace ToolGood.HtmlExtract.HtmlAgilityPack
 {
     public abstract class CssSelector
     {

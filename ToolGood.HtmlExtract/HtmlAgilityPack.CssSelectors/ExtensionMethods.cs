@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors
+namespace ToolGood.HtmlExtract.HtmlAgilityPack
 {
     public static partial class HapCssExtensionMethods
     {
@@ -87,6 +87,50 @@ namespace ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors
             foreach (var child in node.ChildNodes)
                 foreach (var n in Traverse(child))
                     yield return n;
+        }
+
+        public static void RemoveOthers(this HtmlDocument doc, params string[] cssSelectors)
+        {
+            List<HtmlNode> nodes = new List<HtmlNode>();
+
+            foreach (var css in cssSelectors) {
+                var nds = doc.QuerySelectorAll(css);
+                foreach (var nd in nds) {
+                    nodes.Add(nd);
+                    var root = nd;
+                    while (root.ParentNode != null) {
+                        nodes.Add(root);
+                        root = root.ParentNode;
+                    }
+                }
+            }
+            foreach (var node in nodes) {
+                var pNode = node.ParentNode;
+                var removeNode = new List<HtmlNode>();
+                foreach (var nd in pNode.ChildNodes) {
+                    if (nodes.Contains(nd)) { continue; }
+                    removeNode.Add(nd);
+                }
+                foreach (var nd in removeNode) {
+                    nd.Remove();
+                }
+                removeNode.Clear();
+                removeNode = null;
+            }
+            nodes.Clear();
+            nodes = null;
+        }
+
+
+        public static string ToHtml(this HtmlDocument doc)
+        {
+            return doc.DocumentNode.OuterHtml;
+            //StringWriter stringWriter = new StringWriter();
+            //doc.Save(stringWriter);
+            //var html = stringWriter.ToString();
+            //stringWriter.Dispose();
+            //stringWriter = null;
+            //return html;
         }
     }
 }

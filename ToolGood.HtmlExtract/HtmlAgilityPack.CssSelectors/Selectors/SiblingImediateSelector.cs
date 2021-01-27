@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors.Selectors
+namespace ToolGood.HtmlExtract.HtmlAgilityPack.Selectors
 {
     internal class SiblingImediateSelector : CssSelector
     {

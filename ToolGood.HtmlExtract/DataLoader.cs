@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Reflection;
 using ToolGood.HtmlExtract.HtmlAgilityPack;
-using ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors;
+using ToolGood.HtmlExtract.HtmlAgilityPack;
 using ToolGood.HtmlExtract.Attributes;
 using HtmlAgilityPack.Html2Text;
 

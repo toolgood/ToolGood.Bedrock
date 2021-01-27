@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ToolGood.HtmlExtract.HtmlAgilityPack.CssSelectors.Selectors
+namespace ToolGood.HtmlExtract.HtmlAgilityPack.Selectors
 {
     internal class IdSelector : CssSelector
     {

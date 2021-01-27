@@ -407,4 +407,3 @@ namespace ToolGood.Bedrock.Web
         protected virtual void ApplicationRegister(IApplicationBuilder app) { }
     }
 }
- 
