@@ -525,44 +525,25 @@ namespace ToolGood.Bedrock
 
             public void LoadPublicFromXml(string publicString)
             {
-                // Using the .NET RSA class to load a key from an Xml file, and populating the relevant members of my class with it's RSAParameters
-                try {
-                    LoadPublicKey(rsa, publicString);
+                LoadPublicKey(rsa, publicString);
 
-                    //rsa.FromXmlString(publicPath);
-                    RSAParameters rsaParams = rsa.ExportParameters(false);
-                    Modulus = FromBytes(rsaParams.Modulus);
-                    Exponent = FromBytes(rsaParams.Exponent);
-                    isPublicKeyLoaded = true;
-                    isPrivateKeyLoaded = false;
-                } catch (CryptographicException ex)  // Not a Key file
-                  {
-                    string excReason = "Exception occurred at LoadPublicFromXml(), Selected xml file is not a public key file.";
-                    System.Diagnostics.Debug.WriteLine(excReason + " Exception Message: " + ex.Message);
-                    throw new Exception(excReason, ex);
-                } catch (Exception ex)  // other exception, hope the ex.message will help
-                {
-                    string excReason = "General Exception occurred at LoadPublicFromXml().";
-                    System.Diagnostics.Debug.WriteLine(excReason + " Exception Message: " + ex.Message);
-                    throw new Exception(excReason, ex);
-                }
+                RSAParameters rsaParams = rsa.ExportParameters(false);
+                Modulus = FromBytes(rsaParams.Modulus);
+                Exponent = FromBytes(rsaParams.Exponent);
+                isPublicKeyLoaded = true;
+                isPrivateKeyLoaded = false;
             }
 
             public void LoadPrivateFromXml(string privateString)
             {
-                try {
-                    LoadPrivateKey(rsa, privateString);
+                LoadPrivateKey(rsa, privateString);
 
-                    RSAParameters rsaParams = rsa.ExportParameters(true);
-                    D = FromBytes(rsaParams.D);  // This parameter is only for private key
-                    Exponent = FromBytes(rsaParams.Exponent);
-                    Modulus = FromBytes(rsaParams.Modulus);
-                    isPrivateKeyLoaded = true;
-                    isPublicKeyLoaded = true;
-                } catch (Exception ex) {
-                    System.Diagnostics.Debug.WriteLine("Exception occurred at LoadPrivateFromXml()\nMessage: " + ex.Message);
-                    throw;
-                }
+                RSAParameters rsaParams = rsa.ExportParameters(true);
+                D = FromBytes(rsaParams.D);
+                Exponent = FromBytes(rsaParams.Exponent);
+                Modulus = FromBytes(rsaParams.Modulus);
+                isPrivateKeyLoaded = true;
+                isPublicKeyLoaded = true;
             }
 
             public byte[] PrivateEncryption(byte[] data)
@@ -615,11 +596,13 @@ namespace ToolGood.Bedrock
                         int readLen = msInput.Read(buffer, 0, len);
 
                         while (readLen > 0) {
+                            while (buffer[readLen - 1] == 0) { readLen--; }
                             byte[] dataToEnc = new byte[readLen];
                             Array.Copy(buffer, 0, dataToEnc, 0, readLen);
 
                             var bytes = PublicDecryption2(dataToEnc);
                             ms.Write(bytes, 0, bytes.Length);
+
                             readLen = msInput.Read(buffer, 0, len);
                         }
                         msInput.Close();
@@ -637,13 +620,12 @@ namespace ToolGood.Bedrock
             {
                 return new BigInteger(beBytes.Reverse().Concat(new byte[] { 0 }).ToArray());
             }
+
             public void Dispose()
             {
                 rsa.Clear();
             }
         }
-
-
 
     }
 
