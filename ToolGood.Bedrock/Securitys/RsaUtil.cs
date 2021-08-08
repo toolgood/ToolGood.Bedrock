@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace ToolGood.Bedrock
@@ -13,7 +14,7 @@ namespace ToolGood.Bedrock
     /// <summary>
     /// RSA 加解密
     /// </summary>
-    public class RsaUtil
+    public partial class RsaUtil
     {
         #region RSA 的密钥产生
         /// <summary>
@@ -25,35 +26,11 @@ namespace ToolGood.Bedrock
         public static void GetParams(string xmlKeys, out string Modulus, out string Exponent)
         {
             RSA rsa = new RSACryptoServiceProvider();
-            try {
-                LoadPrivateKey(rsa, xmlKeys);
-            } catch {
-                LoadPublicKey(rsa, xmlKeys);
-            }
+            LoadPrivateKey(rsa, xmlKeys);
             var p = rsa.ExportParameters(false);
             Modulus = BitConverter.ToString(p.Modulus).Replace("-", "");
             Exponent = BitConverter.ToString(p.Exponent).Replace("-", "");
-        }
-
-        /// <summary>
-        /// RSA 的密钥产生 产生私钥
-        /// </summary>
-        /// <param name="xmlKeys"></param>
-        public static void CreateKey(out string xmlKeys)
-        {
-            System.Security.Cryptography.RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            xmlKeys = SaveXmlString(rsa, true);
-        }
-
-        /// <summary>
-        /// RSA 的密钥产生 产生私钥
-        /// </summary>
-        /// <param name="keySize"></param>
-        /// <param name="xmlKeys"></param>
-        public static void CreateKey(int keySize, out string xmlKeys)
-        {
-            System.Security.Cryptography.RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(keySize);
-            xmlKeys = SaveXmlString(rsa, true);
+            rsa = null;
         }
 
         /// <summary>
@@ -61,25 +38,23 @@ namespace ToolGood.Bedrock
         /// </summary>
         /// <param name="xmlKeys"></param>
         /// <param name="publicKey"></param>
-        public static void CreateKey(out string xmlKeys, out string publicKey)
+        /// <param name="keySize"></param>
+        public static void CreateXmlKey(out string privateKey, out string publicKey, int keySize = 1024)
         {
-            System.Security.Cryptography.RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            xmlKeys = SaveXmlString(rsa, true);
+            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(keySize);
+            privateKey = SaveXmlString(rsa, true);
             publicKey = SaveXmlString(rsa, false);
+            rsa = null;
         }
 
-        /// <summary>
-        /// RSA 的密钥产生 产生私钥 和公钥
-        /// </summary>
-        /// <param name="keySize"></param>
-        /// <param name="xmlKeys"></param>
-        /// <param name="publicKey"></param>
-        public static void CreateKey(int keySize, out string xmlKeys, out string publicKey)
+        public static void CreatePemKey(out string privateKey, out string publicKey, bool isPKCS8 = false, int keySize = 1024)
         {
-            System.Security.Cryptography.RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(keySize);
-            xmlKeys = SaveXmlString(rsa, true);
-            publicKey = SaveXmlString(rsa, false);
+            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(keySize);
+            privateKey = SavePemString(rsa, true, isPKCS8);
+            publicKey = SavePemString(rsa, false, isPKCS8);
+            rsa = null;
         }
+
 
         #endregion RSA 的密钥产生
 
@@ -247,7 +222,6 @@ namespace ToolGood.Bedrock
 
         #endregion 私钥加密 公钥解密
 
-
         #region RSA签名 验签
 
         /// <summary>
@@ -330,66 +304,27 @@ namespace ToolGood.Bedrock
 
         #endregion
 
-
-
         #region 密钥解析
-        public static string ConvertToXml(string key, string password = null)
-        {
-            if (key.StartsWith("<")) { return key; }
-            try {
-                return SaveXmlString(LoadPemPrivateKey(key), true);
-            } catch (Exception) { }
-            try {
-                return SaveXmlString(LoadPemPublicKey(key), false);
-            } catch (Exception) { }
+        static private Regex _PEMCode = new Regex(@"--+.+?--+|\s+", RegexOptions.IgnoreCase);
+        static private byte[] _SeqOID = new byte[] { 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00 };
+        static private byte[] _Ver = new byte[] { 0x02, 0x01, 0x00 };
 
-            var bytes = Encoding.Default.GetBytes(key);
-            X509Certificate2 certificate2;
-            if (string.IsNullOrEmpty(password)) {
-                certificate2 = new X509Certificate2(bytes);
-            } else {
-                certificate2 = new X509Certificate2(bytes, password);
-            }
-            if (certificate2.HasPrivateKey) {
-                return certificate2.PrivateKey.ToXmlString(true);
-            }
-            return certificate2.PublicKey.Key.ToXmlString(false);
-        }
-
-        private static string SaveXmlString(RSA rsa, bool includePrivateParameters)
-        {
-            RSAParameters parameters = rsa.ExportParameters(includePrivateParameters);
-            return SaveXmlString(parameters, includePrivateParameters);
-        }
-        private static string SaveXmlString(RSAParameters parameters, bool includePrivateParameters)
-        {
-            if (includePrivateParameters) {
-                return string.Format("<RSAKeyValue><Modulus>{0}</Modulus><Exponent>{1}</Exponent><P>{2}</P><Q>{3}</Q><DP>{4}</DP><DQ>{5}</DQ><InverseQ>{6}</InverseQ><D>{7}</D></RSAKeyValue>",
-                    Convert.ToBase64String(parameters.Modulus),
-                    Convert.ToBase64String(parameters.Exponent),
-                    Convert.ToBase64String(parameters.P),
-                    Convert.ToBase64String(parameters.Q),
-                    Convert.ToBase64String(parameters.DP),
-                    Convert.ToBase64String(parameters.DQ),
-                    Convert.ToBase64String(parameters.InverseQ),
-                    Convert.ToBase64String(parameters.D));
-            }
-            return string.Format("<RSAKeyValue><Modulus>{0}</Modulus><Exponent>{1}</Exponent></RSAKeyValue>",
-                Convert.ToBase64String(parameters.Modulus),
-                Convert.ToBase64String(parameters.Exponent));
-        }
-
+        #region LoadPublicKey LoadPrivateKey
         private static void LoadPrivateKey(RSA rsa, string key)
         {
             RSAParameters parameters;
             if (key.StartsWith("<")) {
                 parameters = LoadXmlString(key);
             } else {
-                parameters = LoadPemPrivateKey(key);
+                try {
+                    parameters = FromPem(key, out bool pk);
+                    if (pk == false) { throw new Exception("It is not private key."); }
+                } catch {
+                    parameters = LoadCertPrivateKey(key);
+                }
             }
             rsa.ImportParameters(parameters);
         }
-
         private static void LoadPublicKey(RSA rsa, string key)
         {
             RSAParameters parameters;
@@ -397,20 +332,12 @@ namespace ToolGood.Bedrock
                 parameters = LoadXmlString(key);
             } else {
                 try {
-                    parameters = LoadPemPublicKey(key);
+                    parameters = FromPem(key, out bool _);
                 } catch {
                     parameters = LoadCertPublicKey(key);
                 }
             }
             rsa.ImportParameters(parameters);
-        }
-
-        private static RSAParameters LoadCertPublicKey(string certString)
-        {
-            var bytes = Encoding.Default.GetBytes(certString);
-            X509Certificate2 c1 = new X509Certificate2(bytes);
-            string keyPublic = c1.PublicKey.Key.ToXmlString(false);  // 公钥
-            return LoadXmlString(keyPublic);
         }
 
         private static RSAParameters LoadXmlString(string xmlString)
@@ -436,81 +363,287 @@ namespace ToolGood.Bedrock
             }
             return parameters;
         }
-
-        private static RSAParameters LoadPemPublicKey(string pemFileConent)
+        private static string SaveXmlString(RSAParameters parameters, bool includePrivateParameters)
         {
-
-            byte[] keyData = Convert.FromBase64String(pemFileConent);
-            if (keyData.Length < 162) {
-                throw new ArgumentException("pem file content is incorrect.");
+            if (includePrivateParameters) {
+                return string.Format("<RSAKeyValue><Modulus>{0}</Modulus><Exponent>{1}</Exponent><P>{2}</P><Q>{3}</Q><DP>{4}</DP><DQ>{5}</DQ><InverseQ>{6}</InverseQ><D>{7}</D></RSAKeyValue>",
+                    Convert.ToBase64String(parameters.Modulus),
+                    Convert.ToBase64String(parameters.Exponent),
+                    Convert.ToBase64String(parameters.P),
+                    Convert.ToBase64String(parameters.Q),
+                    Convert.ToBase64String(parameters.DP),
+                    Convert.ToBase64String(parameters.DQ),
+                    Convert.ToBase64String(parameters.InverseQ),
+                    Convert.ToBase64String(parameters.D));
             }
-            byte[] pemModulus = new byte[128];
-            byte[] pemPublicExponent = new byte[3];
-            Array.Copy(keyData, 29, pemModulus, 0, 128);
-            Array.Copy(keyData, 159, pemPublicExponent, 0, 3);
-            RSAParameters para = new RSAParameters();
-            para.Modulus = pemModulus;
-            para.Exponent = pemPublicExponent;
-            return para;
+            return string.Format("<RSAKeyValue><Modulus>{0}</Modulus><Exponent>{1}</Exponent></RSAKeyValue>",
+                Convert.ToBase64String(parameters.Modulus),
+                Convert.ToBase64String(parameters.Exponent));
+        }
+        private static RSAParameters LoadCertPublicKey(string certString)
+        {
+            var bytes = Encoding.Default.GetBytes(certString);
+            X509Certificate2 c1 = new X509Certificate2(bytes);
+            string keyPublic = c1.PublicKey.Key.ToXmlString(false);  // 公钥
+            return LoadXmlString(keyPublic);
+        }
+        private static RSAParameters LoadCertPrivateKey(string certString)
+        {
+            var bytes = Encoding.Default.GetBytes(certString);
+            X509Certificate2 c1 = new X509Certificate2(bytes);
+            string keyPublic = c1.PrivateKey.ToXmlString(true);  // 公钥
+            return LoadXmlString(keyPublic);
+        }
+        private static RSAParameters FromPem(string pem, out bool privateKey)
+        {
+            privateKey = false;
+            var param = new RSAParameters();
+
+            var base64 = _PEMCode.Replace(pem, "");
+            var data = Convert.FromBase64String(base64);
+            if (data == null) { throw new Exception("Pem content invalid "); }
+            var idx = 0;
+
+            //read  length
+            Func<byte, int> readLen = (first) => {
+                if (data[idx] == first) {
+                    idx++;
+                    if (data[idx] == 0x81) {
+                        idx++;
+                        return data[idx++];
+                    } else if (data[idx] == 0x82) {
+                        idx++;
+                        return (((int)data[idx++]) << 8) + data[idx++];
+                    } else if (data[idx] < 0x80) {
+                        return data[idx++];
+                    }
+                }
+                throw new Exception("Not found any content in pem file");
+            };
+            //read module length
+            Func<byte[]> readBlock = () => {
+                var len = readLen(0x02);
+                if (data[idx] == 0x00) {
+                    idx++;
+                    len--;
+                }
+                var val = Sub(data, idx, len);
+                idx += len;
+                return val;
+            };
+
+            Func<byte[], bool> eq = (byts) => {
+                for (var i = 0; i < byts.Length; i++, idx++) {
+                    if (idx >= data.Length) { return false; }
+                    if (byts[i] != data[idx]) { return false; }
+                }
+                return true;
+            };
+
+            if (pem.Contains("PUBLIC KEY")) {
+                readLen(0x30);
+                if (!eq(_SeqOID)) { throw new Exception("Unknown pem format"); }
+
+                readLen(0x03);
+                idx++;
+                readLen(0x30);
+                param.Modulus = readBlock();
+                param.Exponent = readBlock();
+            } else if (pem.Contains("PRIVATE KEY")) {
+                readLen(0x30);
+                //Read version
+                if (!eq(_Ver)) { throw new Exception("Unknown pem version"); }
+                //Check PKCS8
+                var idx2 = idx;
+                if (eq(_SeqOID)) {
+                    readLen(0x04);
+                    readLen(0x30);
+                    if (!eq(_Ver)) { throw new Exception("Pem version invalid"); }
+                } else {
+                    idx = idx2;
+                }
+                param.Modulus = readBlock();
+                param.Exponent = readBlock();
+                param.D = readBlock();
+                param.P = readBlock();
+                param.Q = readBlock();
+                param.DP = readBlock();
+                param.DQ = readBlock();
+                param.InverseQ = readBlock();
+                privateKey = true;
+            } else {
+                throw new Exception("pem need 'BEGIN' and  'END'");
+            }
+            return param;
         }
 
-        private static RSAParameters LoadPemPrivateKey(string pemFileConent)
+        #endregion
+
+        #region SaveXmlString SavePemString
+        private static string SaveXmlString(RSA rsa, bool includePrivateParameters)
         {
-            byte[] keyData = Convert.FromBase64String(pemFileConent);
-            if (keyData.Length < 609) {
-                throw new ArgumentException("pem file content is incorrect.");
-            }
-
-            int index = 11;
-            byte[] pemModulus = new byte[128];
-            Array.Copy(keyData, index, pemModulus, 0, 128);
-
-            index += 128;
-            index += 2;//141
-            byte[] pemPublicExponent = new byte[3];
-            Array.Copy(keyData, index, pemPublicExponent, 0, 3);
-
-            index += 3;
-            index += 4;//148
-            byte[] pemPrivateExponent = new byte[128];
-            Array.Copy(keyData, index, pemPrivateExponent, 0, 128);
-
-            index += 128;
-            index += ((int)keyData[index + 1] == 64 ? 2 : 3);//279
-            byte[] pemPrime1 = new byte[64];
-            Array.Copy(keyData, index, pemPrime1, 0, 64);
-
-            index += 64;
-            index += ((int)keyData[index + 1] == 64 ? 2 : 3);//346
-            byte[] pemPrime2 = new byte[64];
-            Array.Copy(keyData, index, pemPrime2, 0, 64);
-
-            index += 64;
-            index += ((int)keyData[index + 1] == 64 ? 2 : 3);//412/413
-            byte[] pemExponent1 = new byte[64];
-            Array.Copy(keyData, index, pemExponent1, 0, 64);
-
-            index += 64;
-            index += ((int)keyData[index + 1] == 64 ? 2 : 3);//479/480
-            byte[] pemExponent2 = new byte[64];
-            Array.Copy(keyData, index, pemExponent2, 0, 64);
-
-            index += 64;
-            index += ((int)keyData[index + 1] == 64 ? 2 : 3);//545/546
-            byte[] pemCoefficient = new byte[64];
-            Array.Copy(keyData, index, pemCoefficient, 0, 64);
-
-            RSAParameters para = new RSAParameters();
-            para.Modulus = pemModulus;
-            para.Exponent = pemPublicExponent;
-            para.D = pemPrivateExponent;
-            para.P = pemPrime1;
-            para.Q = pemPrime2;
-            para.DP = pemExponent1;
-            para.DQ = pemExponent2;
-            para.InverseQ = pemCoefficient;
-            return para;
+            RSAParameters parameters = rsa.ExportParameters(includePrivateParameters);
+            return SaveXmlString(parameters, includePrivateParameters);
         }
+
+        private static string SavePemString(RSA rsa, bool includePrivateParameters, bool isPKCS8 = false)
+        {
+            RSAParameters parameters = rsa.ExportParameters(includePrivateParameters);
+            return ToPem(parameters, includePrivateParameters, isPKCS8);
+        }
+
+        /// <summary>
+        /// Converter Rsa to pem ,
+        /// </summary>
+        /// <param name="rsa"><see cref="RSACryptoServiceProvider"/></param>
+        /// <param name="includePrivateParameters">if false only return publick key</param>
+        /// <param name="isPKCS8">default is false,if true return PKCS#8 pem else return PKCS#1 pem </param>
+        /// <returns></returns>
+        private static string ToPem(RSAParameters param, bool includePrivateParameters, bool isPKCS8 = false)
+        {
+            var ms = new MemoryStream();
+
+            Action<int> writeLenByte = (len) => {
+                if (len < 0x80) {
+                    ms.WriteByte((byte)len);
+                } else if (len <= 0xff) {
+                    ms.WriteByte(0x81);
+                    ms.WriteByte((byte)len);
+                } else {
+                    ms.WriteByte(0x82);
+                    ms.WriteByte((byte)(len >> 8 & 0xff));
+                    ms.WriteByte((byte)(len & 0xff));
+                }
+            };
+            //write moudle data
+            Action<byte[]> writeBlock = (byts) => {
+                var addZero = (byts[0] >> 4) >= 0x8;
+                ms.WriteByte(0x02);
+                var len = byts.Length + (addZero ? 1 : 0);
+                writeLenByte(len);
+
+                if (addZero) { ms.WriteByte(0x00); }
+                ms.Write(byts, 0, byts.Length);
+            };
+
+            Func<int, byte[], byte[]> writeLen = (index, byts) => {
+                var len = byts.Length - index;
+                ms.SetLength(0);
+                ms.Write(byts, 0, index);
+                writeLenByte(len);
+                ms.Write(byts, index, len);
+                return ms.ToArray();
+            };
+
+
+            if (!includePrivateParameters) {
+                ms.WriteByte(0x30);
+                var index1 = (int)ms.Length;
+
+                // Encoded OID sequence for PKCS #1 rsaEncryption szOID_RSA_RSA = "1.2.840.113549.1.1.1"
+                WriteAll(ms, _SeqOID);
+
+                //Start with 0x00 
+                ms.WriteByte(0x03);
+                var index2 = (int)ms.Length;
+                ms.WriteByte(0x00);
+
+                //Content length
+                ms.WriteByte(0x30);
+                var index3 = (int)ms.Length;
+
+                //Write Modulus
+                writeBlock(param.Modulus);
+
+                //Write Exponent
+                writeBlock(param.Exponent);
+
+                var bytes = ms.ToArray();
+
+                bytes = writeLen(index3, bytes);
+                bytes = writeLen(index2, bytes);
+                bytes = writeLen(index1, bytes);
+
+
+                return "-----BEGIN PUBLIC KEY-----\n" + TextBreak(Convert.ToBase64String(bytes), 64) + "\n-----END PUBLIC KEY-----";
+            } else {
+                //Write total length
+                ms.WriteByte(0x30);
+                int index1 = (int)ms.Length;
+
+                //Write version
+                WriteAll(ms, _Ver);
+
+                //PKCS8 
+                int index2 = -1, index3 = -1;
+                if (isPKCS8) {
+                    WriteAll(ms, _SeqOID);
+                    ms.WriteByte(0x04);
+                    index2 = (int)ms.Length;
+                    ms.WriteByte(0x30);
+                    index3 = (int)ms.Length;
+                    WriteAll(ms, _Ver);
+                }
+                //Write data
+                writeBlock(param.Modulus);
+                writeBlock(param.Exponent);
+                writeBlock(param.D);
+                writeBlock(param.P);
+                writeBlock(param.Q);
+                writeBlock(param.DP);
+                writeBlock(param.DQ);
+                writeBlock(param.InverseQ);
+
+                var bytes = ms.ToArray();
+
+                if (index2 != -1) {
+                    bytes = writeLen(index3, bytes);
+                    bytes = writeLen(index2, bytes);
+                }
+                bytes = writeLen(index1, bytes);
+
+                var flag = " PRIVATE KEY";
+                if (!isPKCS8) { flag = " RSA" + flag; }
+                return "-----BEGIN" + flag + "-----\n" + TextBreak(Convert.ToBase64String(bytes), 64) + "\n-----END" + flag + "-----";
+            }
+        }
+
+        #endregion
+
+        #region private WriteAll Sub TextBreak
+
+
+        private static void WriteAll(Stream stream, byte[] byts)
+        {
+            stream.Write(byts, 0, byts.Length);
+        }
+
+        private static byte[] Sub(byte[] arr, int start, int count)
+        {
+            byte[] val = new byte[count];
+            Array.Copy(arr, start, val, 0, count);
+            return val;
+        }
+
+        private static string TextBreak(string text, int line)
+        {
+            var idx = 0;
+            var len = text.Length;
+            var str = new StringBuilder();
+            while (idx < len) {
+                if (idx > 0) {
+                    str.Append('\n');
+                }
+                if (idx + line >= len) {
+                    str.Append(text.Substring(idx));
+                } else {
+                    str.Append(text.Substring(idx, line));
+                }
+                idx += line;
+            }
+            return str.ToString();
+        }
+        #endregion 
         #endregion
 
         class RsaEncryption : IDisposable
@@ -523,6 +656,7 @@ namespace ToolGood.Bedrock
             private bool isPrivateKeyLoaded = false;
             private bool isPublicKeyLoaded = false;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void LoadPublicFromXml(string publicString)
             {
                 LoadPublicKey(rsa, publicString);
@@ -534,6 +668,7 @@ namespace ToolGood.Bedrock
                 isPrivateKeyLoaded = false;
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void LoadPrivateFromXml(string privateString)
             {
                 LoadPrivateKey(rsa, privateString);
@@ -579,6 +714,7 @@ namespace ToolGood.Bedrock
                 }
                 return PrivareEncryption2(data);
             }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             private byte[] PrivareEncryption2(byte[] data)
             {
                 return BigInteger.ModPow(FromBytes(data), D, Modulus).ToByteArray().Reverse().ToArray();
@@ -611,11 +747,12 @@ namespace ToolGood.Bedrock
                 }
                 return PublicDecryption2(data);
             }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public byte[] PublicDecryption2(byte[] data)
             {
                 return BigInteger.ModPow(FromBytes(data), Exponent, Modulus).ToByteArray().Reverse().ToArray();
             }
-
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             private static BigInteger FromBytes(byte[] beBytes)
             {
                 return new BigInteger(beBytes.Reverse().Concat(new byte[] { 0 }).ToArray());
@@ -628,5 +765,6 @@ namespace ToolGood.Bedrock
         }
 
     }
+
 
 }
