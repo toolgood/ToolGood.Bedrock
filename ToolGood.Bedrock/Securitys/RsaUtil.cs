@@ -15,7 +15,6 @@ namespace ToolGood.Bedrock
     /// </summary>
     public class RsaUtil
     {
-
         #region RSA 的密钥产生
         /// <summary>
         /// 获取参数
@@ -199,11 +198,10 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public static string PrivateEncrypt(string privateKey, string EncryptString)
         {
-            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider()) {
-                LoadPrivateKey(rsa, privateKey);
+            using (RsaEncryption rsa = new RsaEncryption()) {
+                rsa.LoadPrivateFromXml(privateKey);
                 var bs = Encoding.UTF8.GetBytes(EncryptString);
-                var bytes = RSAPrivateEncryption.PrivareEncryption(rsa, bs);
-                return Base64.ToBase64ForUrlString(bytes);
+                return Convert.ToBase64String(rsa.PrivateEncryption(bs));
             }
         }
         /// <summary>
@@ -214,9 +212,9 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public static byte[] PrivateEncrypt(string privateKey, byte[] bytes)
         {
-            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider()) {
-                LoadPrivateKey(rsa, privateKey);
-                return RSAPrivateEncryption.PrivareEncryption(rsa, bytes);
+            using (RsaEncryption rsa = new RsaEncryption()) {
+                rsa.LoadPrivateFromXml(privateKey);
+                return rsa.PrivateEncryption(bytes);
             }
         }
         /// <summary>
@@ -227,11 +225,10 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public static string PublicDecrypt(string publicKey, string DecryptString)
         {
-            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider()) {
-                LoadPublicKey(rsa, publicKey);
-                var bs = Encoding.UTF8.GetBytes(DecryptString);
-                var bytes = RSAPrivateEncryption.PublicDecryption(rsa, bs);
-                return Base64.ToBase64ForUrlString(bytes);
+            using (RsaEncryption rsa = new RsaEncryption()) {
+                rsa.LoadPublicFromXml(publicKey);
+                var bs = rsa.PublicDecryption(Convert.FromBase64String(DecryptString));
+                return Encoding.UTF8.GetString(bs);
             }
         }
         /// <summary>
@@ -242,9 +239,9 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public static byte[] PublicDecrypt(string publicKey, byte[] bytes)
         {
-            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider()) {
-                LoadPublicKey(rsa, publicKey);
-                return RSAPrivateEncryption.PublicDecryption(rsa, bytes);
+            using (RsaEncryption rsa = new RsaEncryption()) {
+                rsa.LoadPublicFromXml(publicKey);
+                return rsa.PublicDecryption(bytes);
             }
         }
 
@@ -262,7 +259,7 @@ namespace ToolGood.Bedrock
         /// <returns></returns>
         public static bool Sign(string privateKey, byte[] HashbyteSignature, out byte[] EncryptedSignatureData)
         {
-            System.Security.Cryptography.RSACryptoServiceProvider RSA = new System.Security.Cryptography.RSACryptoServiceProvider();
+            RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
             LoadPrivateKey(RSA, privateKey);
 
             SHA256 sh = new SHA256CryptoServiceProvider();
@@ -332,6 +329,8 @@ namespace ToolGood.Bedrock
         }
 
         #endregion
+
+
 
         #region 密钥解析
         public static string ConvertToXml(string key, string password = null)
@@ -514,14 +513,61 @@ namespace ToolGood.Bedrock
         }
         #endregion
 
-        public static class RSAPrivateEncryption
+        class RsaEncryption : IDisposable
         {
-            public static byte[] PrivareEncryption(RSACryptoServiceProvider rsa, byte[] data)
+            private BigInteger D;
+            private BigInteger Exponent;
+            private BigInteger Modulus;
+            private RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+
+            private bool isPrivateKeyLoaded = false;
+            private bool isPublicKeyLoaded = false;
+
+            public void LoadPublicFromXml(string publicString)
             {
-                if (data == null)
-                    throw new ArgumentNullException("data");
-                if (rsa.PublicOnly)
-                    throw new InvalidOperationException("Private key is not loaded");
+                // Using the .NET RSA class to load a key from an Xml file, and populating the relevant members of my class with it's RSAParameters
+                try {
+                    LoadPublicKey(rsa, publicString);
+
+                    //rsa.FromXmlString(publicPath);
+                    RSAParameters rsaParams = rsa.ExportParameters(false);
+                    Modulus = FromBytes(rsaParams.Modulus);
+                    Exponent = FromBytes(rsaParams.Exponent);
+                    isPublicKeyLoaded = true;
+                    isPrivateKeyLoaded = false;
+                } catch (CryptographicException ex)  // Not a Key file
+                  {
+                    string excReason = "Exception occurred at LoadPublicFromXml(), Selected xml file is not a public key file.";
+                    System.Diagnostics.Debug.WriteLine(excReason + " Exception Message: " + ex.Message);
+                    throw new Exception(excReason, ex);
+                } catch (Exception ex)  // other exception, hope the ex.message will help
+                {
+                    string excReason = "General Exception occurred at LoadPublicFromXml().";
+                    System.Diagnostics.Debug.WriteLine(excReason + " Exception Message: " + ex.Message);
+                    throw new Exception(excReason, ex);
+                }
+            }
+
+            public void LoadPrivateFromXml(string privateString)
+            {
+                try {
+                    LoadPrivateKey(rsa, privateString);
+
+                    RSAParameters rsaParams = rsa.ExportParameters(true);
+                    D = FromBytes(rsaParams.D);  // This parameter is only for private key
+                    Exponent = FromBytes(rsaParams.Exponent);
+                    Modulus = FromBytes(rsaParams.Modulus);
+                    isPrivateKeyLoaded = true;
+                    isPublicKeyLoaded = true;
+                } catch (Exception ex) {
+                    System.Diagnostics.Debug.WriteLine("Exception occurred at LoadPrivateFromXml()\nMessage: " + ex.Message);
+                    throw;
+                }
+            }
+
+            public byte[] PrivateEncryption(byte[] data)
+            {
+                if (!isPrivateKeyLoaded) throw new CryptographicException("Private Key must be loaded before using the Private Encryption method!");
 
                 int len = (rsa.KeySize / 8) - 11;
                 if (data.Length > len) {
@@ -534,7 +580,7 @@ namespace ToolGood.Bedrock
                             byte[] dataToEnc = new byte[readLen];
                             Array.Copy(buffer, 0, dataToEnc, 0, readLen);
 
-                            var bytes = PrivareEncryption2(rsa, dataToEnc);
+                            var bytes = PrivareEncryption2(dataToEnc);
                             if (bytes.Length == rsa.KeySize / 8 + 1) {
                                 ms.Write(bytes, 0, bytes.Length);
                             } else {
@@ -550,20 +596,21 @@ namespace ToolGood.Bedrock
                         return ms.ToArray();
                     }
                 }
-                return PrivareEncryption2(rsa, data);
+                return PrivareEncryption2(data);
+            }
+            private byte[] PrivareEncryption2(byte[] data)
+            {
+                return BigInteger.ModPow(FromBytes(data), D, Modulus).ToByteArray().Reverse().ToArray();
             }
 
-
-
-            public static byte[] PublicDecryption(RSACryptoServiceProvider rsa, byte[] cipherData)
+            public byte[] PublicDecryption(byte[] data)
             {
-                if (cipherData == null)
-                    throw new ArgumentNullException("cipherData");
+                if (!isPublicKeyLoaded) throw new CryptographicException("Public Key must be loaded before using the Public Encryption method!");
 
                 int len = (rsa.KeySize / 8) + 1;
-                if (cipherData.Length > len) {
+                if (data.Length > len) {
                     using (var ms = new MemoryStream()) {
-                        MemoryStream msInput = new MemoryStream(cipherData);
+                        MemoryStream msInput = new MemoryStream(data);
                         byte[] buffer = new byte[len];
                         int readLen = msInput.Read(buffer, 0, len);
 
@@ -571,7 +618,7 @@ namespace ToolGood.Bedrock
                             byte[] dataToEnc = new byte[readLen];
                             Array.Copy(buffer, 0, dataToEnc, 0, readLen);
 
-                            var bytes = PublicDecryption2(rsa, dataToEnc);
+                            var bytes = PublicDecryption2(dataToEnc);
                             ms.Write(bytes, 0, bytes.Length);
                             readLen = msInput.Read(buffer, 0, len);
                         }
@@ -579,72 +626,24 @@ namespace ToolGood.Bedrock
                         return ms.ToArray();
                     }
                 }
-                return PublicDecryption2(rsa, cipherData);
+                return PublicDecryption2(data);
             }
-
-            private static byte[] PrivareEncryption2(RSACryptoServiceProvider rsa, byte[] data)
+            public byte[] PublicDecryption2(byte[] data)
             {
-                BigInteger numData = GetBig(AddPadding(data));
-
-                RSAParameters rsaParams = rsa.ExportParameters(true);
-                BigInteger D = GetBig(rsaParams.D);
-                BigInteger Modulus = GetBig(rsaParams.Modulus);
-                BigInteger encData = BigInteger.ModPow(numData, D, Modulus);
-
-                return encData.ToByteArray();
+                return BigInteger.ModPow(FromBytes(data), Exponent, Modulus).ToByteArray().Reverse().ToArray();
             }
 
-            private static byte[] PublicDecryption2(RSACryptoServiceProvider rsa, byte[] cipherData)
+            private static BigInteger FromBytes(byte[] beBytes)
             {
-                BigInteger numEncData = new BigInteger(cipherData);
-
-                RSAParameters rsaParams = rsa.ExportParameters(false);
-                BigInteger Exponent = GetBig(rsaParams.Exponent);
-                BigInteger Modulus = GetBig(rsaParams.Modulus);
-
-                BigInteger decData = BigInteger.ModPow(numEncData, Exponent, Modulus);
-
-                byte[] data = decData.ToByteArray();
-                byte[] result = new byte[data.Length - 1];
-                Array.Copy(data, result, result.Length);
-                result = RemovePadding(result);
-
-                Array.Reverse(result);
-                return result;
+                return new BigInteger(beBytes.Reverse().Concat(new byte[] { 0 }).ToArray());
             }
-
-
-            private static BigInteger GetBig(byte[] data)
+            public void Dispose()
             {
-                byte[] inArr = (byte[])data.Clone();
-                Array.Reverse(inArr);  // Reverse the byte order
-                byte[] final = new byte[inArr.Length + 1];  // Add an empty byte at the end, to simulate unsigned BigInteger (no negatives!)
-                Array.Copy(inArr, final, inArr.Length);
-
-                return new BigInteger(final);
+                rsa.Clear();
             }
-
-            private static byte[] AddPadding(byte[] data)
-            {
-                Random rnd = new Random();
-                byte[] paddings = new byte[4];
-                rnd.NextBytes(paddings);
-                paddings[0] = (byte)(paddings[0] | 128);
-
-                byte[] results = new byte[data.Length + 4];
-
-                Array.Copy(paddings, results, 4);
-                Array.Copy(data, 0, results, 4, data.Length);
-                return results;
-            }
-            private static byte[] RemovePadding(byte[] data)
-            {
-                byte[] results = new byte[data.Length - 4];
-                Array.Copy(data, results, results.Length);
-                return results;
-            }
-
         }
+
+
 
     }
 
