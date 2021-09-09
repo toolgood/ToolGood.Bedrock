@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/toolgood/ToolGood.Bedrock</PackageProjectUrl>
     <RepositoryUrl>https://github.com/toolgood/ToolGood.Bedrock</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>1.0.0.6</Version>
+    <Version>1.0.0.7</Version>
   </PropertyGroup>
 
   <ItemGroup>
