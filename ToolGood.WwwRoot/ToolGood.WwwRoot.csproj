@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>将 wwwroot 打包成 Controller 的类库。使用WwwRootSetting.BuildControllers()，默认支持br压缩</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -32,10 +32,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Jint" Version="3.0.0-beta-1778" />
-    <PackageReference Include="WebMarkupMin.MsAjax" Version="2.8.1" />
-    <PackageReference Include="WebMarkupMin.NUglify" Version="2.8.1" />
-    <PackageReference Include="WebMarkupMin.Yui" Version="2.8.1" />
+    <PackageReference Include="Jint" Version="3.0.0-beta-2042" />
+    <PackageReference Include="WebMarkupMin.MsAjax" Version="2.12.0" />
+    <PackageReference Include="WebMarkupMin.NUglify" Version="2.12.0" />
+    <PackageReference Include="WebMarkupMin.Yui" Version="2.12.0" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.0|AnyCPU'">
