@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading;
 
 namespace ToolGood.Bedrock._Others
 {
@@ -9,7 +7,9 @@ namespace ToolGood.Bedrock._Others
     {
         private readonly DoubleLinkedListNode<TKey, TValue> _head;
         private readonly DoubleLinkedListNode<TKey, TValue> _tail;
-        private readonly ConcurrentDictionary<TKey, DoubleLinkedListNode<TKey, TValue>> _dictionary;
+        private readonly Dictionary<TKey, DoubleLinkedListNode<TKey, TValue>> _dictionary;
+        private readonly ReaderWriterLockSlim _slimLock = new ReaderWriterLockSlim();
+
         private readonly int _capacity;
         public LRUCache(int capacity)
         {
@@ -18,44 +18,60 @@ namespace ToolGood.Bedrock._Others
             _tail = new DoubleLinkedListNode<TKey, TValue>();
             _head.Next = _tail;
             _tail.Previous = _head;
-            _dictionary = new ConcurrentDictionary<TKey, DoubleLinkedListNode<TKey, TValue>>();
+            _dictionary = new Dictionary<TKey, DoubleLinkedListNode<TKey, TValue>>();
         }
         public TValue this[TKey key] { get { return Get(key); } set { Set(key, value); } }
 
         public TValue Get(TKey key)
         {
-
-            if (_dictionary.TryGetValue(key, out var node)) {
-                if (_tail != node.Next) {
-                    RemoveNode(node);
-                    AddLastNode(node);
+            _slimLock.EnterUpgradeableReadLock();
+            try {
+                if (_dictionary.TryGetValue(key, out var node)) {
+                    if (_tail != node.Next) {
+                        _slimLock.EnterWriteLock();
+                        RemoveNode(node);
+                        AddLastNode(node);
+                        _slimLock.ExitWriteLock();
+                    }
+                    return node.Value;
                 }
-                return node.Value;
+            } finally {
+                _slimLock.ExitUpgradeableReadLock();
             }
             return default;
         }
         public void Set(TKey key, TValue value)
         {
-            if (_dictionary.TryGetValue(key, out var node)) {
-                if (_tail != node.Next) {
-                    RemoveNode(node);
-                    AddLastNode(node);
+            _slimLock.EnterWriteLock();
+            try {
+                if (_dictionary.TryGetValue(key, out var node)) {
+                    if (_tail != node.Next) {
+                        RemoveNode(node);
+                        AddLastNode(node);
+                    }
+                    node.Value = value;
+                } else {
+                    if (_dictionary.Count >= _capacity) {  
+                        var firstNode = RemoveFirstNode();
+                        _dictionary.Remove(firstNode.Key);
+                    }
+                    var newNode = new DoubleLinkedListNode<TKey, TValue>(key, value);
+                    AddLastNode(newNode);
+                    _dictionary.TryAdd(key, newNode);
                 }
-                node.Value = value;
-            } else {
-                while (_dictionary.Count >= _capacity) {
-                    var firstNode = RemoveFirstNode();
-                    _dictionary.Remove(firstNode.Key, out _);
-                }
-                var newNode = new DoubleLinkedListNode<TKey, TValue>(key, value);
-                AddLastNode(newNode);
-                _dictionary.TryAdd(key, newNode);
+            } finally {
+                _slimLock.ExitWriteLock();
             }
         }
         public void Remove(TKey key)
         {
-            if (_dictionary.Remove(key, out var node)) {
-                RemoveNode(node);
+            _slimLock.EnterWriteLock();
+            try {
+                if (_dictionary.Remove(key, out var node)) {
+                    RemoveNode(node);
+                }
+            } finally {
+                _slimLock.ExitWriteLock();
             }
         }
         private void AddLastNode(DoubleLinkedListNode<TKey, TValue> node)
