@@ -45,7 +45,7 @@ namespace ToolGood.Bedrock._Others
                 AddLastNode(node);
                 node.Value = value;
             } else {
-                if (_dictionary.Count == _capacity) {
+                if (_dictionary.Count >= _capacity) {
                     var firstNode = RemoveFirstNode();
                     _dictionary.Remove(firstNode.Key, out _);
                 }
