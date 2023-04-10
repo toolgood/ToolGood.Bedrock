@@ -20,7 +20,6 @@ namespace ToolGood.Bedrock._Others
             _tail.Previous = _head;
             _dictionary = new Dictionary<TKey, DoubleLinkedListNode<TKey, TValue>>();
         }
-        public TValue this[TKey key] { get { return Get(key); } set { Set(key, value); } }
 
         public TValue Get(TKey key)
         {
@@ -40,7 +39,7 @@ namespace ToolGood.Bedrock._Others
             }
             return default;
         }
-        public void Set(TKey key, TValue value)
+        public void Put(TKey key, TValue value)
         {
             _slimLock.EnterWriteLock();
             try {
