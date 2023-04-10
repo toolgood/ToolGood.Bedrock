@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace ToolGood.Bedrock._Others
     {
         private readonly DoubleLinkedListNode<TKey, TValue> _head;
         private readonly DoubleLinkedListNode<TKey, TValue> _tail;
-        private readonly Dictionary<TKey, DoubleLinkedListNode<TKey, TValue>> _dictionary;
+        private readonly ConcurrentDictionary<TKey, DoubleLinkedListNode<TKey, TValue>> _dictionary;
         private readonly int _capacity;
         public LRUCache(int capacity)
         {
@@ -18,10 +19,18 @@ namespace ToolGood.Bedrock._Others
             _tail = new DoubleLinkedListNode<TKey, TValue>();
             _head.Next = _tail;
             _tail.Previous = _head;
-            _dictionary = new Dictionary<TKey, DoubleLinkedListNode<TKey, TValue>>();
+            _dictionary = new ConcurrentDictionary<TKey, DoubleLinkedListNode<TKey, TValue>>();
         }
+        public TValue this[TKey key] { get { return Get(key); } set { Set(key, value); } }
+
+        public bool ContainsKey(TKey key)
+        {
+            return _dictionary.ContainsKey(key);
+        }
+
         public TValue Get(TKey key)
         {
+
             if (_dictionary.TryGetValue(key, out var node)) {
                 RemoveNode(node);
                 AddLastNode(node);
@@ -29,9 +38,7 @@ namespace ToolGood.Bedrock._Others
             }
             return default;
         }
-
-
-        public void Put(TKey key, TValue value)
+        public void Set(TKey key, TValue value)
         {
             if (_dictionary.TryGetValue(key, out var node)) {
                 RemoveNode(node);
@@ -40,34 +47,26 @@ namespace ToolGood.Bedrock._Others
             } else {
                 if (_dictionary.Count == _capacity) {
                     var firstNode = RemoveFirstNode();
-                    _dictionary.Remove(firstNode.Key);
+                    _dictionary.Remove(firstNode.Key, out _);
                 }
                 var newNode = new DoubleLinkedListNode<TKey, TValue>(key, value);
                 AddLastNode(newNode);
-                _dictionary.Add(key, newNode);
+                _dictionary.TryAdd(key, newNode);
             }
         }
-
-
         public void Remove(TKey key)
         {
-            if (_dictionary.TryGetValue(key, out var node)) {
-                _dictionary.Remove(key);
+            if (_dictionary.Remove(key, out var node)) {
                 RemoveNode(node);
             }
         }
-
-
         private void AddLastNode(DoubleLinkedListNode<TKey, TValue> node)
         {
             node.Previous = _tail.Previous;
             node.Next = _tail;
-
             _tail.Previous.Next = node;
             _tail.Previous = node;
         }
-
-
         private DoubleLinkedListNode<TKey, TValue> RemoveFirstNode()
         {
             var firstNode = _head.Next;
@@ -84,9 +83,6 @@ namespace ToolGood.Bedrock._Others
             node.Next = null;
             node.Previous = null;
         }
-
-
-
         internal class DoubleLinkedListNode<TKey, TValue>
         {
             public DoubleLinkedListNode() { }
@@ -95,11 +91,10 @@ namespace ToolGood.Bedrock._Others
                 Key = key;
                 Value = value;
             }
-            public TKey Key { get; set; }
+            public TKey Key { get; private set; }
             public TValue Value { get; set; }
             public DoubleLinkedListNode<TKey, TValue> Previous { get; set; }
             public DoubleLinkedListNode<TKey, TValue> Next { get; set; }
-
         }
     }
 }
