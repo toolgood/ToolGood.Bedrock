@@ -15,7 +15,6 @@ namespace ToolGood.Bedrock._Others
         {
             _capacity = capacity;
             _head = new DoubleLinkedListNode<TKey, TValue>();
-
             _tail = new DoubleLinkedListNode<TKey, TValue>();
             _head.Next = _tail;
             _tail.Previous = _head;
@@ -23,17 +22,14 @@ namespace ToolGood.Bedrock._Others
         }
         public TValue this[TKey key] { get { return Get(key); } set { Set(key, value); } }
 
-        public bool ContainsKey(TKey key)
-        {
-            return _dictionary.ContainsKey(key);
-        }
-
         public TValue Get(TKey key)
         {
 
             if (_dictionary.TryGetValue(key, out var node)) {
-                RemoveNode(node);
-                AddLastNode(node);
+                if (_tail != node) {
+                    RemoveNode(node);
+                    AddLastNode(node);
+                }
                 return node.Value;
             }
             return default;
@@ -41,11 +37,13 @@ namespace ToolGood.Bedrock._Others
         public void Set(TKey key, TValue value)
         {
             if (_dictionary.TryGetValue(key, out var node)) {
-                RemoveNode(node);
-                AddLastNode(node);
+                if (_tail != node) {
+                    RemoveNode(node);
+                    AddLastNode(node);
+                }
                 node.Value = value;
             } else {
-                if (_dictionary.Count >= _capacity) {
+                while (_dictionary.Count >= _capacity) {
                     var firstNode = RemoveFirstNode();
                     _dictionary.Remove(firstNode.Key, out _);
                 }
@@ -97,4 +95,5 @@ namespace ToolGood.Bedrock._Others
             public DoubleLinkedListNode<TKey, TValue> Next { get; set; }
         }
     }
+
 }
