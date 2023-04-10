@@ -26,7 +26,7 @@ namespace ToolGood.Bedrock._Others
         {
 
             if (_dictionary.TryGetValue(key, out var node)) {
-                if (_tail != node) {
+                if (_tail != node.Next) {
                     RemoveNode(node);
                     AddLastNode(node);
                 }
@@ -37,7 +37,7 @@ namespace ToolGood.Bedrock._Others
         public void Set(TKey key, TValue value)
         {
             if (_dictionary.TryGetValue(key, out var node)) {
-                if (_tail != node) {
+                if (_tail != node.Next) {
                     RemoveNode(node);
                     AddLastNode(node);
                 }
