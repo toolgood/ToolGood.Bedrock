@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolGood.WwwRoot", "ToolGoo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolGood.Bedrock.Web.Test", "ToolGood.Bedrock.Web.Test\ToolGood.Bedrock.Web.Test.csproj", "{9C7A3B0E-A56B-42EC-B2AD-D604C441A6CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolGood.BlindWatermark", "ToolGood.BlindWatermark\ToolGood.BlindWatermark.csproj", "{18163CD3-8E3E-4A30-8081-3B139CED5534}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{9C7A3B0E-A56B-42EC-B2AD-D604C441A6CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C7A3B0E-A56B-42EC-B2AD-D604C441A6CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C7A3B0E-A56B-42EC-B2AD-D604C441A6CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18163CD3-8E3E-4A30-8081-3B139CED5534}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18163CD3-8E3E-4A30-8081-3B139CED5534}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18163CD3-8E3E-4A30-8081-3B139CED5534}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18163CD3-8E3E-4A30-8081-3B139CED5534}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
