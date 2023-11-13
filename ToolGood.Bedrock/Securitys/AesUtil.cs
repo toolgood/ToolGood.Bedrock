@@ -34,7 +34,7 @@ namespace ToolGood.Bedrock
         /// <returns>加密后的字节数组</returns>
         public static byte[] Encrypt(byte[] sourceBytes, string key, Encoding defaultEncode = null)
         {
-            AesCryptoServiceProvider provider = new AesCryptoServiceProvider();
+            Aes provider = Aes.Create();
             string providerKey = GetProviderKey(key);
             provider.Key = (defaultEncode ?? Encoding.ASCII).GetBytes(providerKey);
             provider.IV = (defaultEncode ?? Encoding.ASCII).GetBytes(providerKey);
@@ -69,7 +69,7 @@ namespace ToolGood.Bedrock
         /// <returns>解密后的字节数组</returns>
         public static byte[] Decrypt(byte[] sourceBytes, string key, Encoding defaultEncode = null)
         {
-            AesCryptoServiceProvider provider = new AesCryptoServiceProvider();
+            Aes provider = Aes.Create();
             string providerKey = GetProviderKey(key);
             provider.Key = (defaultEncode ?? Encoding.ASCII).GetBytes(providerKey);
             provider.IV = (defaultEncode ?? Encoding.ASCII).GetBytes(providerKey);
@@ -93,7 +93,7 @@ namespace ToolGood.Bedrock
             if (string.IsNullOrWhiteSpace(key) || key.Length < 8) return "01234567";
             return key.Substring(0, 8);
         }
-         
+
 
 
     }

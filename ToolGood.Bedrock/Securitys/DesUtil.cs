@@ -37,7 +37,7 @@ namespace ToolGood.Bedrock
         /// <returns>加密后的字节数组</returns>
         public static byte[] Encrypt(byte[] sourceBytes, string key, Encoding defaultEncode = null)
         {
-            DESCryptoServiceProvider provider = new DESCryptoServiceProvider();
+            DES provider = DES.Create();
             string providerKey = GetProviderKey(key);
             provider.Key = (defaultEncode ?? Encoding.ASCII).GetBytes(providerKey);
             provider.IV = (defaultEncode ?? Encoding.ASCII).GetBytes(providerKey);
@@ -72,7 +72,7 @@ namespace ToolGood.Bedrock
         /// <returns>解密后的字节数组</returns>
         public static byte[] Decrypt(byte[] sourceBytes, string key, Encoding defaultEncode = null)
         {
-            DESCryptoServiceProvider provider = new DESCryptoServiceProvider();
+            DES provider = DES.Create();
             string providerKey = GetProviderKey(key);
             provider.Key = (defaultEncode ?? Encoding.ASCII).GetBytes(providerKey);
             provider.IV = (defaultEncode ?? Encoding.ASCII).GetBytes(providerKey);

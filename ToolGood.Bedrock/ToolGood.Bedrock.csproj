@@ -64,12 +64,6 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Microsoft.Win32.Registry">
-      <HintPath>..\..\..\Nuget缓存\microsoft.aspnetcore.app.ref\3.0.1\ref\netcoreapp3.0\Microsoft.Win32.Registry.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
     <DocumentationFile>bin\Debug\netcoreapp3.1\ToolGood.Bedrock.xml</DocumentationFile>
