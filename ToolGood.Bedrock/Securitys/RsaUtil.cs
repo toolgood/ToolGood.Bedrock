@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -236,7 +237,7 @@ namespace ToolGood.Bedrock
             RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
             LoadPrivateKey(RSA, privateKey);
 
-            SHA256 sh = new SHA256CryptoServiceProvider();
+            SHA256 sh = SHA256.Create();
             EncryptedSignatureData = RSA.SignData(HashbyteSignature, sh);
             sh.Dispose();
             RSA.Dispose();
@@ -274,7 +275,7 @@ namespace ToolGood.Bedrock
         {
             RSACryptoServiceProvider rsaPub = new RSACryptoServiceProvider();
             LoadPublicKey(rsaPub, publicKey);
-            SHA256 sh = new SHA256CryptoServiceProvider();
+            SHA256 sh = SHA256.Create();
             return rsaPub.VerifyData(HashbyteSignature, sh, signedData);
         }
 

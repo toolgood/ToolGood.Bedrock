@@ -16,7 +16,7 @@ namespace ToolGood.Bedrock
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns></returns>
-       public static string GetCrc8String(byte[] buffer)
+        public static string GetCrc8String(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
             var b = Crc8Hash.CRC(buffer);
@@ -380,7 +380,7 @@ namespace ToolGood.Bedrock
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
 
-            System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            MD5 md5 = MD5.Create();
             byte[] retVal = md5.ComputeHash(buffer);
             md5.Dispose();
             return BitConverter.ToString(retVal).Replace("-", "");
@@ -406,7 +406,7 @@ namespace ToolGood.Bedrock
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
 
-            System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            MD5 md5 = MD5.Create();
             byte[] retVal = md5.ComputeHash(buffer);
             md5.Dispose();
             return retVal;
@@ -447,7 +447,7 @@ namespace ToolGood.Bedrock
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
 
-            System.Security.Cryptography.SHA1CryptoServiceProvider osha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+            SHA1 osha1 = SHA1.Create();
             byte[] retVal = osha1.ComputeHash(buffer);
             osha1.Dispose();
             return BitConverter.ToString(retVal).Replace("-", "");
@@ -461,7 +461,7 @@ namespace ToolGood.Bedrock
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
 
-            System.Security.Cryptography.SHA1CryptoServiceProvider osha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+            SHA1 osha1 = SHA1.Create();
             byte[] retVal = osha1.ComputeHash(buffer);
             osha1.Dispose();
             return retVal;
@@ -502,7 +502,7 @@ namespace ToolGood.Bedrock
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
 
-            SHA256 sha256 = new SHA256Managed();
+            SHA256 sha256 = SHA256.Create();
             byte[] retVal = sha256.ComputeHash(buffer); //计算指定Stream 对象的哈希值
             sha256.Dispose();
             return BitConverter.ToString(retVal).Replace("-", "");
@@ -516,7 +516,7 @@ namespace ToolGood.Bedrock
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
 
-            SHA256 sha256 = new SHA256Managed();
+            SHA256 sha256 = SHA256.Create();
             byte[] retVal = sha256.ComputeHash(buffer); //计算指定Stream 对象的哈希值
             sha256.Dispose();
 
@@ -558,7 +558,7 @@ namespace ToolGood.Bedrock
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
 
-            var sha256 = new SHA384Managed();
+            SHA384 sha256 = SHA384.Create();
             byte[] retVal = sha256.ComputeHash(buffer); //计算指定Stream 对象的哈希值
             sha256.Dispose();
             return BitConverter.ToString(retVal).Replace("-", "");
@@ -572,7 +572,7 @@ namespace ToolGood.Bedrock
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
 
-            var sha256 = new SHA384Managed();
+            SHA384 sha256 = SHA384.Create();
             byte[] retVal = sha256.ComputeHash(buffer); //计算指定Stream 对象的哈希值
             sha256.Dispose();
 
@@ -614,7 +614,7 @@ namespace ToolGood.Bedrock
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
 
-            SHA512 sha512 = new SHA512Managed();
+            SHA512 sha512 = SHA512.Create();
             byte[] retVal = sha512.ComputeHash(buffer); //计算指定Stream 对象的哈希值
             sha512.Dispose();
             return BitConverter.ToString(retVal).Replace("-", "");
@@ -628,7 +628,7 @@ namespace ToolGood.Bedrock
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
 
-            SHA512 sha512 = new SHA512Managed();
+            SHA512 sha512 = SHA512.Create();
             byte[] retVal = sha512.ComputeHash(buffer); //计算指定Stream 对象的哈希值
             sha512.Dispose();
 
