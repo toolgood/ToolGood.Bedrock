@@ -12,9 +12,6 @@
     <Authors>ToolGood</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>3.0.0.7</Version>
-
-    <DefineConstants Condition="'$(TargetFramework)' == 'netcoreapp3.1'">$(DefineConstants);FEATURE_UNLOAD</DefineConstants>
-    <DefineConstants Condition="'$(TargetFramework)' == 'netcoreapp3.1'">$(DefineConstants);FEATURE_NATIVE_RESOLVER</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -63,13 +60,6 @@
     </None>
   </ItemGroup>
 
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp3.1\ToolGood.Bedrock.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
-    <DocumentationFile>bin\Release\netcoreapp3.1\ToolGood.Bedrock.xml</DocumentationFile>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
