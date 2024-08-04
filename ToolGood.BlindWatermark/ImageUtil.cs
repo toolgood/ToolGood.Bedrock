@@ -178,7 +178,7 @@ namespace ToolGood.BlindWatermark
             Cv2.Log(mag, mag);
             shiftDFT(mag);
             mag.ConvertTo(mag, MatType.CV_8UC1);
-            Cv2.Normalize(mag, mag, 0, 255, NormTypes.MinMax, MatType.CV_8UC1);
+            Cv2.Normalize(mag, mag, 0, 255, NormTypes.MinMax,(int) MatType.CV_8UC1);
             return mag;
         }
 
