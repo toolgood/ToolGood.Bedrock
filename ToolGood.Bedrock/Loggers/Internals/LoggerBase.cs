@@ -84,7 +84,7 @@ namespace ToolGood.Bedrock.Internals
                     var ip = queryArgs.HttpContext.GetRealIP();
                     var request = queryArgs.HttpContext.Request;
                     log.Append($"{ip}|{request.Method}|{request.Scheme}://{request.Host}{request.Path}{request.QueryString}\r\n");
-                    if (request.Method == "POST") {
+                    if (request.Method == "POST" && request.ContentType != null) {
                         if (request.ContentType.ToLower().StartsWith("multipart/form-data;") == false || request.ContentType.ToLower().Contains("json") == false) {
                             try {
                                 using (var buffer = new MemoryStream()) {
