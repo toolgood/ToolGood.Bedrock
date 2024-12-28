@@ -8,19 +8,43 @@ using ToolGood.ReadyGo3;
 
 namespace ToolGood.Bedrock.DataCommon
 {
-    public class DiffHelper
+    /// <summary>
+    /// 数据变动转成文本 帮助类
+    /// </summary>
+    public static class DataDiffHelper
     {
-        public static string Diff<T>(T left, T right)
+        /// <summary>
+        /// 数据变动转成文本
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="left">原数据</param>
+        /// <param name="right">新数据</param>
+        /// <returns></returns>
+        public static string Diff<T>(T left, T right) where T : class
         {
-            MyTypeInfo myTypeInfo = new MyTypeInfo(typeof(T));
+            DataDiffTypeInfo myTypeInfo = new DataDiffTypeInfo(typeof(T));
             return myTypeInfo.DiffMessage(left, right);
         }
-        public static string Diff<T>(T left, T right, SqlHelper sqlHelper)
+        /// <summary>
+        /// 数据变动转成文本
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="left">原数据</param>
+        /// <param name="right">新数据</param>
+        /// <param name="sqlHelper"></param>
+        /// <returns></returns>
+        public static string Diff<T>(T left, T right, SqlHelper sqlHelper) where T : class
         {
-            MyTypeInfo myTypeInfo = new MyTypeInfo(typeof(T));
+            DataDiffTypeInfo myTypeInfo = new DataDiffTypeInfo(typeof(T));
             myTypeInfo.SetEnumNameFromDatabase(sqlHelper);
             return myTypeInfo.DiffMessage(left, right);
         }
+        /// <summary>
+        /// 数据变动转成文本
+        /// </summary>
+        /// <param name="lefts">原数据</param>
+        /// <param name="rights"></param>
+        /// <returns></returns>
         public static string Diff(List<string> lefts, List<string> rights)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -30,7 +54,7 @@ namespace ToolGood.Bedrock.DataCommon
             if (adds.Count > 0) {
                 stringBuilder.Append("增加：");
                 for (int i = 0; i < adds.Count; i++) {
-                    if (i > 0) { stringBuilder.Append(','); }
+                    if (i > 0) { stringBuilder.Append('|'); }
                     stringBuilder.Append(adds[i]);
                 }
             }
@@ -38,12 +62,18 @@ namespace ToolGood.Bedrock.DataCommon
                 if (stringBuilder.Length > 0) { stringBuilder.Append('；'); }
                 stringBuilder.Append("删除：");
                 for (int i = 0; i < removes.Count; i++) {
-                    if (i > 0) { stringBuilder.Append(','); }
+                    if (i > 0) { stringBuilder.Append('|'); }
                     stringBuilder.Append(removes[i]);
                 }
             }
             return stringBuilder.ToString();
         }
+        /// <summary>
+        /// 数据变动转成文本
+        /// </summary>
+        /// <param name="lefts">原数据</param>
+        /// <param name="rights">新数据</param>
+        /// <returns></returns>
         public static string Diff(List<int> lefts, List<int> rights)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -53,7 +83,7 @@ namespace ToolGood.Bedrock.DataCommon
             if (adds.Count > 0) {
                 stringBuilder.Append("增加：");
                 for (int i = 0; i < adds.Count; i++) {
-                    if (i > 0) { stringBuilder.Append(','); }
+                    if (i > 0) { stringBuilder.Append('|'); }
                     stringBuilder.Append(adds[i]);
                 }
             }
@@ -61,12 +91,19 @@ namespace ToolGood.Bedrock.DataCommon
                 if (stringBuilder.Length > 0) { stringBuilder.Append('；'); }
                 stringBuilder.Append("删除：");
                 for (int i = 0; i < removes.Count; i++) {
-                    if (i > 0) { stringBuilder.Append(','); }
+                    if (i > 0) { stringBuilder.Append('|'); }
                     stringBuilder.Append(removes[i]);
                 }
             }
             return stringBuilder.ToString();
         }
+        /// <summary>
+        /// 数据变动转成文本
+        /// </summary>
+        /// <param name="lefts">原数据</param>
+        /// <param name="rights">新数据</param>
+        /// <param name="dict">字典</param>
+        /// <returns></returns>
         public static string Diff(List<int> lefts, List<int> rights, Dictionary<int, string> dict)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -76,28 +113,37 @@ namespace ToolGood.Bedrock.DataCommon
             if (adds.Count > 0) {
                 stringBuilder.Append("增加：");
                 for (int i = 0; i < adds.Count; i++) {
+                    if (i > 0) { stringBuilder.Append(','); }
                     stringBuilder.Append(adds[i]);
-                    stringBuilder.Append('(');
+                    stringBuilder.Append('=');
                     if (dict.TryGetValue(adds[i], out string name)) {
                         stringBuilder.Append(name);
                     }
-                    stringBuilder.Append(')');
                 }
             }
             if (removes.Count > 0) {
                 if (stringBuilder.Length > 0) { stringBuilder.Append('；'); }
                 stringBuilder.Append("删除：");
                 for (int i = 0; i < removes.Count; i++) {
-                    stringBuilder.Append(adds[i]);
-                    stringBuilder.Append('(');
-                    if (dict.TryGetValue(adds[i], out string name)) {
+                    if (i > 0) { stringBuilder.Append('|'); }
+                    stringBuilder.Append(removes[i]);
+                    stringBuilder.Append('=');
+                    if (dict.TryGetValue(removes[i], out string name)) {
                         stringBuilder.Append(name);
                     }
-                    stringBuilder.Append(')');
                 }
             }
             return stringBuilder.ToString();
         }
+        /// <summary>
+        /// 数据变动转成文本
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="lefts">原数据</param>
+        /// <param name="rights">新数据</param>
+        /// <param name="func"></param>
+        /// <param name="dict">字典</param>
+        /// <returns></returns>
         public static string Diff<T>(List<T> lefts, List<T> rights, Func<T, int> func, Dictionary<int, string> dict)
         {
             var left = new List<int>(lefts.Count);
@@ -112,15 +158,15 @@ namespace ToolGood.Bedrock.DataCommon
         }
     }
 
-    class MyTypeInfo
+    class DataDiffTypeInfo
     {
         public string Name { get; set; }
-        public MyPropertyInfo IdPropertyInfo { get; set; }
-        public List<MyPropertyInfo> PropertyInfos { get; set; }
+        public DataDiffPropertyInfo IdPropertyInfo { get; set; }
+        public List<DataDiffPropertyInfo> PropertyInfos { get; set; }
 
-        public MyTypeInfo(Type type)
+        public DataDiffTypeInfo(Type type)
         {
-            PropertyInfos = new List<MyPropertyInfo>();
+            PropertyInfos = new List<DataDiffPropertyInfo>();
 
             var cas = type.GetCustomAttributes();
             foreach (var ca in cas) {
@@ -133,7 +179,7 @@ namespace ToolGood.Bedrock.DataCommon
             var ps = type.GetProperties();
             foreach (var p in ps) {
                 if (p.Name.Equals("id", StringComparison.OrdinalIgnoreCase)) {
-                    MyPropertyInfo myPropertyInfo = new MyPropertyInfo();
+                    DataDiffPropertyInfo myPropertyInfo = new DataDiffPropertyInfo();
                     myPropertyInfo.Property = p;
                     IdPropertyInfo = myPropertyInfo;
                     continue;
@@ -141,13 +187,13 @@ namespace ToolGood.Bedrock.DataCommon
                 var ass = p.GetCustomAttributes();
                 foreach (var a in ass) {
                     if (a is DataEnumSqlAttribute dataEnumSql) {
-                        MyPropertyInfo myPropertyInfo = new MyPropertyInfo();
+                        DataDiffPropertyInfo myPropertyInfo = new DataDiffPropertyInfo();
                         myPropertyInfo.Property = p;
                         myPropertyInfo.DisplayName = dataEnumSql.DisplayName;
                         myPropertyInfo.Sql = dataEnumSql.Sql;
                         PropertyInfos.Add(myPropertyInfo);
                     } else if (a is DataEnumAttribute dataEnum) {
-                        MyPropertyInfo myPropertyInfo = new MyPropertyInfo();
+                        DataDiffPropertyInfo myPropertyInfo = new DataDiffPropertyInfo();
                         myPropertyInfo.Property = p;
                         myPropertyInfo.DisplayName = dataEnum.DisplayName;
                         myPropertyInfo.EnumNames = new Dictionary<string, string>();
@@ -156,7 +202,7 @@ namespace ToolGood.Bedrock.DataCommon
                         }
                         PropertyInfos.Add(myPropertyInfo);
                     } else if (a is DataNameAttribute dataName) {
-                        MyPropertyInfo myPropertyInfo = new MyPropertyInfo();
+                        DataDiffPropertyInfo myPropertyInfo = new DataDiffPropertyInfo();
                         myPropertyInfo.Property = p;
                         myPropertyInfo.DisplayName = dataName.DisplayName;
                         if (p.PropertyType.IsEnum) {
@@ -229,7 +275,7 @@ namespace ToolGood.Bedrock.DataCommon
 
     }
 
-    class MyPropertyInfo
+    class DataDiffPropertyInfo
     {
         public PropertyInfo Property { get; set; }
         public string DisplayName { get; set; }
@@ -281,10 +327,9 @@ namespace ToolGood.Bedrock.DataCommon
                 stringBuilder.Append(DisplayName);
                 stringBuilder.Append('：');
                 stringBuilder.Append(rightValue);
+                stringBuilder.Append('|');
                 if (EnumNames.TryGetValue(rightValue.ToString(), out string rv)) {
-                    stringBuilder.Append('(');
                     stringBuilder.Append(rv);
-                    stringBuilder.Append(')');
                 }
             } else if (Property.PropertyType == typeof(string)) {
                 stringBuilder.Append(DisplayName);
@@ -293,13 +338,14 @@ namespace ToolGood.Bedrock.DataCommon
                     stringBuilder.Append("(NULL)");
                 } else {
                     var rs = rightValue.ToString().Split(',', StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var r in rs) {
+                    for (int i = 0; i < rs.Length; i++) {
+                        if (i > 0) { stringBuilder.Append('|'); }
+                        var r = rs[i];
                         stringBuilder.Append(r);
-                        stringBuilder.Append('(');
+                        stringBuilder.Append('=');
                         if (EnumNames.TryGetValue(r.ToString(), out string rv)) {
                             stringBuilder.Append(rv);
                         }
-                        stringBuilder.Append(')');
                     }
                 }
             } else if (Property.PropertyType == typeof(byte)
@@ -326,11 +372,10 @@ namespace ToolGood.Bedrock.DataCommon
                     stringBuilder.Append("(NULL)");
                 } else {
                     stringBuilder.Append(rightValue);
-                    stringBuilder.Append('(');
+                    stringBuilder.Append('|');
                     if (EnumNames.TryGetValue(rightValue.ToString(), out string rv)) {
                         stringBuilder.Append(rv);
                     }
-                    stringBuilder.Append(')');
                 }
             } else {
                 stringBuilder.Append($"{DisplayName}：{rightValue ?? "(NULL)"}");
@@ -348,28 +393,28 @@ namespace ToolGood.Bedrock.DataCommon
 
             if (EnumNames == null) {
                 if (Property.PropertyType == typeof(DateTime)) {
-                    stringBuilder.Append($"{DisplayName}：{(DateTime)leftValue:yyyy-MM-dd HH:mm:ss}=>{(DateTime)rightValue:yyyy-MM-dd HH:mm:ss}");
+                    stringBuilder.Append($"{DisplayName}：{(DateTime)leftValue:yyyy-MM-dd HH:mm:ss}->{(DateTime)rightValue:yyyy-MM-dd HH:mm:ss}");
                 } else if (Property.PropertyType == typeof(DateTimeOffset)) {
-                    stringBuilder.Append($"{DisplayName}：{(DateTimeOffset)leftValue:yyyy-MM-dd HH:mm:ss}=>{(DateTimeOffset)rightValue:yyyy-MM-dd HH:mm:ss}");
+                    stringBuilder.Append($"{DisplayName}：{(DateTimeOffset)leftValue:yyyy-MM-dd HH:mm:ss}->{(DateTimeOffset)rightValue:yyyy-MM-dd HH:mm:ss}");
                 } else if (Property.PropertyType == typeof(TimeSpan)) {
-                    stringBuilder.Append($"{DisplayName}：{(TimeSpan)leftValue:d HH:mm:ss}=>{(TimeSpan)rightValue:d HH:mm:ss}");
+                    stringBuilder.Append($"{DisplayName}：{(TimeSpan)leftValue:d HH:mm:ss}->{(TimeSpan)rightValue:d HH:mm:ss}");
                 } else if (Property.PropertyType == typeof(TimeOnly)) {
-                    stringBuilder.Append($"{DisplayName}：{(TimeOnly)leftValue:HH:mm:ss}=>{(TimeOnly)rightValue:HH:mm:ss}");
+                    stringBuilder.Append($"{DisplayName}：{(TimeOnly)leftValue:HH:mm:ss}->{(TimeOnly)rightValue:HH:mm:ss}");
                 } else if (Property.PropertyType == typeof(DateOnly)) {
-                    stringBuilder.Append($"{DisplayName}：{(DateOnly)leftValue:yyyy-MM-dd}=>{(DateOnly)rightValue:yyyy-MM-dd}");
+                    stringBuilder.Append($"{DisplayName}：{(DateOnly)leftValue:yyyy-MM-dd}->{(DateOnly)rightValue:yyyy-MM-dd}");
 
                 } else if (Property.PropertyType == typeof(DateTime?)) {
-                    stringBuilder.Append($"{DisplayName}：{(DateTime?)leftValue:yyyy-MM-dd HH:mm:ss}=>{(DateTime?)rightValue:yyyy-MM-dd HH:mm:ss}");
+                    stringBuilder.Append($"{DisplayName}：{(DateTime?)leftValue:yyyy-MM-dd HH:mm:ss}->{(DateTime?)rightValue:yyyy-MM-dd HH:mm:ss}");
                 } else if (Property.PropertyType == typeof(DateTimeOffset?)) {
-                    stringBuilder.Append($"{DisplayName}：{(DateTimeOffset?)leftValue:yyyy-MM-dd HH:mm:ss}=>{(DateTimeOffset?)rightValue:yyyy-MM-dd HH:mm:ss}");
+                    stringBuilder.Append($"{DisplayName}：{(DateTimeOffset?)leftValue:yyyy-MM-dd HH:mm:ss}->{(DateTimeOffset?)rightValue:yyyy-MM-dd HH:mm:ss}");
                 } else if (Property.PropertyType == typeof(TimeSpan?)) {
-                    stringBuilder.Append($"{DisplayName}：{(TimeSpan?)leftValue:d HH:mm:ss}=>{(TimeSpan?)rightValue:d HH:mm:ss}");
+                    stringBuilder.Append($"{DisplayName}：{(TimeSpan?)leftValue:d HH:mm:ss}->{(TimeSpan?)rightValue:d HH:mm:ss}");
                 } else if (Property.PropertyType == typeof(TimeOnly?)) {
-                    stringBuilder.Append($"{DisplayName}：{(TimeOnly?)leftValue:HH:mm:ss}=>{(TimeOnly?)rightValue:HH:mm:ss}");
+                    stringBuilder.Append($"{DisplayName}：{(TimeOnly?)leftValue:HH:mm:ss}->{(TimeOnly?)rightValue:HH:mm:ss}");
                 } else if (Property.PropertyType == typeof(DateOnly?)) {
-                    stringBuilder.Append($"{DisplayName}：{(DateOnly?)leftValue:yyyy-MM-dd}=>{(DateOnly?)rightValue:yyyy-MM-dd}");
+                    stringBuilder.Append($"{DisplayName}：{(DateOnly?)leftValue:yyyy-MM-dd}->{(DateOnly?)rightValue:yyyy-MM-dd}");
                 } else {
-                    stringBuilder.Append($"{DisplayName}：{leftValue ?? "(NULL)"}=>{rightValue ?? "(NULL)"}");
+                    stringBuilder.Append($"{DisplayName}：{leftValue ?? "(NULL)"}->{rightValue ?? "(NULL)"}");
                 }
                 return;
             }
@@ -378,19 +423,17 @@ namespace ToolGood.Bedrock.DataCommon
                 stringBuilder.Append('：');
 
                 stringBuilder.Append(leftValue);
+                stringBuilder.Append('|');
                 if (EnumNames.TryGetValue(leftValue.ToString(), out string lv)) {
-                    stringBuilder.Append('(');
                     stringBuilder.Append(lv);
-                    stringBuilder.Append(')');
                 }
-                stringBuilder.Append('=');
+                stringBuilder.Append('-');
                 stringBuilder.Append('>');
 
                 stringBuilder.Append(rightValue);
+                stringBuilder.Append('|');
                 if (EnumNames.TryGetValue(rightValue.ToString(), out string rv)) {
-                    stringBuilder.Append('(');
                     stringBuilder.Append(rv);
-                    stringBuilder.Append(')');
                 }
             } else if (Property.PropertyType == typeof(string)) {
                 stringBuilder.Append(DisplayName);
@@ -399,29 +442,31 @@ namespace ToolGood.Bedrock.DataCommon
                     stringBuilder.Append("(NULL)");
                 } else {
                     var ls = leftValue.ToString().Split(',', StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var l in ls) {
+                    for (int i = 0; i < ls.Length; i++) {
+                        if (i > 0) { stringBuilder.Append('|'); }
+                        var l = ls[i];
                         stringBuilder.Append(l);
-                        stringBuilder.Append('(');
+                        stringBuilder.Append('=');
                         if (EnumNames.TryGetValue(l.ToString(), out string lv)) {
                             stringBuilder.Append(lv);
                         }
-                        stringBuilder.Append(')');
                     }
                 }
-                stringBuilder.Append('=');
+                stringBuilder.Append('-');
                 stringBuilder.Append('>');
 
                 if (null == rightValue) {
                     stringBuilder.Append("(NULL)");
                 } else {
                     var rs = rightValue.ToString().Split(',', StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var r in rs) {
+                    for (int i = 0; i < rs.Length; i++) {
+                        if (i > 0) { stringBuilder.Append('|'); }
+                        var r = rs[i];
                         stringBuilder.Append(r);
-                        stringBuilder.Append('(');
+                        stringBuilder.Append('=');
                         if (EnumNames.TryGetValue(r.ToString(), out string rv)) {
                             stringBuilder.Append(rv);
                         }
-                        stringBuilder.Append(')');
                     }
                 }
             } else if (Property.PropertyType == typeof(byte)
@@ -449,25 +494,23 @@ namespace ToolGood.Bedrock.DataCommon
                     stringBuilder.Append("(NULL)");
                 } else {
                     stringBuilder.Append(leftValue);
-                    stringBuilder.Append('(');
+                    stringBuilder.Append('=');
                     if (EnumNames.TryGetValue(leftValue.ToString(), out string lv)) {
                         stringBuilder.Append(lv);
                     }
-                    stringBuilder.Append(')');
                 }
 
-                stringBuilder.Append('=');
+                stringBuilder.Append('-');
                 stringBuilder.Append('>');
 
                 if (rightValue == null) {
                     stringBuilder.Append("(NULL)");
                 } else {
                     stringBuilder.Append(rightValue);
-                    stringBuilder.Append('(');
+                    stringBuilder.Append('=');
                     if (EnumNames.TryGetValue(rightValue.ToString(), out string rv)) {
                         stringBuilder.Append(rv);
                     }
-                    stringBuilder.Append(')');
                 }
             } else {
                 stringBuilder.Append($"{DisplayName}：{leftValue ?? "(NULL)"}=>{rightValue ?? "(NULL)"}");
