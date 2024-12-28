@@ -19,7 +19,8 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.11" />
+    <PackageReference Include="ToolGood.ReadyGo3" Version="4.1.2" />
     <ProjectReference Include="..\ToolGood.Bedrock\ToolGood.Bedrock.csproj" />
   </ItemGroup>
  

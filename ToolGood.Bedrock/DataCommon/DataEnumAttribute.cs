@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using ToolGood.ReadyGo3;
-
-namespace ToolGood.Bedrock.DataCommon
+﻿namespace ToolGood.Bedrock.DataCommon
 {
     /// <summary>
     /// 数据名称
@@ -14,6 +6,7 @@ namespace ToolGood.Bedrock.DataCommon
     public class DataEnumAttribute : DataNameAttribute
     {
         public string[] EnumName { get; set; }
+
         /// <summary>
         /// 枚举名称
         /// </summary>
@@ -24,6 +17,4 @@ namespace ToolGood.Bedrock.DataCommon
             EnumName = enumName;
         }
     }
-
-
 }

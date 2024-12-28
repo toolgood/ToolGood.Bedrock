@@ -9,6 +9,7 @@ namespace ToolGood.Bedrock.DataCommon
     public class DataNameAttribute : Attribute
     {
         public string DisplayName { get; private set; }
+
         /// <summary>
         /// 数据名称
         /// </summary>
@@ -18,6 +19,4 @@ namespace ToolGood.Bedrock.DataCommon
             DisplayName = displayName;
         }
     }
-
-
 }

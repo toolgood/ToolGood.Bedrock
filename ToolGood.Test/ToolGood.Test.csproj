@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ToolGood.ReadyGo3" Version="4.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ToolGood.Bedrock\ToolGood.Bedrock.csproj" />
   </ItemGroup>
 

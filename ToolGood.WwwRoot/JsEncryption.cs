@@ -14,7 +14,7 @@ namespace ToolGood.WwwRoot
         {
             engine = new Engine(options => {
                 //options.TimeoutInterval(TimeSpan.FromSeconds(0.5));
-                options.AllowDebuggerStatement(true);
+                //options.AllowDebuggerStatement(true);
                 options.DebugMode(true);
             });
             //"";

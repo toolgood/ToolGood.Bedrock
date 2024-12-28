@@ -34,7 +34,7 @@ namespace ToolGood.Test
 
         }
     }
-    [DataName("账号表")]
+    //[DataName("账号表")]
     public class Admin
     {
         public int Id { get; set; }

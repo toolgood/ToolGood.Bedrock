@@ -6,6 +6,7 @@
     public class DataEnumSqlAttribute : DataNameAttribute
     {
         public string Sql { get; set; }
+
         /// <summary>
         /// 枚举名称
         /// </summary>
@@ -16,6 +17,4 @@
             Sql = sql;
         }
     }
-
-
 }
