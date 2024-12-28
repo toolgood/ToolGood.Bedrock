@@ -29,8 +29,8 @@ namespace ToolGood.Test
             idDict[2] = "id2";
             idDict[3] = "id3";
             idDict[4] = "id4";
-            var idm1 = DataDiffHelper.Diff(ids1, ids2);
-            var idm2 = DataDiffHelper.Diff(ids1, ids2, idDict);
+            var idm1 = DataDiffHelper.Diff("ids", ids1, ids2);
+            var idm2 = DataDiffHelper.Diff("ids",ids1, ids2, idDict);
 
 
         }
