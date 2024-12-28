@@ -8,8 +8,8 @@ namespace ToolGood.Test
         static void Main(string[] args)
         {
             Admin admin1 = new Admin() { Name = "admin", Description = "123" };
-            Admin admin2 = new Admin() { Id = 2, Name = "admin", Description = "123" };
-            Admin admin3 = new Admin() { Id = 2, Name = "admin3", Description = "", Type = AdminType.T1, Roles = "1,2,3" };
+            Admin admin2 = new Admin() { Id = 2, Name = "admin", Description = "123",IsFreeze=false };
+            Admin admin3 = new Admin() { Id = 2, Name = "admin3", Description = "", Type = AdminType.T1, Roles = "1,2,3", IsFreeze=true, IsFreeze2=true };
             Admin admin4 = new Admin() { Id = 2, Name = "admin3", Type = AdminType.T1,Date=new DateTime(2014,1,1) };
 
             var message1 = DataDiffHelper.Diff(admin1, admin2);
@@ -54,6 +54,12 @@ namespace ToolGood.Test
         [DataName("日期")]
         public DateTime? Date { get; set; }
 
+        [DataName("冻结")]
+        public bool? IsFreeze { get; set; }
+
+
+        [DataEnum("冻结2","", "已冻结")]
+        public bool? IsFreeze2 { get; set; }
     }
 
 
