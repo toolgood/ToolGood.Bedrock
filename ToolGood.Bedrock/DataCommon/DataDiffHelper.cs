@@ -16,6 +16,29 @@ namespace ToolGood.Bedrock.DataCommon
         /// <summary>
         /// 数据变动转成文本
         /// </summary>
+        /// <param name="right">新数据</param>
+        /// <returns></returns>
+        public static string Diff<T>(T right) where T : class
+        {
+            DataDiffTypeInfo myTypeInfo = new DataDiffTypeInfo(typeof(T));
+            return myTypeInfo.DiffMessage(right);
+        }
+        /// <summary>
+        /// 数据变动转成文本
+        /// </summary>
+        /// <param name="right">新数据</param>
+        /// <param name="sqlHelper"></param>
+        /// <returns></returns>
+        public static string Diff<T>(T right, SqlHelper sqlHelper) where T : class
+        {
+            DataDiffTypeInfo myTypeInfo = new DataDiffTypeInfo(typeof(T));
+            myTypeInfo.SetEnumNameFromDatabase(sqlHelper);
+            return myTypeInfo.DiffMessage(right);
+        }
+
+        /// <summary>
+        /// 数据变动转成文本
+        /// </summary>
         /// <param name="left">原数据</param>
         /// <param name="right">新数据</param>
         /// <returns></returns>
@@ -272,6 +295,36 @@ namespace ToolGood.Bedrock.DataCommon
                     foreach (var propertyInfo in PropertyInfos) {
                         propertyInfo.Diff(left, right, stringBuilder);
                     }
+                }
+            } else {
+                if (string.IsNullOrEmpty(Name)) {
+                    stringBuilder.Append($"修改");
+                } else {
+                    stringBuilder.Append($"修改[{Name}]");
+                }
+                foreach (var propertyInfo in PropertyInfos) {
+                    propertyInfo.Diff(left, right, stringBuilder);
+                }
+            }
+            return stringBuilder.ToString();
+        }
+        public string DiffMessage<T>(T right)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            if (IdPropertyInfo != null) {
+                var id = IdPropertyInfo.Property.GetValue(right);
+                stringBuilder.Append($"新增[{Name ?? "id"}]{id}");
+                foreach (var propertyInfo in PropertyInfos) {
+                    propertyInfo.NewValue(right, stringBuilder);
+                }
+            } else {
+                if (string.IsNullOrEmpty(Name)) {
+                    stringBuilder.Append($"新增");
+                } else {
+                    stringBuilder.Append($"新增[{Name}]");
+                }
+                foreach (var propertyInfo in PropertyInfos) {
+                    propertyInfo.NewValue(right, stringBuilder);
                 }
             }
             return stringBuilder.ToString();

@@ -8,21 +8,22 @@ namespace ToolGood.Test
         static void Main(string[] args)
         {
             Admin admin1 = new Admin() { Name = "admin", Description = "123" };
-            Admin admin2 = new Admin() { Id = 2, Name = "admin", Description = "123",IsFreeze=false };
-            Admin admin3 = new Admin() { Id = 2, Name = "admin3", Description = "", Type = AdminType.T1, Roles = "1,2,3", IsFreeze=true, IsFreeze2=true };
-            Admin admin4 = new Admin() { Id = 2, Name = "admin3", Type = AdminType.T1,Date=new DateTime(2014,1,1) };
+            Admin admin2 = new Admin() { Id = 2, Name = "admin", Description = "123", IsFreeze = false };
+            Admin admin3 = new Admin() { Id = 2, Name = "admin3", Description = "", Type = AdminType.T1, Roles = "1,2,3", IsFreeze = true, IsFreeze2 = true };
+            Admin admin4 = new Admin() { Id = 2, Name = "admin3", Type = AdminType.T1, Date = new DateTime(2014, 1, 1) };
 
+            var message0 = DataDiffHelper.Diff(admin1);
             var message1 = DataDiffHelper.Diff(admin1, admin2);
             var message2 = DataDiffHelper.Diff(admin2, admin3);
             var message3 = DataDiffHelper.Diff(admin3, admin4);
 
-            List<string> list1=new List<string>() {"admin","group" };
-            List<string> list2=new List<string>() {"admin","1","2" };
+            List<string> list1 = new List<string>() { "admin", "group" };
+            List<string> list2 = new List<string>() { "admin", "1", "2" };
 
             var lm1 = DataDiffHelper.Diff(list1, list2);
 
-            List<int> ids1 = new List<int>() { 1,2};
-            List<int> ids2 = new List<int>() { 1,3,4};
+            List<int> ids1 = new List<int>() { 1, 2 };
+            List<int> ids2 = new List<int>() { 1, 3, 4 };
             Dictionary<int, string> idDict = new Dictionary<int, string>();
             idDict[1] = "id1";
             idDict[2] = "id2";
@@ -58,7 +59,7 @@ namespace ToolGood.Test
         public bool? IsFreeze { get; set; }
 
 
-        [DataEnum("冻结2","", "已冻结")]
+        [DataEnum("冻结2", "", "已冻结")]
         public bool? IsFreeze2 { get; set; }
     }
 
