@@ -7,10 +7,10 @@ namespace ToolGood.Test
     {
         static void Main(string[] args)
         {
-            Admin admin1 = new Admin() { Name = "admin", Description = "123" };
+            Admin admin1 = new Admin() { Name = "admin", Description = "123", IsFreeze3 = true };
             Admin admin2 = new Admin() { Id = 2, Name = "admin", Description = "123", IsFreeze = false };
             Admin admin3 = new Admin() { Id = 2, Name = "admin3", Description = "", Type = AdminType.T1, Roles = "1,2,3", IsFreeze = true, IsFreeze2 = true };
-            Admin admin4 = new Admin() { Id = 2, Name = "admin3", Type = AdminType.T1, Date = new DateTime(2014, 1, 1) };
+            Admin admin4 = new Admin() { Id = 2, Name = "admin3", Type = AdminType.T1, Date = new DateTime(2014, 1, 1), IsFreeze3 = true };
 
             var message0 = DataDiffHelper.Diff(admin1);
             var message1 = DataDiffHelper.Diff(admin1, admin2);
@@ -30,7 +30,7 @@ namespace ToolGood.Test
             idDict[3] = "id3";
             idDict[4] = "id4";
             var idm1 = DataDiffHelper.Diff("ids", ids1, ids2);
-            var idm2 = DataDiffHelper.Diff("ids",ids1, ids2, idDict);
+            var idm2 = DataDiffHelper.Diff("ids", ids1, ids2, idDict);
 
 
         }
@@ -61,6 +61,9 @@ namespace ToolGood.Test
 
         [DataEnum("冻结2", "", "已冻结")]
         public bool? IsFreeze2 { get; set; }
+
+        [DataEnum("", "可用", "已冻结")]
+        public bool? IsFreeze3 { get; set; }
     }
 
 
