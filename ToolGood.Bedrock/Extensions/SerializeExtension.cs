@@ -16,7 +16,7 @@ namespace System
         /// <param name="obj"></param>
         /// <param name="ignoreNames"></param>
         /// <returns></returns>
-        public static string ToJson<T>(this T obj, params string[] ignoreNames)
+        public static string ToJson<T>(this T obj, params string[] ignoreNames) where T : class 
         {
             return ToJson(obj, true, false, false, (IEnumerable<string>)ignoreNames);
         }
@@ -27,7 +27,7 @@ namespace System
         /// <param name="obj"></param>
         /// <param name="ignoreNames"></param>
         /// <returns></returns>
-        public static string ToJson<T>(this T obj, IEnumerable<string> ignoreNames)
+        public static string ToJson<T>(this T obj, IEnumerable<string> ignoreNames) where T : class
         {
             return ToJson(obj, true, false, false, (IEnumerable<string>)ignoreNames);
         }
@@ -40,7 +40,7 @@ namespace System
         /// <param name="camelCase"></param>
         /// <param name="ignoreNames"></param>
         /// <returns></returns>
-        public static string ToJson<T>(this T obj, bool camelCase, params string[] ignoreNames)
+        public static string ToJson<T>(this T obj, bool camelCase, params string[] ignoreNames) where T : class
         {
             return ToJson(obj, camelCase, false, false, (IEnumerable<string>)ignoreNames);
         }
@@ -52,7 +52,7 @@ namespace System
         /// <param name="camelCase"></param>
         /// <param name="ignoreNames"></param>
         /// <returns></returns>
-        public static string ToJson<T>(this T obj, bool camelCase, IEnumerable<string> ignoreNames)
+        public static string ToJson<T>(this T obj, bool camelCase, IEnumerable<string> ignoreNames) where T : class
         {
             return ToJson(obj, camelCase, false, false, (IEnumerable<string>)ignoreNames);
         }
@@ -66,7 +66,7 @@ namespace System
         /// <param name="indented"></param>
         /// <param name="ignoreNames"></param>
         /// <returns></returns>
-        public static string ToJson<T>(this T obj, bool camelCase, bool indented, params string[] ignoreNames)
+        public static string ToJson<T>(this T obj, bool camelCase, bool indented, params string[] ignoreNames) where T : class
         {
             return ToJson(obj, camelCase, indented, false, (IEnumerable<string>)ignoreNames);
         }
@@ -80,7 +80,7 @@ namespace System
         /// <param name="indented"></param>
         /// <param name="ignoreNames"></param>
         /// <returns></returns>
-        public static string ToJson<T>(this T obj, bool camelCase, bool indented, IEnumerable<string> ignoreNames)
+        public static string ToJson<T>(this T obj, bool camelCase, bool indented, IEnumerable<string> ignoreNames) where T : class
         {
             return ToJson(obj, camelCase, indented, false, (IEnumerable<string>)ignoreNames);
         }
@@ -95,7 +95,7 @@ namespace System
         /// <param name="ignoreNull"></param>
         /// <param name="ignoreNames"></param>
         /// <returns></returns>
-        public static string ToJson<T>(this T obj, bool camelCase, bool indented, bool ignoreNull, params string[] ignoreNames)
+        public static string ToJson<T>(this T obj, bool camelCase, bool indented, bool ignoreNull, params string[] ignoreNames) where T : class
         {
             return ToJson(obj, camelCase, indented, ignoreNull, (IEnumerable<string>)ignoreNames);
         }
@@ -110,7 +110,7 @@ namespace System
         /// <param name="ignoreNull"></param>
         /// <param name="ignoreNames"></param>
         /// <returns></returns>
-        public static string ToJson<T>(this T obj, bool camelCase, bool indented, bool ignoreNull, IEnumerable<string> ignoreNames)
+        public static string ToJson<T>(this T obj, bool camelCase, bool indented, bool ignoreNull, IEnumerable<string> ignoreNames) where T : class
         {
             if (object.Equals(null, obj)) { return ""; }
 

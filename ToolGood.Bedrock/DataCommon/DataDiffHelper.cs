@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using ToolGood.Bedrock.DataCommon.JsonDiffer;
+using ToolGood.Bedrock.DataCommon.YamlToJson;
 using ToolGood.ReadyGo3;
 
 namespace ToolGood.Bedrock.DataCommon
@@ -168,6 +172,28 @@ namespace ToolGood.Bedrock.DataCommon
             }
             return Diff(name, left, right, dict);
         }
+
+        public static string JsonDiff(string left, string right, Formatting formatting = Formatting.None)
+        {
+            var j1 = JToken.Parse(left);
+            var j2 = JToken.Parse(right);
+
+            var diff = JsonDifferentiator.Differentiate(j1, j2);
+            return diff.ToString(formatting);
+        }
+
+        public static string YamlDiff(string left, string right, Formatting formatting = Formatting.None)
+        {
+            var leftStr = StringHelper.ToJson(left);
+            var j1 = JToken.Parse(leftStr);
+
+            var rightStr = StringHelper.ToJson(right);
+            var j2 = JToken.Parse(rightStr);
+
+            var diff = JsonDifferentiator.Differentiate(j1, j2);
+            return diff.ToString(formatting);
+        }
+
     }
 
     internal class DataDiffTypeInfo
@@ -502,7 +528,7 @@ namespace ToolGood.Bedrock.DataCommon
                 } else {
                     stringBuilder.Append(leftValue);
                 }
-            
+
                 stringBuilder.Append("->");
 
                 if (null == rightValue) {
@@ -512,7 +538,7 @@ namespace ToolGood.Bedrock.DataCommon
                 } else {
                     stringBuilder.Append(rightValue);
                 }
-           
+
             } else if (Property.PropertyType == typeof(string)) {
                 if (null == leftValue) {
                     stringBuilder.Append("(NULL)");

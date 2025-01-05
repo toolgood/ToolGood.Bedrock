@@ -1,5 +1,7 @@
 ﻿using System.Data;
+using System.Text;
 using ToolGood.Bedrock.DataCommon;
+using ToolGood.Bedrock.DataCommon.YamlToJson;
 
 namespace ToolGood.Test
 {
@@ -32,6 +34,41 @@ namespace ToolGood.Test
             var idm1 = DataDiffHelper.Diff("ids", ids1, ids2);
             var idm2 = DataDiffHelper.Diff("ids", ids1, ids2, idDict);
 
+
+            var j1 = ("{'id':1, 'foo':'bar'}");
+            var j2 = ("{'id':1, 'foo':'baz'}");
+
+            var jd1 = DataDiffHelper.JsonDiff(j1, j2);
+
+            var y1 = @"
+aaa:ddd
+bbb:ccc
+";
+
+            var y2 = @"
+aaa:ddd2
+ccc:sss
+ddd:
+   sddd:123
+";
+            var yd1 = DataDiffHelper.YamlDiff(y1, y2, Newtonsoft.Json.Formatting.Indented);
+
+            var sb = new StringBuilder();
+            sb.AppendLine("contentVersion: 1.0.0.0");
+            sb.AppendLine("parameters: {}");
+            sb.AppendLine("variables: {}");
+            sb.AppendLine("variables11: ");
+            sb.AppendLine("   variable2221: 12223");
+            sb.AppendLine("   122: 你好");
+            sb.AppendLine("resources: []");
+            sb.AppendLine("outputs: {}");
+
+            var yaml = sb.ToString();
+            var json = StringHelper.ToJson( yaml);
+
+            var sb2 = new StringBuilder();
+
+            var json2 = StringHelper.ToJson(y1);
 
         }
     }
