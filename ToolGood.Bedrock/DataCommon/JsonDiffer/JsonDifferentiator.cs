@@ -6,11 +6,6 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
 {
     public class JsonDifferentiator
     {
-
-        public JsonDifferentiator()
-        {
-        }
-
         private static TargetNode PointTargetNode(JToken diff, string property, ChangeMode mode)
         {
             string symbol = string.Empty;
