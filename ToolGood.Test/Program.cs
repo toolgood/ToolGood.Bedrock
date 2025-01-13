@@ -37,8 +37,13 @@ namespace ToolGood.Test
 
             var j1 = ("{'id':1, 'foo':'bar'}");
             var j2 = ("{'id':1, 'foo':'baz'}");
-
             var jd1 = DataDiffHelper.JsonDiff(j1, j2);
+
+            var ja1 = ("[{'id':1, 'foo':'bar'},{'id':2, 'foo':'bar3'},{'id':3, 'foo':'bark'}]");
+            var ja2 = ("[{'id':2, 'foo':'bar3'},{'id':1, 'foo':'baz'},{'id':3, 'foo':'bar9'}]");
+            var jad1 = DataDiffHelper.JsonDiff(ja1, ja2);
+
+
 
             var y1 = @"
 aaa:ddd

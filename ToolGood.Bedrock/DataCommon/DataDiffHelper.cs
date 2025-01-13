@@ -178,7 +178,7 @@ namespace ToolGood.Bedrock.DataCommon
             var j1 = JToken.Parse(left);
             var j2 = JToken.Parse(right);
 
-            var diff = JsonDifferentiator.Differentiate(j1, j2);
+            var diff = JsonDifferentiator.Differentiate(j2, j1);
             return diff.ToString(formatting);
         }
 
@@ -190,7 +190,7 @@ namespace ToolGood.Bedrock.DataCommon
             var rightStr = StringHelper.ToJson(right);
             var j2 = JToken.Parse(rightStr);
 
-            var diff = JsonDifferentiator.Differentiate(j1, j2);
+            var diff = JsonDifferentiator.Differentiate(j2, j1);
             return diff.ToString(formatting);
         }
 

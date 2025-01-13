@@ -19,8 +19,7 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
         {
             string symbol = string.Empty;
 
-            switch (mode)
-            {
+            switch (mode) {
                 case ChangeMode.Changed:
                     symbol = outMode == OutputMode.Symbol ? $"*{property}" : "changed";
                     break;
@@ -32,10 +31,13 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
                 case ChangeMode.Removed:
                     symbol = outMode == OutputMode.Symbol ? $"-{property}" : "removed";
                     break;
+
+                case ChangeMode.Id:
+                    symbol = outMode == OutputMode.Symbol ? $"${property}" : "id";
+                    break;
             }
 
-            if (outMode == OutputMode.Detailed && diff[symbol] == null)
-            {
+            if (outMode == OutputMode.Detailed && diff[symbol] == null) {
                 diff[symbol] = JToken.Parse("{}");
             }
 
@@ -43,132 +45,120 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
 
         }
 
-        public static JToken Differentiate(JToken first, JToken second, OutputMode outputMode = OutputMode.Symbol, bool showOriginalValues = false)
+        public static JToken Differentiate(JToken newValue, JToken oldValue, OutputMode outputMode = OutputMode.Symbol, bool showOriginalValues = false)
         {
-            if (JToken.DeepEquals(first, second)) return null;
+            if (JToken.DeepEquals(newValue, oldValue)) return null;
 
-            if (first != null && second != null && first?.GetType() != second?.GetType())
-                throw new InvalidOperationException($"Operands' types must match; '{first.GetType().Name}' <> '{second.GetType().Name}'");
+            if (newValue != null && oldValue != null && newValue?.GetType() != oldValue?.GetType())
+                throw new InvalidOperationException($"Operands' types must match; '{newValue.GetType().Name}' <> '{oldValue.GetType().Name}'");
 
-            var propertyNames = (first?.Children() ?? default).Union(second?.Children() ?? default)?.Select(_ => (_ as JProperty)?.Name)?.Distinct();
+            var propertyNames = (newValue?.Children() ?? default).Union(oldValue?.Children() ?? default)?.Select(_ => (_ as JProperty)?.Name)?.Distinct();
 
-            if (!propertyNames.Any() && (first is JValue || second is JValue))
-            {
-                return (first == null) ? second : first;
+            if (!propertyNames.Any() && (newValue is JValue || oldValue is JValue)) {
+                return (newValue == null) ? oldValue : newValue;
             }
 
             var difference = JToken.Parse("{}");
 
-            foreach (var property in propertyNames)
-            {
-                if (property == null)
-                {
-                    if (first == null)
-                    {
-                        difference = second;
+            foreach (var property in propertyNames) {
+                if (property == null) {
+                    if (newValue == null) {
+                        difference = oldValue;
                     }
                     // array of object?
-                    else if (first is JArray && first.Children().All(c => !(c is JValue)))
-                    {
+                    else if (newValue is JArray && newValue.Children().All(c => !(c is JValue))) {
                         var difrences = new JArray();
-                        var maximum = Math.Max(first?.Count() ?? 0, second?.Count() ?? 0);
+                        var maximum = Math.Max(newValue?.Count() ?? 0, oldValue?.Count() ?? 0);
 
-                        for (int i = 0; i < maximum; i++)
-                        {
-                            var firstsItem = first?.ElementAtOrDefault(i);
-                            var secondsItem = second?.ElementAtOrDefault(i);
+                        for (int i = 0; i < maximum; i++) {
+                            var firstsItem = newValue?.ElementAtOrDefault(i);
+                            var secondsItem = oldValue?.ElementAtOrDefault(i);
 
                             var diff = Differentiate(firstsItem, secondsItem, outputMode, showOriginalValues);
 
-                            if (diff != null)
-                            {
+
+                            if (diff != null) {
+                                if (firstsItem["id"] != null) {
+                                    if (diff["*id"] != null || diff["+id"] != null || diff["-id"] != null) {
+                                    } else {
+                                        var diff2 = new JObject();
+                                        diff2["#id"] = firstsItem["id"];
+                                        foreach (var (k, v) in (JObject)diff) {
+                                            diff2[k] = v;
+                                        }
+                                        diff = diff2;
+                                    }
+                                }
                                 difrences.Add(diff);
                             }
                         }
 
-                        if (difrences.HasValues)
-                        {
+                        if (difrences.HasValues) {
                             difference = difrences;
                         }
-                    }
-                    else
-                    {
-                        difference = first;
+                    } else {
+                        difference = newValue;
                     }
 
                     continue;
                 }
 
-                if (first?[property] == null)
-                {
-                    var secondVal = second?[property]?.Parent as JProperty;
+                if (newValue?[property] == null) {
+                    var secondVal = oldValue?[property]?.Parent as JProperty;
 
                     var targetNode = PointTargetNode(difference, property, ChangeMode.Added, outputMode);
 
-                    if (targetNode.Property != null)
-                    {
+                    if (targetNode.Property != null) {
                         difference[targetNode.Symbol][targetNode.Property] = secondVal.Value;
-                    }
-                    else
+                    } else
                         difference[targetNode.Symbol] = secondVal.Value;
 
                     continue;
                 }
 
-                if (second?[property] == null)
-                {
-                    var firstVal = first?[property]?.Parent as JProperty;
+                if (oldValue?[property] == null) {
+                    var firstVal = newValue?[property]?.Parent as JProperty;
 
                     var targetNode = PointTargetNode(difference, property, ChangeMode.Removed, outputMode);
 
-                    if (targetNode.Property != null)
-                    {
+                    if (targetNode.Property != null) {
                         difference[targetNode.Symbol][targetNode.Property] = firstVal.Value;
-                    }
-                    else
+                    } else
                         difference[targetNode.Symbol] = firstVal.Value;
 
                     continue;
                 }
 
-                if (first?[property] is JValue value)
-                {
-                    if (!JToken.DeepEquals(first?[property], second?[property]))
-                    {
+                if (newValue?[property] is JValue value) {
+                    if (!JToken.DeepEquals(newValue?[property], oldValue?[property])) {
                         var targetNode = PointTargetNode(difference, property, ChangeMode.Changed, outputMode);
 
-                        if (targetNode.Property != null)
-                        {
-                            difference[targetNode.Symbol][targetNode.Property] = showOriginalValues ? second?[property] : value;
-                        }
-                        else
-                            difference[targetNode.Symbol] = showOriginalValues ? second?[property] : value;
+                        if (targetNode.Property != null) {
+                            difference[targetNode.Symbol][targetNode.Property] = showOriginalValues ? oldValue?[property] : value;
+                        } else
+                            difference[targetNode.Symbol] = showOriginalValues ? oldValue?[property] : value;
                         //difference["changed"][property] = showOriginalValues ? second?[property] : value;
                     }
 
                     continue;
                 }
 
-                if (first?[property] is JObject)
-                {
+                if (newValue?[property] is JObject) {
 
-                    var targetNode = second?[property] == null
+                    var targetNode = oldValue?[property] == null
                         ? PointTargetNode(difference, property, ChangeMode.Removed, outputMode)
                         : PointTargetNode(difference, property, ChangeMode.Changed, outputMode);
 
-                    var firstsItem = first[property];
-                    var secondsItem = second[property];
+                    var firstsItem = newValue[property];
+                    var secondsItem = oldValue[property];
 
                     var diffrence = Differentiate(firstsItem, secondsItem, outputMode, showOriginalValues);
 
-                    if (diffrence != null)
-                    {
+                    if (diffrence != null) {
 
-                        if (targetNode.Property != null)
-                        {
+                        if (targetNode.Property != null) {
                             difference[targetNode.Symbol][targetNode.Property] = diffrence;
-                        }
-                        else
+                        } else
                             difference[targetNode.Symbol] = diffrence;
 
                     }
@@ -176,36 +166,30 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
                     continue;
                 }
 
-                if (first?[property] is JArray)
-                {
+                if (newValue?[property] is JArray) {
                     var difrences = new JArray();
 
-                    var targetNode = second?[property] == null
+                    var targetNode = oldValue?[property] == null
                        ? PointTargetNode(difference, property, ChangeMode.Removed, outputMode)
                        : PointTargetNode(difference, property, ChangeMode.Changed, outputMode);
 
-                    var maximum = Math.Max(first?[property]?.Count() ?? 0, second?[property]?.Count() ?? 0);
+                    var maximum = Math.Max(newValue?[property]?.Count() ?? 0, oldValue?[property]?.Count() ?? 0);
 
-                    for (int i = 0; i < maximum; i++)
-                    {
-                        var firstsItem = first[property]?.ElementAtOrDefault(i);
-                        var secondsItem = second[property]?.ElementAtOrDefault(i);
+                    for (int i = 0; i < maximum; i++) {
+                        var firstsItem = newValue[property]?.ElementAtOrDefault(i);
+                        var secondsItem = oldValue[property]?.ElementAtOrDefault(i);
 
                         var diff = Differentiate(firstsItem, secondsItem, outputMode, showOriginalValues);
 
-                        if (diff != null)
-                        {
+                        if (diff != null) {
                             difrences.Add(diff);
                         }
                     }
 
-                    if (difrences.HasValues)
-                    {
-                        if (targetNode.Property != null)
-                        {
+                    if (difrences.HasValues) {
+                        if (targetNode.Property != null) {
                             difference[targetNode.Symbol][targetNode.Property] = difrences;
-                        }
-                        else
+                        } else
                             difference[targetNode.Symbol] = difrences;
                     }
 
