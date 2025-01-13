@@ -41,8 +41,13 @@ namespace ToolGood.Test
 
             var ja1 = ("[{'id':1, 'foo':'bar'},{'id':2, 'foo':'bar3'},{'id':3, 'foo':'bark'}]");
             var ja2 = ("[{'id':2, 'foo':'bar3'},{'id':1, 'foo':'baz'},{'id':3, 'foo':'bar9'}]");
-            var jad1 = DataDiffHelper.JsonDiff(ja1, ja2);
 
+
+            var ja3 = ("[{'foo':'bar', 'id':1},{'id':2, 'foo':'bar3'},{'id':3, 'foo':'bark'}]");
+            var ja4 = ("[{'foo':'bar3','id':2},{'id':1, 'foo':'baz'},{'id':3, 'foo':'bar9'}]");
+
+            var jad1 = DataDiffHelper.JsonDiff(ja1, ja2);
+            var jad2 = DataDiffHelper.JsonDiff(ja3, ja4);
 
 
             var y1 = @"
@@ -69,7 +74,7 @@ ddd:
             sb.AppendLine("outputs: {}");
 
             var yaml = sb.ToString();
-            var json = StringHelper.ToJson( yaml);
+            var json = StringHelper.ToJson(yaml);
 
             var sb2 = new StringBuilder();
 

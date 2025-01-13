@@ -6,53 +6,35 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
 {
     public class JsonDifferentiator
     {
-        public OutputMode OutputMode { get; private set; }
-        public bool ShowOriginalValues { get; private set; }
 
-        public JsonDifferentiator(OutputMode outputMode, bool showOriginalValues)
+        public JsonDifferentiator()
         {
-            this.OutputMode = outputMode;
-            this.ShowOriginalValues = showOriginalValues;
         }
 
-        private static TargetNode PointTargetNode(JToken diff, string property, ChangeMode mode, OutputMode outMode)
+        private static TargetNode PointTargetNode(JToken diff, string property, ChangeMode mode)
         {
             string symbol = string.Empty;
 
             switch (mode) {
-                case ChangeMode.Changed:
-                    symbol = outMode == OutputMode.Symbol ? $"*{property}" : "changed";
-                    break;
-
-                case ChangeMode.Added:
-                    symbol = outMode == OutputMode.Symbol ? $"+{property}" : "added";
-                    break;
-
-                case ChangeMode.Removed:
-                    symbol = outMode == OutputMode.Symbol ? $"-{property}" : "removed";
-                    break;
-
-                case ChangeMode.Id:
-                    symbol = outMode == OutputMode.Symbol ? $"${property}" : "id";
-                    break;
+                case ChangeMode.Changed: symbol = $"*{property}"; break;
+                case ChangeMode.Added: symbol = $"+{property}"; break;
+                case ChangeMode.Removed: symbol = $"-{property}"; break;
             }
-
-            if (outMode == OutputMode.Detailed && diff[symbol] == null) {
-                diff[symbol] = JToken.Parse("{}");
-            }
-
-            return new TargetNode(symbol, (outMode == OutputMode.Symbol) ? null : property);
-
+            return new TargetNode(symbol, null);
         }
 
-        public static JToken Differentiate(JToken newValue, JToken oldValue, OutputMode outputMode = OutputMode.Symbol, bool showOriginalValues = false)
+        public static JToken Differentiate(JToken newValue, JToken oldValue)
         {
             if (JToken.DeepEquals(newValue, oldValue)) return null;
 
             if (newValue != null && oldValue != null && newValue?.GetType() != oldValue?.GetType())
                 throw new InvalidOperationException($"Operands' types must match; '{newValue.GetType().Name}' <> '{oldValue.GetType().Name}'");
 
-            var propertyNames = (newValue?.Children() ?? default).Union(oldValue?.Children() ?? default)?.Select(_ => (_ as JProperty)?.Name)?.Distinct();
+            var propertyNames = (newValue?.Children() ?? default).Union(oldValue?.Children() ?? default)?.Select(_ => (_ as JProperty)?.Name)?.Distinct().ToList();
+            if (propertyNames.Contains("id")) { //id放在第一位比较好找
+                propertyNames.Remove("id");
+                propertyNames.Insert(0, "id");
+            }
 
             if (!propertyNames.Any() && (newValue is JValue || oldValue is JValue)) {
                 return (newValue == null) ? oldValue : newValue;
@@ -74,15 +56,14 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
                             var firstsItem = newValue?.ElementAtOrDefault(i);
                             var secondsItem = oldValue?.ElementAtOrDefault(i);
 
-                            var diff = Differentiate(firstsItem, secondsItem, outputMode, showOriginalValues);
-
+                            var diff = Differentiate(firstsItem, secondsItem);
 
                             if (diff != null) {
                                 if (firstsItem["id"] != null) {
-                                    if (diff["*id"] != null || diff["+id"] != null || diff["-id"] != null) {
+                                    if (diff["*id"] != null || diff["+id"] != null || diff["-id"] != null || diff["id"] != null) {
                                     } else {
                                         var diff2 = new JObject();
-                                        diff2["#id"] = firstsItem["id"];
+                                        diff2["$id"] = firstsItem["id"];
                                         foreach (var (k, v) in (JObject)diff) {
                                             diff2[k] = v;
                                         }
@@ -106,7 +87,7 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
                 if (newValue?[property] == null) {
                     var secondVal = oldValue?[property]?.Parent as JProperty;
 
-                    var targetNode = PointTargetNode(difference, property, ChangeMode.Added, outputMode);
+                    var targetNode = PointTargetNode(difference, property, ChangeMode.Added);
 
                     if (targetNode.Property != null) {
                         difference[targetNode.Symbol][targetNode.Property] = secondVal.Value;
@@ -119,7 +100,7 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
                 if (oldValue?[property] == null) {
                     var firstVal = newValue?[property]?.Parent as JProperty;
 
-                    var targetNode = PointTargetNode(difference, property, ChangeMode.Removed, outputMode);
+                    var targetNode = PointTargetNode(difference, property, ChangeMode.Removed);
 
                     if (targetNode.Property != null) {
                         difference[targetNode.Symbol][targetNode.Property] = firstVal.Value;
@@ -131,12 +112,12 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
 
                 if (newValue?[property] is JValue value) {
                     if (!JToken.DeepEquals(newValue?[property], oldValue?[property])) {
-                        var targetNode = PointTargetNode(difference, property, ChangeMode.Changed, outputMode);
+                        var targetNode = PointTargetNode(difference, property, ChangeMode.Changed);
 
                         if (targetNode.Property != null) {
-                            difference[targetNode.Symbol][targetNode.Property] = showOriginalValues ? oldValue?[property] : value;
+                            difference[targetNode.Symbol][targetNode.Property] = value;
                         } else
-                            difference[targetNode.Symbol] = showOriginalValues ? oldValue?[property] : value;
+                            difference[targetNode.Symbol] = value;
                         //difference["changed"][property] = showOriginalValues ? second?[property] : value;
                     }
 
@@ -146,13 +127,13 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
                 if (newValue?[property] is JObject) {
 
                     var targetNode = oldValue?[property] == null
-                        ? PointTargetNode(difference, property, ChangeMode.Removed, outputMode)
-                        : PointTargetNode(difference, property, ChangeMode.Changed, outputMode);
+                        ? PointTargetNode(difference, property, ChangeMode.Removed)
+                        : PointTargetNode(difference, property, ChangeMode.Changed);
 
                     var firstsItem = newValue[property];
                     var secondsItem = oldValue[property];
 
-                    var diffrence = Differentiate(firstsItem, secondsItem, outputMode, showOriginalValues);
+                    var diffrence = Differentiate(firstsItem, secondsItem);
 
                     if (diffrence != null) {
 
@@ -170,8 +151,8 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
                     var difrences = new JArray();
 
                     var targetNode = oldValue?[property] == null
-                       ? PointTargetNode(difference, property, ChangeMode.Removed, outputMode)
-                       : PointTargetNode(difference, property, ChangeMode.Changed, outputMode);
+                       ? PointTargetNode(difference, property, ChangeMode.Removed)
+                       : PointTargetNode(difference, property, ChangeMode.Changed);
 
                     var maximum = Math.Max(newValue?[property]?.Count() ?? 0, oldValue?[property]?.Count() ?? 0);
 
@@ -179,7 +160,7 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
                         var firstsItem = newValue[property]?.ElementAtOrDefault(i);
                         var secondsItem = oldValue[property]?.ElementAtOrDefault(i);
 
-                        var diff = Differentiate(firstsItem, secondsItem, outputMode, showOriginalValues);
+                        var diff = Differentiate(firstsItem, secondsItem);
 
                         if (diff != null) {
                             difrences.Add(diff);
@@ -198,11 +179,6 @@ namespace ToolGood.Bedrock.DataCommon.JsonDiffer
             }
 
             return difference;
-        }
-
-        public JToken Differentiate(JToken first, JToken second)
-        {
-            return Differentiate(first, second, this.OutputMode, this.ShowOriginalValues);
         }
     }
 }
