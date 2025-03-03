@@ -718,7 +718,13 @@ namespace ToolGood.Bedrock
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             private byte[] PrivareEncryption2(byte[] data)
             {
-                return BigInteger.ModPow(FromBytes(data), D, Modulus).ToByteArray().Reverse().ToArray();
+                var dbs = BigInteger.ModPow(FromBytes(data), D, Modulus).ToByteArray().Reverse().ToArray();
+                if (dbs[0] != 0) {
+                    return dbs;
+                }
+                byte[] temp = new byte[dbs.Length - 1];
+                Array.Copy(dbs, 1, temp, 0, temp.Length);
+                return temp;
             }
 
             public byte[] PublicDecryption(byte[] data)
@@ -751,7 +757,13 @@ namespace ToolGood.Bedrock
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public byte[] PublicDecryption2(byte[] data)
             {
-                return BigInteger.ModPow(FromBytes(data), Exponent, Modulus).ToByteArray().Reverse().ToArray();
+                var dbs = BigInteger.ModPow(FromBytes(data), Exponent, Modulus).ToByteArray().Reverse().ToArray();
+                if (dbs[0] != 0) {
+                    return dbs;
+                }
+                byte[] temp = new byte[dbs.Length - 1];
+                Array.Copy(dbs, 1, temp, 0, temp.Length);
+                return temp;
             }
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             private static BigInteger FromBytes(byte[] beBytes)
