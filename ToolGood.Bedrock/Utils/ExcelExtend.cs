@@ -1,9 +1,11 @@
 ﻿using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
+using System;
 using System.IO;
 
-namespace NPOI.SS.UserModel
+namespace ToolGood.Bedrock.Utils
 {
     public static class ExcelUtil
     {
@@ -23,8 +25,10 @@ namespace NPOI.SS.UserModel
             return new XSSFWorkbook();
         }
     }
+}
 
-
+namespace NPOI.SS.UserModel
+{
     public static class ExcelExtensions
     {
         /// <summary>
@@ -1352,7 +1356,7 @@ namespace NPOI.SS.UserModel
             switch (cell0.CellType) {
                 case CellType.Numeric:
                     if (DateUtil.IsCellDateFormatted(cell0)) {
-                        return cell0.DateCellValue.ToString("yyyy-MM-dd");
+                        return ToString(cell0.DateCellValue,"yyyy-MM-dd");
                     }
                     return cell0.NumericCellValue.ToString();
 
@@ -1363,7 +1367,7 @@ namespace NPOI.SS.UserModel
                     if (cell0.CachedFormulaResultType == CellType.String) {
                         return cell0.StringCellValue.Trim();
                     } else if (DateUtil.IsCellDateFormatted(cell0)) {
-                        return cell0.DateCellValue.ToString("yyyy-MM-dd");
+                        return ToString(cell0.DateCellValue, "yyyy-MM-dd");
                     } else if (cell0.CachedFormulaResultType == CellType.Numeric) {
                         return cell0.NumericCellValue.ToString();
                     } else if (cell0.CachedFormulaResultType == CellType.Boolean) {
@@ -1390,5 +1394,13 @@ namespace NPOI.SS.UserModel
         }
 
         #endregion Read
+
+        private static string ToString(this DateTime? dt, string fmt)
+        {
+            if (dt != null) {
+                return ((DateTime)dt).ToString(fmt);
+            }
+            return "";
+        }
     }
 }
