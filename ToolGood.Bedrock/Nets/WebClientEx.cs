@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net.Security;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -384,6 +387,14 @@ namespace System.Net
         //}
 
         #endregion 04 Cookie 操作
+
+
+        public string PostJson(string url, string json)
+        {
+            this.Headers["Content-Type"] = "application/json;charset=utf-8";
+            var data = this.UploadData(url, Encoding.UTF8.GetBytes(json));
+            return Encoding.UTF8.GetString(data);
+        }
     }
 
 
