@@ -1,26 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>_key.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>ToolGood</Authors>
     <Company>ToolGood</Company>
-    <Copyright>Copyright 2016-2014 ToolGood</Copyright>
+    <Copyright>Copyright 2016-2025 ToolGood</Copyright>
     <PackageProjectUrl>https://github.com/toolgood/ToolGood.Bedrock</PackageProjectUrl>
     <RepositoryUrl>https://github.com/toolgood/ToolGood.Bedrock</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>3.0.0.7</Version>
+    <Version>3.0.0.8</Version>
     
   </PropertyGroup>
 
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.11" />
-    <PackageReference Include="ToolGood.ReadyGo3" Version="4.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="10.0.0" />
+    <PackageReference Include="ToolGood.ReadyGo3" Version="4.4.0" />
     <ProjectReference Include="..\ToolGood.Bedrock\ToolGood.Bedrock.csproj" />
   </ItemGroup>
  
